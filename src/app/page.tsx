@@ -5,6 +5,7 @@ import { SidebarSourcecode } from "@/components/SidebarSourcecode";
 import { Listing } from "@/model/Listing";
 import { Results } from "@/components/Results";
 import { useStorage } from "@/hooks/useStorage";
+import { Eraser, SquarePlus } from "lucide-react";
 
 
 export default function Home() {
@@ -15,6 +16,11 @@ export default function Home() {
   // hooks
   const $storage = useStorage();
 
+  /**
+   * parse the source and fill listing
+   * @param html 
+   * @returns 
+   */
   const parseHtml = async (html: string | null) => {
     setVisible(false);
 
@@ -32,6 +38,7 @@ export default function Home() {
       });
 
       const data: Listing = await res.json();
+      console.log(data);
 
       if (!("error" in data)) {
         const priceNum = parseFloat(data.price.replace(/[^\d]/g, ""));
@@ -51,6 +58,10 @@ export default function Home() {
     setLoading(false);
   };
 
+  /**
+   * show sidebar
+   * @returns 
+   */
   const renderSidebar = () => {
     if (!visible) {
       return null;
@@ -67,24 +78,24 @@ export default function Home() {
 
       <div className="flex justify-between mb-8">
         <p className="text-gray-500 my-4">Hier kannst Du verschiedene Häuser miteinander vergleichen. Klicke auf Hinzufügen .</p>
-        <div>
+        <div className="flex gap-2">
           <button
             onClick={$storage.clear}
-            className="text-primary px-4 py-1 cursor-pointer"
+            className="cursor-pointer p-2"
           >
-            Alle löschen
+            <Eraser className="w-4 h-4" />
           </button>
           <button
             onClick={() => setVisible(prev => !prev)}
-            className="bg-primary text-white px-4 py-1 rounded cursor-pointer"
+            className="cursor-pointer p-2"
           >
-            Hinzufügen
+            <SquarePlus className="w-4 h-4" />
           </button>
         </div>
       </div>
       {renderSidebar()}
 
-      <Results list={$storage.list} />
+      <Results list={$storage.list} onDelete={$storage.remove} />
     </div >
   );
 };

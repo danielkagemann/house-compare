@@ -8,4 +8,5 @@ export type Listing = {
   description: string;
   contact: string;
   pricePerSqm: string;
+  features: string[];
 };

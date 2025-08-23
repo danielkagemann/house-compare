@@ -32,6 +32,11 @@ export async function POST(req: NextRequest) {
     const description = $(".comment").text().trim();
     const contact = $(".advertiser-name-container").text().trim();
 
+    const features: string[] = [];
+    $(".details-property_features li").each((i, li) => {
+      features.push($(li).text().trim());
+    });
+
     return NextResponse.json({
       title,
       location,
@@ -41,6 +46,7 @@ export async function POST(req: NextRequest) {
       image,
       description,
       contact,
+      features,
     });
   } catch (error) {
     console.error("Parse-Fehler:", error);
