@@ -20,7 +20,7 @@ export const Results = ({ list, onDelete }: Props) => {
          const dest = b[sorted];
 
          // numeric?
-         if (['pricePerSqm', 'price', 'sqm'].includes(sorted)) {
+         if (['pricePerSqm', 'price', 'sqm', 'rooms'].includes(sorted)) {
             if (typeof src === 'string' && typeof dest === 'string') {
                return parseFloat(src) - parseFloat(dest);
             }
@@ -56,10 +56,10 @@ export const Results = ({ list, onDelete }: Props) => {
    }
 
    function _features(item: Listing) {
-      return (<div className="flex justify-start flex-wrap gap-1">
+      return (<div className="flex flex-col items-start gap-0.5">
          {
             item.features.map((val: string) => (
-               <span key={val} className="bg-black text-white rounded-full p-1 text-xs">{val}</span>
+               <div key={val} className="bg-black text-white rounded-full px-2 py-1 text-xs">{val}</div>
             ))
          }
       </div>);
@@ -84,22 +84,33 @@ export const Results = ({ list, onDelete }: Props) => {
    }
 
    return (
-      <div className="overflow-x-auto max-w-full">
-         <table className="min-w-full border-collapse pb-4">
-            <tbody>
-               {renderRow('_image', _image)}
-               {renderRow('_what', _title)}
-               {renderRow('Standort', _text('location'))}
-               {renderRow('Beschreibung', _text('description'))}
-               {renderRow('Preis', _text('price'))}
-               {renderRow('Fläche', _text('sqm'))}
-               {renderRow('Räume', _text('rooms'))}
-               {renderRow('Kontakt', _text('contact'))}
-               {renderRow('Features', _features)}
-               {renderRow('Quad. Preis', _text('pricePerSqm'))}
-               {renderRow('Aktion', _action)}
-            </tbody>
-         </table>
-      </div>
+      <>
+         <div className="flex justify-start gap-1 items-center mb-4">
+            <span className="text-primary">Sortieren nach</span>
+            <select className="font-bold cursor-pointer" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
+               <option value="pricePerSqm">Preis pro Quadratmeter</option>
+               <option value="price">Preis</option>
+               <option value="sqm">Quadratmeter</option>
+               <option value="rooms">Anzahl Räume</option>
+            </select>
+         </div>
+         <div className="overflow-x-auto max-w-full">
+            <table className="min-w-full border-collapse pb-4">
+               <tbody>
+                  {renderRow('_image', _image)}
+                  {renderRow('_what', _title)}
+                  {renderRow('Standort', _text('location'))}
+                  {renderRow('Beschreibung', _text('description'))}
+                  {renderRow('Preis', _text('price'))}
+                  {renderRow('Fläche', _text('sqm'))}
+                  {renderRow('Räume', _text('rooms'))}
+                  {renderRow('Kontakt', _text('contact'))}
+                  {renderRow('Features', _features)}
+                  {renderRow('Quad. Preis', _text('pricePerSqm'))}
+                  {renderRow('Aktion', _action)}
+               </tbody>
+            </table>
+         </div>
+      </>
    );
 }
