@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { SidebarSourcecode } from "@/components/SidebarSourcecode";
+import { ListDetails, SidebarSourcecode } from "@/components/SidebarSourcecode";
 import { Listing } from "@/model/Listing";
 import { Results } from "@/components/Results";
 import { useStorage } from "@/hooks/useStorage";
@@ -21,10 +21,10 @@ export default function Home() {
    * @param html 
    * @returns 
    */
-  const parseHtml = async (html: string | null) => {
+  const parseHtml = async (response: ListDetails | null) => {
     setVisible(false);
 
-    if (!html) {
+    if (!response) {
       return;
     }
 
@@ -34,11 +34,11 @@ export default function Home() {
       const res = await fetch("/api/details", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ html }),
+        body: JSON.stringify({ html: response.html }),
       });
 
       const data: Listing = await res.json();
-      console.log(data);
+      data.url = response.url;
 
       if (!("error" in data)) {
         const priceNum = parseFloat(data.price.replace(/[^\d]/g, ""));
@@ -77,11 +77,12 @@ export default function Home() {
       <Image src="/assets/images/logo.png" width={135} height={64} alt="logo" />
 
       <div className="flex justify-between mb-8">
-        <p className="text-gray-500 my-4">Hier kannst Du verschiedene Häuser miteinander vergleichen. Klicke auf Hinzufügen .</p>
+        <p className="text-gray-500 my-4">Hier kannst Du verschiedene Häuser miteinander vergleichen.</p>
         <div className="flex gap-2">
           <button
             onClick={$storage.clear}
-            className="cursor-pointer p-2"
+            className="cursor-pointer p-2 disabled:cursor-not-allowed disabled:opacity-20"
+            disabled={$storage.list.length === 0}
           >
             <Eraser className="w-4 h-4" />
           </button>

@@ -17,6 +17,19 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - cheerio (server api parses the HTML here)
 - lucide-react for nice symbols
 
+## possible improvements
+
+- more sorting possibilities
+- ~~add map link on location~~
+- ~~highlight features only one house has~~
+- ~~extract build year from response (server)~~
+- ~~remove energy details (server)~~
+- better anvigation (show arrows instead of scrolling)
+- ~~put action at the top~~
+- ~~add url as link~~
+- micro-animations?
+- better comparison view
+
 ## Getting Started
 
 First, run the development server:

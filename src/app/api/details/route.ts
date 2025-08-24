@@ -34,16 +34,12 @@ export async function POST(req: NextRequest) {
 
     const features: string[] = [];
 
-    // $(".details-property_features li").each((i, li) => {
-    //   features.push($(li).text().trim());
-    // });
-
-    const sections = $(".details-property-h2").slice(0, -1);
+    const sections = $(".details-property_features").slice(0, -1);
     let year = "";
-    sections.each((i, el) => {
+    sections.each((_, el) => {
       $(el)
         .find("li")
-        .each((j, li) => {
+        .each((_, li) => {
           const value = $(li).text().trim();
           if (value.toLowerCase().startsWith("baujahr")) {
             year = value.match(/\d+/)?.[0] ?? "";
