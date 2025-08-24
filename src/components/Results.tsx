@@ -1,18 +1,20 @@
 import { Listing } from "@/model/Listing";
 import { ReactNode, useMemo, useState } from "react";
 import { ReadMore } from "./Readmore";
-import { MapPinned, Trash } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, MapPinned, Trash } from "lucide-react";
 
 type Props = {
    list: Listing[];
    onDelete: (index: number) => void;
 };
 
+const MAX_ITEMS = 3;
+const CELL_WIDTH = "w-1/3"
+
 export const Results = ({ list, onDelete }: Props) => {
    // state 
    const [sorted, setSorted] = useState<keyof Listing>('pricePerSqm');
-
-   // TODO: think about this ... const allFeatures = [...new Set(...list.map((item) => item.features))];
+   const [from, setFrom] = useState<number>(0);
 
    const sortedList = useMemo(() => {
       return list.toSorted((a: Listing, b: Listing) => {
@@ -32,7 +34,7 @@ export const Results = ({ list, onDelete }: Props) => {
          return 0;
 
       });
-   }, [sorted, list]);
+   }, [sorted, list, from]);
 
    // do we have data?
    if (list.length === 0) {
@@ -47,11 +49,12 @@ export const Results = ({ list, onDelete }: Props) => {
    }
 
    function renderRow(label: string, render: (item: Listing, index: number) => ReactNode) {
+      const reduced = sortedList.slice(from, MAX_ITEMS);
       return (
          <tr key={label}>
             <td className="font-bold border-b border-gray-200 p-2 text-xs align-top">{!label.startsWith('_') && label}</td>
             {
-               sortedList.map((item: Listing, index: number) => (<td className="border-b border-gray-200 p-2 align-top w-1/3" key={`${label}-${index}`}>{render(item, index)}</td>))
+               reduced.map((item: Listing, index: number) => (<td className={`border-b border-gray-200 p-2 align-top ${CELL_WIDTH}`} key={`${label}-${index}`}>{render(item, index)}</td>))
             }
          </tr>
       )
@@ -69,12 +72,7 @@ export const Results = ({ list, onDelete }: Props) => {
 
    function _location(item: Listing) {
       return (
-         <div className="flex gap-1 items-center">
-            <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
-               <MapPinned className="cursor-pointer w-4 h-4" />
-            </a>
-            <span>{item.location}</span>
-         </div>
+         <span>{item.location}</span>
       )
    }
 
@@ -102,18 +100,41 @@ export const Results = ({ list, onDelete }: Props) => {
       return (<strong>{item.title}</strong>)
    }
 
-   function _link(item: Listing) {
-      return (<a className="underline text-primary text-md" href={item.url} target="_blank">{item.url}</a>)
-   }
-
    function _action(item: Listing, index: number) {
-      return (<button type="button" className="cursor-pointer" onClick={() => onDelete(index)}>
-         <Trash className="text-red-600 w-4 h-4" />
-      </button>);
+      return (<div className="flex gap-2">
+         <a className="text-primary cursor-pointer" title={item.url} href={item.url} target="_blank">
+            < ExternalLink className="w-4 h-4" />
+         </a >
+         <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
+            <MapPinned className="cursor-pointer w-4 h-4" />
+         </a>
+         <button type="button" className="cursor-pointer" onClick={() => onDelete(index)}>
+            <Trash className="text-red-600 w-4 h-4" />
+         </button>
+      </div >);
    }
 
    function _image(item: Listing) {
       return (<img src={item.image} alt="compare:image" className="w-full h-52 object-cover rounded-xl" />)
+   }
+
+   function renderButtons() {
+      if (list.length <= MAX_ITEMS) {
+         return null;
+      }
+      return (
+         <div className="flex justify-between mb-4">
+            <h2 className="font-bold text-lg">Ergebnisse {from + 1} bis {Math.min(from + MAX_ITEMS, list.length)}</h2>
+            <div className="flex justify-end gap-2">
+               <button type="button" onClick={() => setFrom(p => Math.max(p - 1, 0))}>
+                  <ArrowLeft className="w-4 h-4 cursor-pointer"></ArrowLeft>
+               </button>
+               <button type="button" onClick={() => setFrom(p => Math.min(p + 1, list.length - MAX_ITEMS))}>
+                  <ArrowRight className="w-4 h-4 cursor-pointer"></ArrowRight>
+               </button>
+            </div>
+         </div>
+      );
    }
 
    return (
@@ -129,12 +150,13 @@ export const Results = ({ list, onDelete }: Props) => {
                </select>
             </div>}
 
+         {renderButtons()}
+
          <table className="w-full border-collapse pb-4">
             <tbody>
                {renderRow('_image', _image)}
-               {renderRow('URL', _link)}
+               {renderRow('_actions', _action)}
                {renderRow('_what', _title)}
-               {renderRow('Aktion', _action)}
                {renderRow('Standort', _location)}
                {renderRow('Baujahr', _text('year'))}
                {renderRow('Beschreibung', _text('description'))}
