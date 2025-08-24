@@ -33,8 +33,24 @@ export async function POST(req: NextRequest) {
     const contact = $(".advertiser-name-container").text().trim();
 
     const features: string[] = [];
-    $(".details-property_features li").each((i, li) => {
-      features.push($(li).text().trim());
+
+    // $(".details-property_features li").each((i, li) => {
+    //   features.push($(li).text().trim());
+    // });
+
+    const sections = $(".details-property-h2").slice(0, -1);
+    let year = "";
+    sections.each((i, el) => {
+      $(el)
+        .find("li")
+        .each((j, li) => {
+          const value = $(li).text().trim();
+          if (value.toLowerCase().startsWith("baujahr")) {
+            year = value.match(/\d+/)?.[0] ?? "";
+          } else {
+            features.push(value);
+          }
+        });
     });
 
     return NextResponse.json({
@@ -47,6 +63,7 @@ export async function POST(req: NextRequest) {
       description,
       contact,
       features,
+      year,
     });
   } catch (error) {
     console.error("Parse-Fehler:", error);

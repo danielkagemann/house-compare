@@ -1,4 +1,5 @@
 export type Listing = {
+  url: string;
   title: string;
   location: string;
   price: string;
@@ -7,6 +8,7 @@ export type Listing = {
   image: string;
   description: string;
   contact: string;
+  year: string;
   pricePerSqm: string;
   features: string[];
 };
