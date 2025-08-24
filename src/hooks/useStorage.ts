@@ -26,9 +26,8 @@ export const useStorage = () => {
       const newValues = [...list, val];
       _update(newValues);
     },
-    remove: (index: number) => {
-      const newValues = [...list];
-      newValues.splice(index, 1);
+    remove: (id: string) => {
+      const newValues = list.filter((item) => item.uuid !== id);
       _update(newValues);
     },
     clear: () => {

@@ -49,7 +49,10 @@ export async function POST(req: NextRequest) {
         });
     });
 
+    const uuid: string = new Date().getTime().toString();
+
     return NextResponse.json({
+      uuid,
       title,
       location,
       price,

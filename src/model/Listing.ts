@@ -1,4 +1,5 @@
 export type Listing = {
+  uuid: string;
   url: string;
   title: string;
   location: string;

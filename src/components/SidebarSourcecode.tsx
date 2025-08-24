@@ -20,7 +20,7 @@ export const SidebarSourcecode = ({ onChange }: Props) => {
       if (data.url.trim().length === 0) {
          return;
       }
-      window.open(data.url, "_blank", "popup");
+      window.open(data.url, "_blank", "width=800,height=600,left=200,top=150,resizable=yes,scrollbars=yes,popup");
    };
 
    return (

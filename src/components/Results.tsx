@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, ExternalLink, MapPinned, Trash } from "lucide-re
 
 type Props = {
    list: Listing[];
-   onDelete: (index: number) => void;
+   onDelete: (id: string) => void;
 };
 
 const MAX_ITEMS = 3;
@@ -32,8 +32,7 @@ export const Results = ({ list, onDelete }: Props) => {
             }
          }
          return 0;
-
-      });
+      }).slice(from, MAX_ITEMS);
    }, [sorted, list, from]);
 
    // do we have data?
@@ -49,12 +48,11 @@ export const Results = ({ list, onDelete }: Props) => {
    }
 
    function renderRow(label: string, render: (item: Listing, index: number) => ReactNode) {
-      const reduced = sortedList.slice(from, MAX_ITEMS);
       return (
          <tr key={label}>
             <td className="font-bold border-b border-gray-200 p-2 text-xs align-top">{!label.startsWith('_') && label}</td>
             {
-               reduced.map((item: Listing, index: number) => (<td className={`border-b border-gray-200 p-2 align-top ${CELL_WIDTH}`} key={`${label}-${index}`}>{render(item, index)}</td>))
+               sortedList.map((item: Listing, index: number) => (<td className={`border-b border-gray-200 p-2 align-top ${CELL_WIDTH}`} key={`${label}-${index}`}>{render(item, index)}</td>))
             }
          </tr>
       )
@@ -78,8 +76,10 @@ export const Results = ({ list, onDelete }: Props) => {
 
    function _features(item: Listing, index: number) {
       // get other features translated to only string array and remove this one
-      const otherFeatures = [...list].map((item) => item.features);
-      const flatList = otherFeatures.splice(index, 1).flat();
+      const tmp = [...sortedList];
+      tmp.splice(index, 1);
+
+      const flatList = tmp.map((item) => item.features).flat();
 
       // get the features NOT in otherFeatures
       const highlight = item.features.filter((feature: string) => !flatList.includes(feature));
@@ -108,7 +108,7 @@ export const Results = ({ list, onDelete }: Props) => {
          <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
             <MapPinned className="cursor-pointer w-4 h-4" />
          </a>
-         <button type="button" className="cursor-pointer" onClick={() => onDelete(index)}>
+         <button type="button" className="cursor-pointer" onClick={() => onDelete(item.uuid)}>
             <Trash className="text-red-600 w-4 h-4" />
          </button>
       </div >);
