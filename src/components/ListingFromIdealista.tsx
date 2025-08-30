@@ -62,6 +62,8 @@ export const ListingFromIdealista = ({ onChange }: Props) => {
 
    return (
       <>
+         <em>Dieser Bereich funktioniert nicht unter github-pages.</em>
+
          <p className="text-gray-500 text-sm py-2">URL eingeben</p>
          <div className="flex justify-between gap-1">
             <input type="text" value={data.url} onChange={(e) => setData({ ...data, url: e.target.value })} className="border-1 w-full bg-gray-50 p-1 border-gray-500" />
