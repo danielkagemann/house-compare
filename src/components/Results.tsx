@@ -9,7 +9,6 @@ type Props = {
    onDelete: (id: string) => void;
 };
 
-const CELL_LABEL = "min-w-[15vw]";
 const CELL_WIDTH = "min-w-[25vw]";
 
 export const Results = ({ list, onDelete }: Props) => {
@@ -60,7 +59,6 @@ export const Results = ({ list, onDelete }: Props) => {
    function renderRow(label: string, render: (item: Listing, index: number) => ReactNode) {
       return (
          <tr key={label}>
-            <td className={`font-bold border-b border-gray-200 p-2 text-xs align-top sticky z-10 bg-white left-0 border-r-1 border-r-gray-500 ${CELL_LABEL}`}>{!label.startsWith('_') && label}</td>
             {
                sortedList.map((item: Listing, index: number) => (<td className={`border-b border-gray-200 p-2 align-top ${CELL_WIDTH}`} key={`${label}-${index}`}>{render(item, index)}</td>))
             }
@@ -80,7 +78,15 @@ export const Results = ({ list, onDelete }: Props) => {
 
    function _location(item: Listing) {
       return (
-         <span>{item.location}</span>
+         <div className="flex gap-1 items-center">
+            {
+               item.location &&
+               <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
+                  <MapPinned className="cursor-pointer w-4 h-4" />
+               </a>
+            }
+            <span>{item.location}</span>
+         </div>
       )
    }
 
@@ -107,23 +113,21 @@ export const Results = ({ list, onDelete }: Props) => {
    }
 
    function _title(item: Listing) {
-      return (<strong>{item.title}</strong>)
+      return (
+         <div className="flex gap-1 items-center">
+            {
+               item.url &&
+               <a className="text-primary cursor-pointer" title={item.url} href={item.url} target="_blank">
+                  <ExternalLink className="w-4 h-4" />
+               </a>
+            }
+            <strong>{item.title}</strong>
+         </div>
+      )
    }
 
    function _action(item: Listing) {
       return (<div className="flex gap-2">
-         {
-            item.url &&
-            <a className="text-primary cursor-pointer" title={item.url} href={item.url} target="_blank">
-               <ExternalLink className="w-4 h-4" />
-            </a>
-         }
-         {
-            item.location &&
-            <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
-               <MapPinned className="cursor-pointer w-4 h-4" />
-            </a>
-         }
          {
             item.uuid &&
             <button type="button" className="cursor-pointer" onClick={() => onDelete(item.uuid)}>
@@ -158,12 +162,12 @@ export const Results = ({ list, onDelete }: Props) => {
                   {renderRow('_actions', _action)}
                   {attributes.includes('title') && renderRow('_what', _title)}
                   {attributes.includes('location') && renderRow(listingAttributeToText('location'), _location)}
-                  {attributes.includes('year') && renderRow(listingAttributeToText('year'), _text('year'))}
+                  {attributes.includes('year') && renderRow(listingAttributeToText('year'), _text('year', 'gebaut'))}
                   {attributes.includes('description') && renderRow(listingAttributeToText('description'), _text('description'))}
-                  {attributes.includes('price') && renderRow(listingAttributeToText('price'), _text('price'))}
-                  {attributes.includes('sqm') && renderRow(listingAttributeToText('sqm'), _text('sqm'))}
-                  {renderRow(listingAttributeToText('pricePerSqm'), _text('pricePerSqm'))}
-                  {attributes.includes('rooms') && renderRow(listingAttributeToText('rooms'), _text('rooms'))}
+                  {attributes.includes('price') && renderRow(listingAttributeToText('price'), _text('price', 'EUR'))}
+                  {attributes.includes('sqm') && renderRow(listingAttributeToText('sqm'), _text('sqm', 'm2 Wohnfläche'))}
+                  {attributes.includes('pricePerSqm') && renderRow(listingAttributeToText('pricePerSqm'), _text('pricePerSqm', 'EUR pro m2'))}
+                  {attributes.includes('rooms') && renderRow(listingAttributeToText('rooms'), _text('rooms', 'Schlafz.'))}
                   {attributes.includes('features') && renderRow(listingAttributeToText('features'), _features)}
                   {attributes.includes('contact') && renderRow(listingAttributeToText('contact'), _text('contact'))}
                </tbody>
