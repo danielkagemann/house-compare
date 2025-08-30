@@ -1,10 +1,10 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === "production";
+const repo = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const nextConfig: NextConfig = {
-  basePath: isProd ? "/house-compare" : "",
-  assetPrefix: isProd ? "/house-compare/" : "",
+  basePath: repo,
+  assetPrefix: repo,
   images: {
     unoptimized: true, // wichtig für GH Pages, da kein Image-Optimizer-Server läuft
   },
