@@ -34,6 +34,7 @@ export const ListingFromIdealista = ({ onChange }: Props) => {
       setLoading(true);
       const listing = parseHtml(data.html);
       if (listing !== null) {
+         listing.url = data.url;
          onChange(listing);
       }
       setLoading(false);

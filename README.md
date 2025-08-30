@@ -19,10 +19,13 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 ## possible improvements
 
+- better navigation
+- hide attribute via click filter
+- thumbnails of the results to preselect
+- distance meassure between two locations
 - store data in indexdb (fallbacks to localstorage)
 - add search
-- add manual in a nice way
-- rewrite cheerio to client based parsing
+- ~~rewrite cheerio to client based parsing~~
 - more sorting possibilities
 - ~~add map link on location~~
 - ~~highlight features only one house has~~

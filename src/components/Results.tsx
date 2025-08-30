@@ -1,7 +1,8 @@
-import { Listing } from "@/model/Listing";
+import { Listing, listingAttributeToText } from "@/model/Listing";
 import { ReactNode, useMemo, useState } from "react";
 import { ReadMore } from "./Readmore";
 import { ArrowLeft, ArrowRight, ExternalLink, MapPinned, Trash } from "lucide-react";
+import { FilterList } from "./FilterList";
 
 type Props = {
    list: Listing[];
@@ -10,11 +11,25 @@ type Props = {
 
 const MAX_ITEMS = 3;
 const CELL_WIDTH = "w-1/3"
+const AVAILABLE_ATTRIBUTES = [
+   'image',
+   'title',
+   'location',
+   'year',
+   'description',
+   'price',
+   'sqm',
+   'pricePerSqm',
+   'rooms',
+   'features',
+   'contact'];
+
 
 export const Results = ({ list, onDelete }: Props) => {
    // state 
    const [sorted, setSorted] = useState<keyof Listing>('pricePerSqm');
    const [from, setFrom] = useState<number>(0);
+   const [attributes, setAttributes] = useState<string[]>(AVAILABLE_ATTRIBUTES);
 
    const sortedList = useMemo(() => {
       return list.toSorted((a: Listing, b: Listing) => {
@@ -32,7 +47,7 @@ export const Results = ({ list, onDelete }: Props) => {
             }
          }
          return 0;
-      }).slice(from, MAX_ITEMS);
+      }).slice(from, from + MAX_ITEMS);
    }, [sorted, list, from]);
 
    // do we have data?
@@ -142,7 +157,7 @@ export const Results = ({ list, onDelete }: Props) => {
          {list.length > 1 &&
             <div className="flex justify-start gap-1 items-center mb-4">
                <span className="text-primary">Sortieren nach</span>
-               <select className="font-bold cursor-pointer border-1 rounded-sm border-gray-400" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
+               <select className="font-bold cursor-pointer border-1 rounded-sm border-gray-400 p-1" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
                   <option value="pricePerSqm">Preis pro Quadratmeter</option>
                   <option value="price">Preis</option>
                   <option value="sqm">Quadratmeter</option>
@@ -153,20 +168,22 @@ export const Results = ({ list, onDelete }: Props) => {
 
          {renderButtons()}
 
+         <FilterList list={AVAILABLE_ATTRIBUTES} selected={attributes} onChange={setAttributes} />
+
          <table className="w-full border-collapse pb-4">
             <tbody>
-               {renderRow('_image', _image)}
+               {attributes.includes('image') && renderRow('_image', _image)}
                {renderRow('_actions', _action)}
-               {renderRow('_what', _title)}
-               {renderRow('Standort', _location)}
-               {renderRow('Baujahr', _text('year'))}
-               {renderRow('Beschreibung', _text('description'))}
-               {renderRow('Preis', _text('price'))}
-               {renderRow('Fläche', _text('sqm'))}
-               {renderRow('Quad. Preis', _text('pricePerSqm'))}
-               {renderRow('Räume', _text('rooms'))}
-               {renderRow('Features', _features)}
-               {renderRow('Kontakt', _text('contact'))}
+               {attributes.includes('title') && renderRow('_what', _title)}
+               {attributes.includes('location') && renderRow(listingAttributeToText('location'), _location)}
+               {attributes.includes('year') && renderRow(listingAttributeToText('year'), _text('year'))}
+               {attributes.includes('description') && renderRow(listingAttributeToText('description'), _text('description'))}
+               {attributes.includes('price') && renderRow(listingAttributeToText('price'), _text('price'))}
+               {attributes.includes('sqm') && renderRow(listingAttributeToText('sqm'), _text('sqm'))}
+               {renderRow(listingAttributeToText('pricePerSqm'), _text('pricePerSqm'))}
+               {attributes.includes('rooms') && renderRow(listingAttributeToText('rooms'), _text('rooms'))}
+               {attributes.includes('features') && renderRow(listingAttributeToText('features'), _features)}
+               {attributes.includes('contact') && renderRow(listingAttributeToText('contact'), _text('contact'))}
             </tbody>
          </table>
       </>

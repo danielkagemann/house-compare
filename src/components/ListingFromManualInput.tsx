@@ -1,5 +1,6 @@
 import { Listing } from "@/model/Listing";
-import { Fragment, useState } from "react";
+import { BedDouble, Calendar, Euro, ImageUp, Leaf, Link, MapPin, MessageSquareMore, RulerDimensionLine, Tag, User } from "lucide-react";
+import { ReactElement, useState } from "react";
 
 type Props = {
    onChange: (value: Listing | null) => void;
@@ -8,27 +9,27 @@ type Props = {
 type Layout = {
    attr: string;
    label: string;
+   icon: ReactElement;
    field: 'input' | 'area' | 'readonly' | 'features';
 };
 
 export const ListingFromManualInput = ({ onChange }: Props) => {
-   const [data, setData] = useState<Record<string, any>>({ uuid: Date.now().toString(), pricePerSqm: '-', price: '0', sqm: '0' });
+   const [data, setData] = useState<Record<string, any>>({ uuid: Date.now().toString(), pricePerSqm: '', price: '', sqm: '' });
    const [features, setFeatures] = useState<string>('');
 
    const attributes: Layout[] = [
-      { field: 'readonly', attr: 'uuid', label: 'Eindeutige ID' },
-      { field: 'input', attr: 'url', label: 'URL zum Angebot' },
-      { field: 'input', attr: 'title', label: 'Titel des Hauses' },
-      { field: 'input', attr: 'location', label: 'Standort (Stadt, Provinz)' },
-      { field: 'input', attr: 'price', label: 'Preis in Euro' },
-      { field: 'input', attr: 'sqm', label: 'Wohnfläche in Quadratmeter' },
-      { field: 'readonly', attr: 'pricePerSqm', label: 'Quadratmeterpreis' },
-      { field: 'input', attr: 'rooms', label: 'Anzahl Schlafzimmer' },
-      { field: 'input', attr: 'image', label: 'URL zum Bild' },
-      { field: 'area', attr: 'description', label: 'Beschreibung des Hauses' },
-      { field: 'input', attr: 'contact', label: 'Name. des Maklers' },
-      { field: 'input', attr: 'year', label: 'Baujahr' },
-      { field: 'features', attr: 'features', label: 'Features (Komma getrennt)' }
+      { icon: <Link size={14} />, field: 'input', attr: 'url', label: 'URL zur Webseite' },
+      { icon: <Tag size={14} />, field: 'input', attr: 'title', label: 'Titel des Hauses' },
+      { icon: <MapPin size={14} />, field: 'input', attr: 'location', label: 'Standort (Stadt, Provinz)' },
+      { icon: <Euro size={14} />, field: 'input', attr: 'price', label: 'Preis in Euro' },
+      { icon: <RulerDimensionLine size={14} />, field: 'input', attr: 'sqm', label: 'Wohnfläche in Quadratmeter' },
+      { icon: <span className="w-3" />, field: 'readonly', attr: 'pricePerSqm', label: 'Der Quadratmeterpreis ist {1} EUR' },
+      { icon: <BedDouble size={14} />, field: 'input', attr: 'rooms', label: 'Anzahl Schlafzimmer' },
+      { icon: <ImageUp size={14} />, field: 'input', attr: 'image', label: 'URL zum Bild' },
+      { icon: <MessageSquareMore size={14} />, field: 'area', attr: 'description', label: 'Beschreibung des Hauses' },
+      { icon: <User size={14} />, field: 'input', attr: 'contact', label: 'Name. des Maklers' },
+      { icon: <Calendar size={14} />, field: 'input', attr: 'year', label: 'Baujahr' },
+      { icon: <Leaf size={14} />, field: 'features', attr: 'features', label: 'Features (Komma getrennt)' }
    ];
 
    function onUpdate(attr: string) {
@@ -58,14 +59,15 @@ export const ListingFromManualInput = ({ onChange }: Props) => {
 
 
    function renderRow(item: any) {
+      const cl = 'border-1 w-full bg-white p-1 border-gray-500 p-2 text-sm focus:outline-none focus:ring-0 focus:bg-gray-100';
       return (
-         <Fragment key={item.attr}>
-            <p className="text-gray-500 text-sm">{item.label}</p>
-            {item.field === 'features' && <input type="text" value={features} onChange={onUpdate(item.attr)} className="border-1 w-full bg-gray-50 p-1 border-gray-500" />}
-            {item.field === 'input' && <input type="text" value={data[item.attr] ?? ''} onChange={onUpdate(item.attr)} className="border-1 w-full bg-gray-50 p-1 border-gray-500" />}
-            {item.field === 'area' && <textarea rows={4} value={data[item.attr] ?? ''} onChange={onUpdate(item.attr)} className="border-1 w-full bg-gray-50 p-1 border-gray-500" />}
-            {item.field === 'readonly' && <p className="text-gray-500 border-1 w-full bg-gray-200 p-1 border-gray-500">{data[item.attr]}</p>}
-         </Fragment>
+         <div key={item.attr} className="flex gap-1 items-center">
+            {item.icon}
+            {item.field === 'features' && <input placeholder={item.label} type="text" value={features} onChange={onUpdate(item.attr)} className={cl} />}
+            {item.field === 'input' && <input placeholder={item.label} type="text" value={data[item.attr] ?? ''} onChange={onUpdate(item.attr)} className={cl} />}
+            {item.field === 'area' && <textarea placeholder={item.label} rows={4} value={data[item.attr] ?? ''} onChange={onUpdate(item.attr)} className={cl} />}
+            {(item.field === 'readonly' && data[item.attr]) && <p className="text-gray-500 w-full border-gray-500">{item.label.replace("{1}", data[item.attr])}</p>}
+         </div>
       );
    }
 
@@ -75,7 +77,8 @@ export const ListingFromManualInput = ({ onChange }: Props) => {
 
    return (
       <>
-         <div className="flex flex-col gap-1">
+         <div className="flex flex-col gap-2">
+            <p className="text-right text-xs font-bold">ID: {data.uuid}</p>
             {
                attributes.map(renderRow)
             }

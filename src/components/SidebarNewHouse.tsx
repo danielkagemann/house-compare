@@ -45,7 +45,7 @@ export const SidebarNewHouse = ({ onChange }: Props) => {
 
    return (
       <div className="bg-black/50 z-50 inset-0 fixed">
-         <div className="absolute right-0 top-0 bottom-0 bg-white p-8 w-1/3 h-screen overflow-y-auto">
+         <div className="absolute right-0 top-0 bottom-0 bg-white p-8 max-w-1/3 min-w-md h-screen overflow-y-auto">
             <div className="flex justify-between gap-2">
                <h2 className="text-xl font-bold">Daten hinzufügen...</h2>
                <button type="button" onClick={() => onChange(null)}>

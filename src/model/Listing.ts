@@ -13,3 +13,22 @@ export type Listing = {
   pricePerSqm: string;
   features: string[];
 };
+
+export function listingAttributeToText(attr: string): string {
+  const mapper: Record<string, string> = {
+    uuid: "ID",
+    url: "Link",
+    title: "Titel",
+    location: "Standort",
+    price: "Preis",
+    sqm: "Wohnfläche",
+    rooms: "Schlafzimmer",
+    image: "Bild",
+    description: "Beschreibung",
+    contact: "Makler",
+    year: "Baujahr",
+    pricePerSqm: "Quad. Preis",
+    features: "Eigenschaften",
+  };
+  return mapper[attr] ?? attr;
+}
