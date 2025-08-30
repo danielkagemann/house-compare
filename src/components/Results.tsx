@@ -17,6 +17,9 @@ export const Results = ({ list, onDelete }: Props) => {
    const [sorted, setSorted] = useState<keyof Listing>('pricePerSqm');
    const [attributes, setAttributes] = useState<string[]>(LISTING_AVAILABLE_ATTRIBUTES);
 
+   /**
+    * sort list and also filter
+    */
    const sortedList = useMemo(() => {
       return list.toSorted((a: Listing, b: Listing) => {
          const src = a[sorted];
@@ -36,7 +39,7 @@ export const Results = ({ list, onDelete }: Props) => {
       });
    }, [sorted, list]);
 
-   // do we have data?
+   // do we have data? if not render empty welcome message
    if (list.length === 0) {
       return <>
          <h2 className="font-bold text-lg">Herzlich Willkommen,</h2>
@@ -48,6 +51,12 @@ export const Results = ({ list, onDelete }: Props) => {
       </>;
    }
 
+   /**
+    * render one row of the table
+    * @param label 
+    * @param render 
+    * @returns 
+    */
    function renderRow(label: string, render: (item: Listing, index: number) => ReactNode) {
       return (
          <tr key={label}>
@@ -130,7 +139,7 @@ export const Results = ({ list, onDelete }: Props) => {
 
    return (
       <>
-         <div className="flex justify-between gap-1 items-center mb-4">
+         <div className="flex justify-end gap-1 items-center mb-4">
             <FilterList list={LISTING_AVAILABLE_ATTRIBUTES} selected={attributes} onChange={setAttributes} />
 
             <select className="cursor-pointer border-1 rounded-sm border-gray-400 p-2 text-md" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>

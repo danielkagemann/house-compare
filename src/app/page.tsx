@@ -4,10 +4,8 @@ import Image from "next/image";
 import { Listing } from "@/model/Listing";
 import { Results } from "@/components/Results";
 import { useStorage } from "@/hooks/useStorage";
-import { Eraser, SquarePlus } from "lucide-react";
 import { SidebarNewHouse } from "@/components/SidebarNewHouse";
 import { ActionPanel } from "@/components/ActionPanel";
-
 
 export default function Home() {
   // states
@@ -16,6 +14,10 @@ export default function Home() {
   // hooks
   const $storage = useStorage();
 
+  /**
+   * coming back from sidebar. null means just close otherwise add new item.
+   * @param data 
+   */
   function handleData(data: Listing | null) {
     if (data) {
       $storage.add(data);
@@ -37,11 +39,17 @@ export default function Home() {
     );
   }
 
+  /**
+   * callback from actionpanel
+   * @param action 
+   */
   const handleAction = (action: string) => {
     if (action === 'delete') {
       $storage.clear();
-    } else {
+    } else if (action === 'add') {
       setVisible(prev => !prev)
+    } else {
+      throw new Error('action not supported');
     }
   }
 
@@ -49,11 +57,7 @@ export default function Home() {
     <div className="p-12">
       <div className="flex justify-between">
         <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/logo.png`} width={135} height={64} alt="logo" />
-
-        {
-          $storage.list.length > 0 && <div className="bg-primary rounded-full w-12 h-12"><span className="text-white font-bold flex justify-center items-center w-full h-full">{$storage.list.length}</span></div>
-        }
-
+        {$storage.list.length > 0 && <div className="bg-primary rounded-full w-12 h-12"><span className="text-white font-bold flex justify-center items-center w-full h-full">{$storage.list.length}</span></div>}
       </div>
       <Results list={$storage.list} onDelete={$storage.remove} />
       <ActionPanel onAction={handleAction} />

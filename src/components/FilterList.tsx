@@ -1,4 +1,5 @@
 import { listingAttributeToText } from "@/model/Listing";
+import { useState } from "react";
 
 type Props = {
    list: string[];
@@ -7,7 +8,11 @@ type Props = {
 };
 
 export const FilterList = ({ selected, list, onChange }: Props) => {
-
+   /**
+    * handle update of selected filters
+    * @param val 
+    * @returns 
+    */
    const handleUpdate = (val: string) => () => {
       const newValues = [...selected];
       const id = newValues.indexOf(val);
@@ -19,6 +24,11 @@ export const FilterList = ({ selected, list, onChange }: Props) => {
       onChange(newValues);
    };
 
+   /**
+    * render one filter item active or not depending if in the list
+    * @param item 
+    * @returns 
+    */
    const render = (item: string) => (
       <button type="button"
          key={item}
@@ -29,7 +39,7 @@ export const FilterList = ({ selected, list, onChange }: Props) => {
    );
 
    return (
-      <div className="flex gap-1 flex-wrap">
+      <div className="flex gap-1">
          {list.map(render)}
       </div>
    );
