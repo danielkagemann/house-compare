@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import getConfig from "next/config";
 import Image from "next/image";
 import { Listing } from "@/model/Listing";
 import { Results } from "@/components/Results";
@@ -8,7 +7,6 @@ import { useStorage } from "@/hooks/useStorage";
 import { Eraser, SquarePlus } from "lucide-react";
 import { SidebarNewHouse } from "@/components/SidebarNewHouse";
 
-const { basePath } = getConfig();
 
 export default function Home() {
   // states
@@ -40,7 +38,7 @@ export default function Home() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <Image src={`${basePath}/assets/images/logo.png`} width={135} height={64} alt="logo" />
+      <Image src="/assets/images/logo.png" width={135} height={64} alt="logo" />
 
       <div className="flex justify-between mb-8">
         <p className="text-gray-500 my-4">Hier kannst Du verschiedene Häuser miteinander vergleichen.</p>
