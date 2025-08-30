@@ -127,7 +127,7 @@ export const Results = ({ list, onDelete }: Props) => {
    }
 
    function _action(item: Listing) {
-      return (<div className="flex gap-2">
+      return (<div className="flex gap-2 justify-center">
          {
             item.uuid &&
             <button type="button" className="cursor-pointer" onClick={() => onDelete(item.uuid)}>
@@ -155,11 +155,11 @@ export const Results = ({ list, onDelete }: Props) => {
             </select>
          </div>
 
-         <div className="overflow-x-auto block">
-            <table className="min-w-full border-collapse pb-4">
+         <div className="overflow-x-auto block shadow-xl border-1 border-gray-300 rounded-xl bg-white p-4">
+            <table className="min-w-full border-collapse">
                <tbody>
-                  {attributes.includes('image') && renderRow('_image', _image)}
                   {renderRow('_actions', _action)}
+                  {attributes.includes('image') && renderRow('_image', _image)}
                   {attributes.includes('title') && renderRow('_what', _title)}
                   {attributes.includes('location') && renderRow(listingAttributeToText('location'), _location)}
                   {attributes.includes('year') && renderRow(listingAttributeToText('year'), _text('year', 'gebaut'))}
