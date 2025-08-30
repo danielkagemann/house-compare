@@ -59,7 +59,7 @@ export const Results = ({ list, onDelete }: Props) => {
    }
 
    function _text(attr: keyof Listing, suffix: string = '') {
-      return function (item: Listing) {
+      return function _internal(item: Listing) {
          const v = item[attr] || ''
          if (!v || v.length === 0) {
             return '---'
@@ -79,14 +79,14 @@ export const Results = ({ list, onDelete }: Props) => {
       const tmp = [...sortedList];
       tmp.splice(index, 1);
 
-      const flatList = tmp.map((item) => item.features).flat();
+      const flatList = tmp.map((item) => item?.features ?? []).flat();
 
       // get the features NOT in otherFeatures
-      const highlight = item.features.filter((feature: string) => !flatList.includes(feature));
+      const highlight = (item?.features ?? []).filter((feature: string) => !flatList.includes(feature));
 
       return (<div className="flex flex-col items-start gap-0.5">
          {
-            item.features.map((val: string) => (
+            (item?.features ?? []).map((val: string) => (
                <div key={val}
                   className={`${highlight.includes(val) ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'} rounded-full px-2 py-1 text-xs`}>
                   {val}
@@ -100,7 +100,7 @@ export const Results = ({ list, onDelete }: Props) => {
       return (<strong>{item.title}</strong>)
    }
 
-   function _action(item: Listing, index: number) {
+   function _action(item: Listing) {
       return (<div className="flex gap-2">
          <a className="text-primary cursor-pointer" title={item.url} href={item.url} target="_blank">
             < ExternalLink className="w-4 h-4" />
@@ -142,11 +142,12 @@ export const Results = ({ list, onDelete }: Props) => {
          {list.length > 1 &&
             <div className="flex justify-start gap-1 items-center mb-4">
                <span className="text-primary">Sortieren nach</span>
-               <select className="font-bold cursor-pointer" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
+               <select className="font-bold cursor-pointer border-1 rounded-sm border-gray-400" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
                   <option value="pricePerSqm">Preis pro Quadratmeter</option>
                   <option value="price">Preis</option>
                   <option value="sqm">Quadratmeter</option>
                   <option value="rooms">Anzahl Räume</option>
+                  <option value="year">Baujahr</option>
                </select>
             </div>}
 

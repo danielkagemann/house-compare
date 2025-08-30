@@ -1,62 +1,26 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { ListDetails, SidebarSourcecode } from "@/components/SidebarSourcecode";
 import { Listing } from "@/model/Listing";
 import { Results } from "@/components/Results";
 import { useStorage } from "@/hooks/useStorage";
 import { Eraser, SquarePlus } from "lucide-react";
+import { SidebarNewHouse } from "@/components/SidebarNewHouse";
 
 
 export default function Home() {
   // states
   const [visible, setVisible] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
 
   // hooks
   const $storage = useStorage();
 
-  /**
-   * parse the source and fill listing
-   * @param html 
-   * @returns 
-   */
-  const parseHtml = async (response: ListDetails | null) => {
+  function handleData(data: Listing | null) {
+    if (data) {
+      $storage.add(data);
+    }
     setVisible(false);
-
-    if (!response) {
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/details", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ html: response.html }),
-      });
-
-      const data: Listing = await res.json();
-      data.url = response.url;
-
-      if (!("error" in data)) {
-        const priceNum = parseFloat(data.price.replace(/[^\d]/g, ""));
-        const sqmNum = parseFloat(data.sqm.replace(/[^\d]/g, ""));
-        data.pricePerSqm = !isNaN(priceNum) && !isNaN(sqmNum) && sqmNum > 0
-          ? (Math.round(priceNum / sqmNum) + ' €')
-          : '';
-        $storage.add(data);
-      } else {
-        alert("Fehler: " + (data as any).error);
-      }
-    } catch (e) {
-      console.error(e);
-      alert("Fehler beim Abrufen der Daten");
-    }
-
-    setLoading(false);
-  };
+  }
 
   /**
    * show sidebar
@@ -68,7 +32,7 @@ export default function Home() {
     }
 
     return (
-      <SidebarSourcecode onChange={parseHtml} />
+      <SidebarNewHouse onChange={handleData} />
     );
   }
 
