@@ -12,13 +12,17 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 ## dependencies used
 
-- nextjs for client and server
+- nextjs for client ~~and server~~
 - tailwind css
-- cheerio (server api parses the HTML here)
+- ~~cheerio (server api parses the HTML here)~~ replaced with DOM parsing to be deployable on GH pages
 - lucide-react for nice symbols
 
 ## possible improvements
 
+- store data in indexdb (fallbacks to localstorage)
+- add search
+- add manual in a nice way
+- rewrite cheerio to client based parsing
 - more sorting possibilities
 - ~~add map link on location~~
 - ~~highlight features only one house has~~
@@ -27,8 +31,8 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - ~~better navigation (show arrows instead of scrolling)~~
 - ~~put action at the top~~
 - ~~add url as link~~
-- micro-animations?
-- better comparison view
+- micro-animations
+- smarter comparison view
 
 ## Getting Started
 

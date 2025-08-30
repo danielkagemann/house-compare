@@ -124,7 +124,7 @@ export const Results = ({ list, onDelete }: Props) => {
       }
       return (
          <div className="flex justify-between mb-4">
-            <h2 className="font-bold text-lg">Ergebnisse {from + 1} bis {Math.min(from + MAX_ITEMS, list.length)}</h2>
+            <h2 className="font-bold text-lg">Insgesamt {list.length} - Sichtbar {from + 1} bis {Math.min(from + MAX_ITEMS, list.length)}</h2>
             <div className="flex justify-end gap-2">
                <button type="button" onClick={() => setFrom(p => Math.max(p - 1, 0))}>
                   <ArrowLeft className="w-4 h-4 cursor-pointer"></ArrowLeft>

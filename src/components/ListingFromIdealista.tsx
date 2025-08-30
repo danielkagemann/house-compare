@@ -1,6 +1,7 @@
 "use client";
 
 import { Listing } from "@/model/Listing";
+import { parseHtml } from "@/utils/parse";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
 
@@ -29,41 +30,17 @@ export const ListingFromIdealista = ({ onChange }: Props) => {
    * parse the source and fill listing
    * @returns 
    */
-   const parseHtml = async () => {
+   const onFinished = async () => {
       setLoading(true);
-
-      try {
-         const res = await fetch("/api/details", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ html: data.html }),
-         });
-
-         const listing: Listing = await res.json();
-         listing.url = data.url;
-
-         if (!("error" in listing)) {
-            const priceNum = parseFloat(listing.price.replace(/[^\d]/g, ""));
-            const sqmNum = parseFloat(listing.sqm.replace(/[^\d]/g, ""));
-            listing.pricePerSqm = !isNaN(priceNum) && !isNaN(sqmNum) && sqmNum > 0
-               ? (Math.round(priceNum / sqmNum) + ' €')
-               : '';
-            onChange(listing);
-         } else {
-            alert("Fehler: " + (listing as any).error);
-         }
-      } catch (e) {
-         console.error(e);
-         alert("Fehler beim Abrufen der Daten");
+      const listing = parseHtml(data.html);
+      if (listing !== null) {
+         onChange(listing);
       }
-
       setLoading(false);
    };
 
    return (
       <>
-         <em>Dieser Bereich funktioniert nicht unter github-pages.</em>
-
          <p className="text-gray-500 text-sm py-2">URL eingeben</p>
          <div className="flex justify-between gap-1">
             <input type="text" value={data.url} onChange={(e) => setData({ ...data, url: e.target.value })} className="border-1 w-full bg-gray-50 p-1 border-gray-500" />
@@ -81,7 +58,7 @@ export const ListingFromIdealista = ({ onChange }: Props) => {
 
          <div className="flex justify-end mt-4">
             {loading && <span>Wird hinzugefügt...</span>}
-            {!loading && <button type="button" onClick={parseHtml} className="bg-primary text-white px-2 py-1 cursor-pointer rounded">Hinzufügen</button>}
+            {!loading && <button type="button" onClick={onFinished} className="bg-primary text-white px-2 py-1 cursor-pointer rounded">Hinzufügen</button>}
          </div>
       </>
    );
