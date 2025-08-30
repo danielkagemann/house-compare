@@ -21,6 +21,7 @@ export const FilterList = ({ selected, list, onChange }: Props) => {
 
    const render = (item: string) => (
       <button type="button"
+         key={item}
          onClick={handleUpdate(item)}
          className={`text-xs px-2 py-1 rounded-xl cursor-pointer ${selected.includes(item) ? 'text-white bg-primary border-black' : 'text-gray-800 bg-gray-300 border-gray-500'} border-1 border-dashed`}>
          {listingAttributeToText(item)}

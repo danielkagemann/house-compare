@@ -14,6 +14,20 @@ export type Listing = {
   features: string[];
 };
 
+export const LISTING_AVAILABLE_ATTRIBUTES = [
+  "image",
+  "title",
+  "location",
+  "year",
+  "description",
+  "price",
+  "sqm",
+  "pricePerSqm",
+  "rooms",
+  "features",
+  "contact",
+];
+
 export function listingAttributeToText(attr: string): string {
   const mapper: Record<string, string> = {
     uuid: "ID",

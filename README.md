@@ -19,8 +19,13 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 ## possible improvements
 
-- better navigation
-- hide attribute via click filter
+- better filter in drawer?
+- instead of dropdown choose other filters like price range, sqm range, ...
+- notifications
+- ~~url only if there is one~~
+- highlight differences (year, price, ...)
+- ~~better navigation~~
+- ~~hide attribute via click filter~~
 - thumbnails of the results to preselect
 - distance meassure between two locations
 - store data in indexdb (fallbacks to localstorage)

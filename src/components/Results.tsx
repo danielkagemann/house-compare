@@ -1,7 +1,7 @@
-import { Listing, listingAttributeToText } from "@/model/Listing";
+import { Listing, LISTING_AVAILABLE_ATTRIBUTES, listingAttributeToText } from "@/model/Listing";
 import { ReactNode, useMemo, useState } from "react";
 import { ReadMore } from "./Readmore";
-import { ArrowLeft, ArrowRight, ExternalLink, MapPinned, Trash } from "lucide-react";
+import { ExternalLink, MapPinned, Trash } from "lucide-react";
 import { FilterList } from "./FilterList";
 
 type Props = {
@@ -9,27 +9,13 @@ type Props = {
    onDelete: (id: string) => void;
 };
 
-const MAX_ITEMS = 3;
-const CELL_WIDTH = "w-1/3"
-const AVAILABLE_ATTRIBUTES = [
-   'image',
-   'title',
-   'location',
-   'year',
-   'description',
-   'price',
-   'sqm',
-   'pricePerSqm',
-   'rooms',
-   'features',
-   'contact'];
-
+const CELL_LABEL = "min-w-[15vw]";
+const CELL_WIDTH = "min-w-[25vw]";
 
 export const Results = ({ list, onDelete }: Props) => {
    // state 
    const [sorted, setSorted] = useState<keyof Listing>('pricePerSqm');
-   const [from, setFrom] = useState<number>(0);
-   const [attributes, setAttributes] = useState<string[]>(AVAILABLE_ATTRIBUTES);
+   const [attributes, setAttributes] = useState<string[]>(LISTING_AVAILABLE_ATTRIBUTES);
 
    const sortedList = useMemo(() => {
       return list.toSorted((a: Listing, b: Listing) => {
@@ -47,8 +33,8 @@ export const Results = ({ list, onDelete }: Props) => {
             }
          }
          return 0;
-      }).slice(from, from + MAX_ITEMS);
-   }, [sorted, list, from]);
+      });
+   }, [sorted, list]);
 
    // do we have data?
    if (list.length === 0) {
@@ -65,7 +51,7 @@ export const Results = ({ list, onDelete }: Props) => {
    function renderRow(label: string, render: (item: Listing, index: number) => ReactNode) {
       return (
          <tr key={label}>
-            <td className="font-bold border-b border-gray-200 p-2 text-xs align-top">{!label.startsWith('_') && label}</td>
+            <td className={`font-bold border-b border-gray-200 p-2 text-xs align-top sticky z-10 bg-white left-0 border-r-1 border-r-gray-500 ${CELL_LABEL}`}>{!label.startsWith('_') && label}</td>
             {
                sortedList.map((item: Listing, index: number) => (<td className={`border-b border-gray-200 p-2 align-top ${CELL_WIDTH}`} key={`${label}-${index}`}>{render(item, index)}</td>))
             }
@@ -117,15 +103,24 @@ export const Results = ({ list, onDelete }: Props) => {
 
    function _action(item: Listing) {
       return (<div className="flex gap-2">
-         <a className="text-primary cursor-pointer" title={item.url} href={item.url} target="_blank">
-            < ExternalLink className="w-4 h-4" />
-         </a >
-         <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
-            <MapPinned className="cursor-pointer w-4 h-4" />
-         </a>
-         <button type="button" className="cursor-pointer" onClick={() => onDelete(item.uuid)}>
-            <Trash className="text-red-600 w-4 h-4" />
-         </button>
+         {
+            item.url &&
+            <a className="text-primary cursor-pointer" title={item.url} href={item.url} target="_blank">
+               <ExternalLink className="w-4 h-4" />
+            </a>
+         }
+         {
+            item.location &&
+            <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
+               <MapPinned className="cursor-pointer w-4 h-4" />
+            </a>
+         }
+         {
+            item.uuid &&
+            <button type="button" className="cursor-pointer" onClick={() => onDelete(item.uuid)}>
+               <Trash className="text-red-600 w-4 h-4" />
+            </button>
+         }
       </div >);
    }
 
@@ -133,59 +128,38 @@ export const Results = ({ list, onDelete }: Props) => {
       return (<img src={item.image} alt="compare:image" className="w-full h-52 object-cover rounded-xl" />)
    }
 
-   function renderButtons() {
-      if (list.length <= MAX_ITEMS) {
-         return null;
-      }
-      return (
-         <div className="flex justify-between mb-4">
-            <h2 className="font-bold text-lg">Insgesamt {list.length} - Sichtbar {from + 1} bis {Math.min(from + MAX_ITEMS, list.length)}</h2>
-            <div className="flex justify-end gap-2">
-               <button type="button" onClick={() => setFrom(p => Math.max(p - 1, 0))}>
-                  <ArrowLeft className="w-4 h-4 cursor-pointer"></ArrowLeft>
-               </button>
-               <button type="button" onClick={() => setFrom(p => Math.min(p + 1, list.length - MAX_ITEMS))}>
-                  <ArrowRight className="w-4 h-4 cursor-pointer"></ArrowRight>
-               </button>
-            </div>
-         </div>
-      );
-   }
-
    return (
       <>
-         {list.length > 1 &&
-            <div className="flex justify-start gap-1 items-center mb-4">
-               <span className="text-primary">Sortieren nach</span>
-               <select className="font-bold cursor-pointer border-1 rounded-sm border-gray-400 p-1" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
-                  <option value="pricePerSqm">Preis pro Quadratmeter</option>
-                  <option value="price">Preis</option>
-                  <option value="sqm">Quadratmeter</option>
-                  <option value="rooms">Anzahl Räume</option>
-                  <option value="year">Baujahr</option>
-               </select>
-            </div>}
+         <div className="flex justify-between gap-1 items-center mb-4">
+            <FilterList list={LISTING_AVAILABLE_ATTRIBUTES} selected={attributes} onChange={setAttributes} />
 
-         {renderButtons()}
+            <select className="cursor-pointer border-1 rounded-sm border-gray-400 p-2 text-md" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
+               <option value="pricePerSqm">Preis pro Quadratmeter</option>
+               <option value="price">Preis</option>
+               <option value="sqm">Quadratmeter</option>
+               <option value="rooms">Anzahl Räume</option>
+               <option value="year">Baujahr</option>
+            </select>
+         </div>
 
-         <FilterList list={AVAILABLE_ATTRIBUTES} selected={attributes} onChange={setAttributes} />
-
-         <table className="w-full border-collapse pb-4">
-            <tbody>
-               {attributes.includes('image') && renderRow('_image', _image)}
-               {renderRow('_actions', _action)}
-               {attributes.includes('title') && renderRow('_what', _title)}
-               {attributes.includes('location') && renderRow(listingAttributeToText('location'), _location)}
-               {attributes.includes('year') && renderRow(listingAttributeToText('year'), _text('year'))}
-               {attributes.includes('description') && renderRow(listingAttributeToText('description'), _text('description'))}
-               {attributes.includes('price') && renderRow(listingAttributeToText('price'), _text('price'))}
-               {attributes.includes('sqm') && renderRow(listingAttributeToText('sqm'), _text('sqm'))}
-               {renderRow(listingAttributeToText('pricePerSqm'), _text('pricePerSqm'))}
-               {attributes.includes('rooms') && renderRow(listingAttributeToText('rooms'), _text('rooms'))}
-               {attributes.includes('features') && renderRow(listingAttributeToText('features'), _features)}
-               {attributes.includes('contact') && renderRow(listingAttributeToText('contact'), _text('contact'))}
-            </tbody>
-         </table>
+         <div className="overflow-x-auto block">
+            <table className="min-w-full border-collapse pb-4">
+               <tbody>
+                  {attributes.includes('image') && renderRow('_image', _image)}
+                  {renderRow('_actions', _action)}
+                  {attributes.includes('title') && renderRow('_what', _title)}
+                  {attributes.includes('location') && renderRow(listingAttributeToText('location'), _location)}
+                  {attributes.includes('year') && renderRow(listingAttributeToText('year'), _text('year'))}
+                  {attributes.includes('description') && renderRow(listingAttributeToText('description'), _text('description'))}
+                  {attributes.includes('price') && renderRow(listingAttributeToText('price'), _text('price'))}
+                  {attributes.includes('sqm') && renderRow(listingAttributeToText('sqm'), _text('sqm'))}
+                  {renderRow(listingAttributeToText('pricePerSqm'), _text('pricePerSqm'))}
+                  {attributes.includes('rooms') && renderRow(listingAttributeToText('rooms'), _text('rooms'))}
+                  {attributes.includes('features') && renderRow(listingAttributeToText('features'), _features)}
+                  {attributes.includes('contact') && renderRow(listingAttributeToText('contact'), _text('contact'))}
+               </tbody>
+            </table>
+         </div>
       </>
    );
 }
