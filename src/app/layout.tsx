@@ -1,11 +1,7 @@
-import type { Metadata } from "next";
+"use client";
+
+import { ToastProvider } from "@/hooks/useToast";
 import "./globals.css";
-
-
-export const metadata: Metadata = {
-  title: "House compare",
-  description: "Häuser vergleichen von idealista und manuellen Einträgen",
-};
 
 export default function RootLayout({
   children,
@@ -21,7 +17,9 @@ export default function RootLayout({
         <link rel="manifest" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/site.webmanifest`} />
       </head>
       <body>
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import { Results } from "@/components/Results";
 import { useStorage } from "@/hooks/useStorage";
 import { SidebarNewHouse } from "@/components/SidebarNewHouse";
 import { ActionPanel } from "@/components/ActionPanel";
+import SlideIn from "@/motion/SlideIn";
 
 export default function Home() {
   // states
@@ -43,14 +44,45 @@ export default function Home() {
    * callback from actionpanel
    * @param action 
    */
-  const handleAction = (action: string) => {
+  const handleAction = (action: string, data?: string) => {
     if (action === 'delete') {
       $storage.clear();
     } else if (action === 'add') {
       setVisible(prev => !prev)
+    } else if (action === 'save') {
+      $storage.exportAsJson();
+    } else if (action === 'import') {
+      $storage.importJson(data || '');
     } else {
       throw new Error('action not supported');
     }
+  }
+
+  if ($storage.list.length === 0) {
+    return (
+      <div className="flex justify-center items-center flex-col max-w-xl m-auto h-screen">
+        <SlideIn direction="top" duration={0.5} delay={0}>
+          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/logo.png`} width={135} height={64} alt="logo" />
+        </SlideIn>
+        <div className="mt-8">
+          <SlideIn direction="left" duration={0.5} delay={0.2}>
+            <h2 className="font-bold text-lg">Herzlich Willkommen,</h2>
+          </SlideIn>
+          <SlideIn direction="top" duration={0.5} delay={0.6}>
+            <p className="text-gray-600 text-md mt-4">Dies ist eine kleine Anwendung, mit der Du Häuser vergleichen kannst.
+              Du kannst die Daten manuell eingeben oder von einer idealista-Immobilienseite importieren. Ein automatischer Import von idealista
+              ist leider nicht möglich, aberdu kannst den Quelltext hinzufügen und die Daten werden automatisch extrahiert.
+              <br />Alle hinzugefügten Immobilien werden gespeichert. Auch wenn Du die Seite verlässt und wieder kommst, kannst Du
+              dort weitermachen, wo Du aufgehört hast. Füge so viele Immobilien hinzu wie Du möchtest.
+            </p>
+          </SlideIn>
+        </div>
+        {renderSidebar()}
+        <SlideIn amount={0} delay={0.5}>
+          <ActionPanel onAction={handleAction} disabled={['delete', 'save']} />
+        </SlideIn>
+      </div>
+    );
   }
 
   return (

@@ -19,16 +19,13 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 ## possible improvements
 
-- better filter in drawer?
-- instead of dropdown choose other filters like price range, sqm range, ...
-- notifications
+- ~~Tooltips hinzufügen~~
+- ~~export/import as JSON~~
+- ~~notifications~~
 - ~~url only if there is one~~
-- highlight differences (year, price, ...)
 - ~~better navigation~~
 - ~~hide attribute via click filter~~
-- thumbnails of the results to preselect
 - distance meassure between two locations
-- store data in indexdb (fallbacks to localstorage)
 - add search
 - ~~rewrite cheerio to client based parsing~~
 - more sorting possibilities
@@ -39,8 +36,8 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - ~~better navigation (show arrows instead of scrolling)~~
 - ~~put action at the top~~
 - ~~add url as link~~
-- micro-animations
-- smarter comparison view
+- ~~micro-animations~~
+- ~~smarter comparison view~~
 
 ## Getting Started
 

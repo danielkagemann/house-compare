@@ -3,6 +3,7 @@ import { ReactNode, useMemo, useState } from "react";
 import { ReadMore } from "./Readmore";
 import { ExternalLink, MapPinned, Trash } from "lucide-react";
 import { FilterList } from "./FilterList";
+import { Tooltip } from "./Tooltip";
 
 type Props = {
    list: Listing[];
@@ -37,18 +38,6 @@ export const Results = ({ list, onDelete }: Props) => {
          return 0;
       });
    }, [sorted, list]);
-
-   // do we have data? if not render empty welcome message
-   if (list.length === 0) {
-      return <>
-         <h2 className="font-bold text-lg">Herzlich Willkommen,</h2>
-         <p className="text-gray-600 text-md mt-4">Dies ist eine kleine Anwendung, mit der Du Häuser von Idealista miteinander vergleichen kannst.
-            Da die Daten nicht direkt von idealista ermittelt werden können, kmusst Du (leider) den Quelltext hinzufügen.
-            <br />Alle hinzugefügten Immobilien werden gespeichert. Auch wenn Du die Seite verlässt und wieder kommst, kannst Du
-            dort weitermachen, wo Du aufgehört hast. Füge so viele Immobilien hinzu wie Du möchtest.
-         </p>
-      </>;
-   }
 
    /**
     * render one row of the table
@@ -117,8 +106,10 @@ export const Results = ({ list, onDelete }: Props) => {
          <div className="flex gap-1 items-center">
             {
                item.url &&
-               <a className="text-primary cursor-pointer" title={item.url} href={item.url} target="_blank">
-                  <ExternalLink className="w-4 h-4" />
+               <a className="text-primary cursor-pointer" href={item.url} target="_blank">
+                  <Tooltip text="Zur Originalseite">
+                     <ExternalLink className="w-4 h-4" />
+                  </Tooltip>
                </a>
             }
             <strong>{item.title}</strong>
@@ -131,14 +122,16 @@ export const Results = ({ list, onDelete }: Props) => {
          {
             item.uuid &&
             <button type="button" className="cursor-pointer" onClick={() => onDelete(item.uuid)}>
-               <Trash className="text-red-600 w-4 h-4" />
+               <Tooltip text="Immobilie löschen">
+                  <Trash className="text-red-600 w-4 h-4" />
+               </Tooltip>
             </button>
          }
       </div >);
    }
 
    function _image(item: Listing) {
-      return (<img src={item.image} alt="compare:image" className="w-full h-52 object-cover rounded-xl" />)
+      return (<img src={item.image} alt="compare:image" className="w-[25vw] h-52 object-cover rounded-xl" />)
    }
 
    return (
