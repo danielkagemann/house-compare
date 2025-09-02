@@ -85,11 +85,17 @@ export default function Home() {
     );
   }
 
+  const renderAmount = () => {
+    return <div className="bg-primary rounded-full w-12 h-12">
+      <span className="text-white font-bold flex justify-center items-center w-full h-full">{$storage.list.length}</span>
+    </div>
+  }
+
   return (
     <div className="p-12">
       <div className="flex justify-between">
         <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/logo.png`} width={135} height={64} alt="logo" />
-        {$storage.list.length > 0 && <div className="bg-primary rounded-full w-12 h-12"><span className="text-white font-bold flex justify-center items-center w-full h-full">{$storage.list.length}</span></div>}
+        {renderAmount()}
       </div>
       <Results list={$storage.list} onDelete={$storage.remove} />
       <ActionPanel onAction={handleAction} />

@@ -39,7 +39,7 @@ export const FilterList = ({ selected, list, onChange }: Props) => {
    );
 
    return (
-      <div className="flex gap-1">
+      <div className="flex gap-1 flex-wrap">
          {list.map(render)}
       </div>
    );

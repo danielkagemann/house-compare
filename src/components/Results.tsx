@@ -10,7 +10,7 @@ type Props = {
    onDelete: (id: string) => void;
 };
 
-const CELL_WIDTH = "min-w-[25vw]";
+const CELL_WIDTH = "min-w-[50vw] md:min-w-[25vw]";
 
 export const Results = ({ list, onDelete }: Props) => {
    // state 
@@ -127,16 +127,16 @@ export const Results = ({ list, onDelete }: Props) => {
                </Tooltip>
             </button>
          }
-      </div >);
+      </div>);
    }
 
    function _image(item: Listing) {
-      return (<img src={item.image} alt="compare:image" className="w-[25vw] h-52 object-cover rounded-xl" />)
+      return (<img src={item.image} alt="compare:image" className="min-w-[50vw] md:min-w-[25vw] h-52 object-cover rounded-xl" />)
    }
 
    return (
       <>
-         <div className="flex justify-end gap-1 items-center mb-4">
+         <div className="flex flex-col md:flex-row justify-end gap-1 items-center mb-4">
             <FilterList list={LISTING_AVAILABLE_ATTRIBUTES} selected={attributes} onChange={setAttributes} />
 
             <select className="cursor-pointer border-1 rounded-sm border-gray-400 p-2 text-md" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
