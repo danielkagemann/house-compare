@@ -3,26 +3,51 @@
 import { Listing, LISTING_AVAILABLE_ATTRIBUTES } from "@/model/Listing";
 import { useEffect, useState } from "react";
 import { useToast } from "./useToast";
+import { useCoordinates } from "./useCoordinates";
 
 const STORAGEKEY = "listings";
 
 export const useStorage = () => {
   // hooks
   const { showToast } = useToast();
+  const $coords = useCoordinates();
 
   // state
   const [list, setList] = useState<Listing[]>([]);
 
   const _update = (values: Listing[]) => {
     setList(values);
-    localStorage.setItem(STORAGEKEY, JSON.stringify(values));
+
+    // async Funktion im useEffect definieren
+    async function updateData() {
+      const updated: Listing[] = [];
+
+      for (const item of values) {
+        if (item.coordinates === undefined && item.location) {
+          try {
+            const res = await $coords.fromAddress(item.location);
+            updated.push({ ...item, coordinates: res });
+          } catch (err) {
+            console.error("Fehler bei Request:", err);
+            updated.push(item);
+          }
+        } else {
+          updated.push(item);
+        }
+      }
+      setList(updated);
+      localStorage.setItem(STORAGEKEY, JSON.stringify(updated));
+    }
+
+    // execute the async function
+    updateData();
   };
 
   // initial load
   useEffect(() => {
     const raw = localStorage.getItem(STORAGEKEY) ?? "[]";
     const json = JSON.parse(raw);
-    setList(json);
+    _update(json);
   }, []);
 
   const exportAsJson = (filename = "listings.json") => {

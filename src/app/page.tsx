@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Listing } from "@/model/Listing";
 import { Results } from "@/components/Results";
 import { useStorage } from "@/hooks/useStorage";
-import { SidebarNewHouse } from "@/components/SidebarNewHouse";
+import { SidebarNewHouse } from "@/components/sidebars/SidebarNewHouse";
 import { ActionPanel } from "@/components/ActionPanel";
 import SlideIn from "@/motion/SlideIn";
 
@@ -92,7 +92,7 @@ export default function Home() {
   }
 
   return (
-    <div className="p-12">
+    <div className="py-8 px-12 space-y-2">
       <div className="flex justify-between">
         <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/logo.png`} width={135} height={64} alt="logo" />
         {renderAmount()}

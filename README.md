@@ -16,6 +16,7 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - tailwind css
 - ~~cheerio (server api parses the HTML here)~~ replaced with DOM parsing to be deployable on GH pages
 - lucide-react for nice symbols
+- motion for microanimations
 
 ## possible improvements
 

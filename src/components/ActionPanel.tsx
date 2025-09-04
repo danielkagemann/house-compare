@@ -1,5 +1,5 @@
 import { Dot, Download, SquarePlus, Trash } from "lucide-react";
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "./ui/Tooltip";
 import { useEffect, useState } from "react";
 
 type Props = {

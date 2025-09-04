@@ -1,3 +1,8 @@
+export type Coordinates = {
+  lat: number;
+  lon: number;
+};
+
 export type Listing = {
   uuid: string;
   url: string;
@@ -12,6 +17,7 @@ export type Listing = {
   year: string;
   pricePerSqm: string;
   features: string[];
+  coordinates?: Coordinates;
 };
 
 export const LISTING_AVAILABLE_ATTRIBUTES = [

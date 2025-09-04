@@ -1,9 +1,12 @@
-import { Listing, LISTING_AVAILABLE_ATTRIBUTES, listingAttributeToText } from "@/model/Listing";
+import { Coordinates, Listing, LISTING_AVAILABLE_ATTRIBUTES, listingAttributeToText } from "@/model/Listing";
 import { ReactNode, useMemo, useState } from "react";
-import { ReadMore } from "./Readmore";
-import { ExternalLink, MapPinned, Trash } from "lucide-react";
+import { ReadMore } from "./ui/Readmore";
+import { ArrowDown01, ArrowUp10, ExternalLink, MapPinned, Trash } from "lucide-react";
 import { FilterList } from "./FilterList";
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "./ui/Tooltip";
+import { ButtonGroup } from "./ui/ButtonGroup";
+import { LocationInput } from "./LocationInput";
+import { useCoordinates } from "@/hooks/useCoordinates";
 
 type Props = {
    list: Listing[];
@@ -15,15 +18,20 @@ const CELL_WIDTH = "min-w-[50vw] md:min-w-[25vw]";
 export const Results = ({ list, onDelete }: Props) => {
    // state 
    const [sorted, setSorted] = useState<keyof Listing>('pricePerSqm');
+   const [isAscending, setIsAscending] = useState<boolean>(true);
    const [attributes, setAttributes] = useState<string[]>(LISTING_AVAILABLE_ATTRIBUTES);
+   const [startPoint, setStartPoint] = useState<Coordinates>({ lat: 0, lon: 0 });
+
+   // hooks
+   const $coords = useCoordinates();
 
    /**
     * sort list and also filter
     */
    const sortedList = useMemo(() => {
       return list.toSorted((a: Listing, b: Listing) => {
-         const src = a[sorted];
-         const dest = b[sorted];
+         const src = isAscending ? a[sorted] : b[sorted];
+         const dest = isAscending ? b[sorted] : a[sorted];
 
          // numeric?
          if (['pricePerSqm', 'price', 'sqm', 'rooms'].includes(sorted)) {
@@ -37,7 +45,7 @@ export const Results = ({ list, onDelete }: Props) => {
          }
          return 0;
       });
-   }, [sorted, list]);
+   }, [sorted, list, isAscending, startPoint]);
 
    /**
     * render one row of the table
@@ -57,7 +65,7 @@ export const Results = ({ list, onDelete }: Props) => {
 
    function _text(attr: keyof Listing, suffix: string = '') {
       return function _internal(item: Listing) {
-         const v = item[attr] || ''
+         const v = item[attr] as string || ''
          if (!v || v.length === 0) {
             return '---'
          }
@@ -66,16 +74,30 @@ export const Results = ({ list, onDelete }: Props) => {
    }
 
    function _location(item: Listing) {
+
+      let distance = '';
+      if (item.coordinates && startPoint.lat !== 0 && startPoint.lon !== 0) {
+         distance = $coords.distanceBetween(startPoint, item.coordinates).toFixed(0);
+      }
+
       return (
-         <div className="flex gap-1 items-center">
+         <>
+            <div className="flex gap-1 items-center">
+               {
+                  item.location &&
+                  <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
+                     <MapPinned className="cursor-pointer w-4 h-4" />
+                  </a>
+               }
+               <span>{item.location}</span>
+            </div>
             {
-               item.location &&
-               <a href={`https://www.google.de/maps/search/${encodeURIComponent(item.location)}`} target="_blank">
-                  <MapPinned className="cursor-pointer w-4 h-4" />
-               </a>
+               distance.length > 0 &&
+               <div className="text-xs text-primary">
+                  {distance} km entfernt
+               </div>
             }
-            <span>{item.location}</span>
-         </div>
+         </>
       )
    }
 
@@ -136,19 +158,30 @@ export const Results = ({ list, onDelete }: Props) => {
 
    return (
       <>
-         <div className="flex flex-col md:flex-row justify-end gap-1 items-center mb-4">
+         <div className="flex flex-col gap-2 shadow-xl border-1 border-gray-300 rounded-xl bg-white p-4">
+            <p className="text-sm">Wähle die Eigenschaften aus, die angezeigt werden sollen:</p>
             <FilterList list={LISTING_AVAILABLE_ATTRIBUTES} selected={attributes} onChange={setAttributes} />
 
-            <select className="cursor-pointer border-1 rounded-sm border-gray-400 p-2 text-md" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
-               <option value="pricePerSqm">Preis pro Quadratmeter</option>
-               <option value="price">Preis</option>
-               <option value="sqm">Quadratmeter</option>
-               <option value="rooms">Anzahl Räume</option>
-               <option value="year">Baujahr</option>
-            </select>
+            <div className="flex gap-1 justify-between items-center">
+               <LocationInput onChange={setStartPoint} />
+               <div className="flex gap-2 justify-end items-center">
+                  <span>Sortieren nach:</span>
+                  <select className="cursor-pointer border-1 rounded-sm border-gray-400 p-2 text-md" name="filter" id="filter" value={sorted} onChange={(e) => setSorted(e.target.value as keyof Listing)}>
+                     <option value="pricePerSqm">Preis pro Quadratmeter</option>
+                     <option value="price">Preis</option>
+                     <option value="sqm">Quadratmeter</option>
+                     <option value="rooms">Anzahl Räume</option>
+                     <option value="year">Baujahr</option>
+                  </select>
+                  <ButtonGroup data={[
+                     { label: '', icon: <ArrowDown01 size={14} /> },
+                     { label: '', icon: <ArrowUp10 size={14} /> },
+                  ]} selected={isAscending ? 0 : 1} onChange={(sel) => setIsAscending(sel === 0)} />
+               </div>
+            </div>
          </div>
 
-         <div className="overflow-x-auto block shadow-xl border-1 border-gray-300 rounded-xl bg-white p-4">
+         <div className="overflow-x-auto block shadow-xl border-1 border-gray-300 rounded-xl bg-white p-4 mt-2">
             <table className="min-w-full border-collapse">
                <tbody>
                   {renderRow('_actions', _action)}
