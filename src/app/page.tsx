@@ -50,7 +50,7 @@ export default function Home() {
     } else if (action === 'add') {
       setVisible(prev => !prev)
     } else if (action === 'save') {
-      $storage.exportAsJson();
+      $storage.exportAsJson(`listings-${new Date().toISOString()}.json`);
     } else if (action === 'import') {
       $storage.importJson(data || '');
     } else {

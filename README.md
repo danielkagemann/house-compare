@@ -6,9 +6,33 @@ Sorting can be changed by dropdown.
 Because websites do not like webcrawling, I decided to add new data by using pasted HTML source. I tried different things for crawling but
 captcha hits hard and could not get it done in less effort (tried puppeteer, playwright).
 
+## features
+
+- set real estate data manually or from idealista html
+- filter options to show/hide attributes
+- sorting possibility (ascending/descending) for attributes
+- redirect to google map
+- export and import of data
+- storage in browser
+- add starting point to calculate distance (air)
+
+## some additional ideas to think about
+
+- ...
+
 ## Some insights
 
-![](./screenshot.png)
+### Overview
+
+This is the overview where you can sort, filter and compare your dream houses.
+
+![](./screen1.jpg)
+
+### Location
+
+You can define a starting point and the (air) distance is calculated to give you a better understanding of the place.
+
+![](./screen2.jpg)
 
 ## dependencies used
 
@@ -17,28 +41,6 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - ~~cheerio (server api parses the HTML here)~~ replaced with DOM parsing to be deployable on GH pages
 - lucide-react for nice symbols
 - motion for microanimations
-
-## possible improvements
-
-- ~~Tooltips hinzufügen~~
-- ~~export/import as JSON~~
-- ~~notifications~~
-- ~~url only if there is one~~
-- ~~better navigation~~
-- ~~hide attribute via click filter~~
-- distance meassure between two locations
-- add search
-- ~~rewrite cheerio to client based parsing~~
-- more sorting possibilities
-- ~~add map link on location~~
-- ~~highlight features only one house has~~
-- ~~extract build year from response (server)~~
-- ~~remove energy details (server)~~
-- ~~better navigation (show arrows instead of scrolling)~~
-- ~~put action at the top~~
-- ~~add url as link~~
-- ~~micro-animations~~
-- ~~smarter comparison view~~
 
 ## Getting Started
 

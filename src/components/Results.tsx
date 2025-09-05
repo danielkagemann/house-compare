@@ -50,6 +50,7 @@ export const Results = ({ list, onDelete }: Props) => {
    /**
     * render one row of the table
     * @param label 
+    * @param editAttribute
     * @param render 
     * @returns 
     */
@@ -57,7 +58,12 @@ export const Results = ({ list, onDelete }: Props) => {
       return (
          <tr key={label}>
             {
-               sortedList.map((item: Listing, index: number) => (<td className={`border-b border-gray-200 p-2 align-top ${CELL_WIDTH}`} key={`${label}-${index}`}>{render(item, index)}</td>))
+               sortedList.map((item: Listing, index: number) => (
+                  <td className={`border-b border-gray-200 p-2 align-top ${CELL_WIDTH} relative`}
+                     key={`${label}-${index}`}>
+                     {render(item, index)}
+                  </td>
+               ))
             }
          </tr>
       )
