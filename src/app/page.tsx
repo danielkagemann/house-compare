@@ -60,7 +60,7 @@ export default function Home() {
 
   if ($storage.list.length === 0) {
     return (
-      <div className="flex justify-center items-center flex-col max-w-xl m-auto h-screen">
+      <div className="flex justify-center items-center flex-col max-w-xl m-auto h-screen p-4">
         <SlideIn direction="top" duration={0.5} delay={0}>
           <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/logo.png`} width={135} height={64} alt="logo" />
         </SlideIn>
@@ -92,7 +92,7 @@ export default function Home() {
   }
 
   return (
-    <div className="py-8 px-12 space-y-2">
+    <div className="py-8 px-4 md:px-12 space-y-2">
       <div className="flex justify-between">
         <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/logo.png`} width={135} height={64} alt="logo" />
         {renderAmount()}

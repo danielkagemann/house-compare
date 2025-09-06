@@ -13,7 +13,7 @@ type Props = {
    onDelete: (id: string) => void;
 };
 
-const CELL_WIDTH = "min-w-[50vw] md:min-w-[25vw]";
+const CELL_WIDTH = "min-w-[calc(100vw-3rem)] md:min-w-[25vw]";
 
 export const Results = ({ list, onDelete }: Props) => {
    // state 
@@ -162,9 +162,10 @@ export const Results = ({ list, onDelete }: Props) => {
       return (<img src={item.image} alt="compare:image" className="min-w-[50vw] md:min-w-[25vw] h-52 object-cover rounded-xl" />)
    }
 
+   // on mobile we do not show filter possibilities
    return (
       <>
-         <div className="flex flex-col gap-2 shadow-xl border-1 border-gray-300 rounded-xl bg-white p-4">
+         <div className="hidden md:flex flex-col gap-2 shadow-xl border-1 border-gray-300 rounded-xl bg-white p-4">
             <p className="text-sm">Wähle die Eigenschaften aus, die angezeigt werden sollen:</p>
             <FilterList list={LISTING_AVAILABLE_ATTRIBUTES} selected={attributes} onChange={setAttributes} />
 
