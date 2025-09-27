@@ -23,6 +23,16 @@ export const useStorage = () => {
       const updated: Listing[] = [];
 
       for (const item of values) {
+        // updat sqm price
+        if (item.price && item.sqm) {
+          const priceNum = parseFloat(item.price);
+          const sqmNum = parseFloat(item.sqm);
+          item.pricePerSqm =
+            !isNaN(priceNum) && !isNaN(sqmNum) && sqmNum > 0
+              ? Math.round(priceNum / sqmNum) + " €"
+              : "";
+        }
+
         if (item.coordinates === undefined && item.location) {
           try {
             const res = await $coords.fromAddress(item.location);

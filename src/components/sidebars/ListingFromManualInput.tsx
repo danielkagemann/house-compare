@@ -39,24 +39,27 @@ export const ListingFromManualInput = ({ onChange }: Props) => {
 
             const list = e.target.value.split(',').map((item: string) => item.trim())
             setData({ ...data, [attr]: list });
-         } else {
-            setData({ ...data, [attr]: e.target.value });
-            if (attr === 'price' || attr === 'sqm') {
-               setTimeout(() => {
-                  const priceNum = parseFloat(data.price.replace(/[^\d]/g, ""));
-                  const sqmNum = parseFloat(data.sqm.replace(/[^\d]/g, ""));
-                  setData(p => ({
-                     ...p,
-                     pricePerSqm: !isNaN(priceNum) && !isNaN(sqmNum) && sqmNum > 0
-                        ? (Math.round(priceNum / sqmNum) + ' €')
-                        : ''
-                  }));
-               }, 0);
-            }
          }
-      }
-   }
+         else {
+            const newValue = e.target.value;
+            setData(prev => {
+               const next = { ...prev, [attr]: newValue };
 
+               // wenn price oder sqm geändert wurde, gleich pricePerSqm neu berechnen
+               if (attr === 'price' || attr === 'sqm') {
+                  const priceNum = parseFloat(attr === 'price' ? newValue : next.price);
+                  const sqmNum = parseFloat(attr === 'sqm' ? newValue : next.sqm);
+                  next.pricePerSqm =
+                     !isNaN(priceNum) && !isNaN(sqmNum) && sqmNum > 0
+                        ? `${Math.round(priceNum / sqmNum)} €`
+                        : '';
+               }
+
+               return next;
+            });
+         }
+      };
+   }
 
    function renderRow(item: any) {
       const cl = 'border-1 w-full bg-white p-1 border-gray-500 p-2 text-sm focus:outline-none focus:ring-0 focus:bg-gray-100';

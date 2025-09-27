@@ -19,6 +19,7 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 ## some additional ideas to think about
 
 - missing or invalid image
+- correct location
 
 ## Some insights
 
