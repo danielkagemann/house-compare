@@ -1,7 +1,9 @@
 import { Listing } from "@/model/Listing"
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { motion, AnimatePresence } from "framer-motion";
-import { BedDouble, Calendar, Heart, Home, MapPin, PlusCircle, Ruler, Trash } from "lucide-react";
+import { motion } from "framer-motion";
+import { BedDouble, Calendar, Heart, MapPin, Ruler, Trash } from "lucide-react";
+import { ListingPreview } from "./ListingPreview";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 interface HouseCardProps {
    data: Listing;
@@ -11,7 +13,7 @@ interface HouseCardProps {
 
 export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
    return (
-      <Card className="w-1/3 rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip">
+      <Card className="lg:w-1/4 md:w-1/3 w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip">
          <CardHeader className="p-0 relative">
             <motion.img
                src={data.image}
@@ -41,22 +43,29 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
             </div>
             <div className="flex gap-1 justify-between text-sm px-2">
                <div className="flex items-center gap-1">
-                  <Ruler size={14} /> {data.sqm} m²
+                  <Ruler size={14} /> {data.sqm || '---'} m²
                </div>
                <div className="flex items-center gap-1">
-                  <BedDouble size={14} /> {data.rooms}
+                  <BedDouble size={14} /> {data.rooms || '--'}
                </div>
                <div className="flex items-center gap-1">
-                  <Calendar size={14} /> {data.year}
+                  <Calendar size={14} /> {data.year || '--'}
                </div>
             </div>
          </CardHeader>
          <CardContent className="p-2">
-
             <p className="text-sm text-gray-700 mt-1 leading-snug">
                {data.description.slice(0, 100)}{data.description.length > 100 ? '...' : ''}
             </p>
 
+            <div className="flex justify-end">
+               <Sheet>
+                  <SheetTrigger><div className="bg-black text-white text-xs p-1 rounded-md">Details</div></SheetTrigger>
+                  <SheetContent side="right" className="min-w-[40%]">
+                     <ListingPreview data={data} />
+                  </SheetContent>
+               </Sheet>
+            </div>
          </CardContent>
       </Card>
    );

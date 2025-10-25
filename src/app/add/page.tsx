@@ -75,7 +75,6 @@ export default function AddPage() {
 
    function onSave() {
       $save.listingAdd(listing);
-      toast.success('Immobilie gespeichert!');
       $router.push('/');
    }
 

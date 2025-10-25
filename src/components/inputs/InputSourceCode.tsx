@@ -23,9 +23,10 @@ export const InputSourceCode = ({ onChange }: Props) => {
    }
 
    return (
-      <div>
+      <div className="max-w-full">
          Hier kannst Du den HTML Quellcode der Immobilienseite einfügen. Aktuell kann nur von idealista extrahiert werden.
          <Textarea
+            className="h-16 resize-none overflow-auto"
             rows={3}
             placeholder="Füge hier den HTML Quellcode der Seite ein..."
             value={data}

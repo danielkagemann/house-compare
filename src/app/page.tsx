@@ -32,7 +32,8 @@ export default function Home() {
     <>
       {renderEmpty()}
       <div className="flex flex-wrap justify-start gap-1 p-4">
-        {$storage.listings.map((item) => (<HouseCard key={item.uuid}
+        {$storage.listings.map((item) => (<HouseCard
+          key={item.uuid}
           data={item}
           isSelected={$storage.selectionContains(item.uuid)}
           onSelect={() => $storage.selectionToggle(item.uuid)} />))}

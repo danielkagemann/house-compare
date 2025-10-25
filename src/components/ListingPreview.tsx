@@ -22,6 +22,9 @@ export const ListingPreview = ({ data }: Props) => {
          if (value?.lat && value?.lon) {
             return true;
          }
+
+         console.log('The key ', key, ' is not filled.');
+
          return false;
       });
       return Math.round((filled.length * 100) / keys.length);
@@ -30,7 +33,7 @@ export const ListingPreview = ({ data }: Props) => {
    const percentage = calculateAllFilled();
 
    return (
-      <div className="h-screen border-l-1 border-gray-200 p-4 flex flex-col">
+      <div className="h-screen border-l-1 border-gray-200 p-4 flex flex-col space-y-2">
          <strong>Vorschau: id {data.uuid}</strong>
 
          <div className="flex justify-end text-xs">
