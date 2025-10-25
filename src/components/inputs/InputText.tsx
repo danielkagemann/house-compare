@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 
 interface Props {
-   description: string;
+   description?: string;
    value: string;
    onChange: (value: string) => void;
    type?: 'text' | 'area';

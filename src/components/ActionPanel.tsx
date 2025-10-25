@@ -90,8 +90,8 @@ export const ActionPanel = () => {
          return null;
       }
       return (
-         <div className="mt-2 text-sm text-gray-700">
-            {`Ausgewählte Immobilien: ${$save.selected.length}`}
+         <div className="mt-2 text-sm text-gray-700 flex justify-center text-center">
+            <a href="/compare" className="text-primary font-bold ml-1">Vergleichen ({$save.selected.length})</a>
          </div>
       );
    };

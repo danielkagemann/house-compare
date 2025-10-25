@@ -8,9 +8,36 @@ interface Props {
 
 export const ListingPreview = ({ data }: Props) => {
    const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/no-image.png`;
+
+   function calculateAllFilled() {
+      const keys = Object.keys(data);
+      const filled = keys.filter(key => {
+         const value = data[key as keyof Listing];
+         if (Array.isArray(value)) {
+            return value.length > 0;
+         }
+         if (typeof value === 'string') {
+            return value.trim().length > 0;
+         }
+         if (value?.lat && value?.lon) {
+            return true;
+         }
+         return false;
+      });
+      return Math.round((filled.length * 100) / keys.length);
+   }
+
+   const percentage = calculateAllFilled();
+
    return (
       <div className="h-screen border-l-1 border-gray-200 p-4 flex flex-col">
-         <strong>Vorschau</strong>
+         <strong>Vorschau: id {data.uuid}</strong>
+
+         <div className="flex justify-end text-xs">
+            <div className={`w-10 h-10 ${percentage < 50 ? 'bg-red-800' : percentage < 80 ? 'bg-yellow-800' : 'bg-green-800'} rounded-full flex items-center justify-center text-white`}>
+               {percentage}%
+            </div>
+         </div>
          <img
             src={imageSrc}
             alt={data.title}

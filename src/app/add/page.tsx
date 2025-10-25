@@ -17,9 +17,9 @@ import { InputLocation } from "@/components/inputs/InputLocation";
 import { InputImage } from "@/components/inputs/InputImage";
 import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
-import { useStorage } from "@/hooks/useStorageInternal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useStorage } from "@/hooks/storage-provider";
 
 
 type InputOrder = {
@@ -61,7 +61,7 @@ export default function AddPage() {
    const order: InputOrder[] = [
       { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url', 'sourcecode')} /> },
       { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...listing, ...v }); setCurrent('title') }} /> },
-      { title: 'Titel', attr: 'title', children: <InputText description="Titel der Immobilie" value={listing.title} onChange={onUpdateListing('title', 'location')} /> },
+      { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title', 'location')} /> },
       { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} onChange={(value, coords) => { setListing({ ...listing, location: value, coordinates: coords || undefined }); setCurrent('image') }} /> },
       { title: 'Link zum Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image', 'price')} /> },
       { title: 'Preis', attr: 'price', children: <InputText description="Preis der Immobilie" value={listing.price} onChange={onUpdateListing('price', 'sqm')} /> },
@@ -94,9 +94,9 @@ export default function AddPage() {
             >
                {
                   order.map((item: InputOrder) => (
-                     <AccordionItem value={item.attr} key={item.attr}>
-                        <AccordionTrigger><strong>{item.title}</strong></AccordionTrigger>
-                        <AccordionContent className="flex flex-col gap-1 text-balance">{item.children}</AccordionContent>
+                     <AccordionItem value={item.attr} key={item.attr} className={item.attr === current ? 'bg-gray-100 border-l-2 border-gray-700' : 'transparent'}>
+                        <AccordionTrigger className={`py-2 px-1 ${item.attr === current ? 'font-bold text-primary' : 'font-normal'}`}>{item.title}</AccordionTrigger>
+                        <AccordionContent className="flex flex-col gap-1 text-balance p-2">{item.children}</AccordionContent>
                      </AccordionItem>
                   ))
                }
@@ -113,7 +113,6 @@ export default function AddPage() {
 
          {/*preview*/}
          <ListingPreview data={listing} />
-
       </div>
    );
 };
