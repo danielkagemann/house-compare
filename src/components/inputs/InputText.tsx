@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 interface Props {
    description?: string;
@@ -18,7 +19,7 @@ export const InputText = ({ description, value, onChange, children, type = 'text
       <>
          {description}
          {type === 'area' && (
-            <textarea className="w-full p-1.5 border rounded-md" rows={3} value={data} onChange={(e) => setData(e.target.value)} />
+            <Textarea rows={3} value={data} onChange={(e) => setData(e.target.value)} />
          )}
          {type === 'text' && (
             <Input type="text" value={data} onChange={(e) => setData(e.target.value)} />

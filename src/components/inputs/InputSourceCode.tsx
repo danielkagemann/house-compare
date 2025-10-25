@@ -2,6 +2,7 @@ import { Listing } from "@/model/Listing";
 import { parseHtml } from "@/lib/parse";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 
 interface Props {
    onChange: (listing: Listing) => void;
@@ -24,9 +25,8 @@ export const InputSourceCode = ({ onChange }: Props) => {
    return (
       <div>
          Hier kannst Du den HTML Quellcode der Immobilienseite einfügen. Aktuell kann nur von idealista extrahiert werden.
-         <textarea
+         <Textarea
             rows={3}
-            className="w-full p-2 border rounded-md mt-2"
             placeholder="Füge hier den HTML Quellcode der Seite ein..."
             value={data}
             onChange={(e) => {
