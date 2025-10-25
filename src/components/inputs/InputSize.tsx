@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface Props {
    price: string;
@@ -26,7 +27,7 @@ export const InputSize = ({ price, value, onChange }: Props) => {
    return (
       <>
          <p>Gib hier die Wohnfläche oder Nutzfläche in m² an. Der Quadratmeterpreis wird automatisch berechnet.</p>
-         <input type="text" className="w-full p-1.5 border rounded-md" value={data} onChange={(e) => setData(e.target.value)} />
+         <Input type="text" value={data} onChange={(e) => setData(e.target.value)} />
          <p>Der Preis pro Quadratmeter beträgt {getPrice()} €.</p>
          <div className="flex justify-end">
             <Button onClick={() => onChange(data, getPrice().toString())}>Übernehmen</Button>

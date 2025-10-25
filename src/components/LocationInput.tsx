@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useStorage } from "@/hooks/storage-provider";
+import { Input } from "./ui/input";
 
 export const LocationInput = () => {
    // states
@@ -28,7 +29,7 @@ export const LocationInput = () => {
    }
 
    return <div className="flex gap-1 items-center">
-      <input type="text" className="border border-gray-300 rounded-lg p-1.5 w-full"
+      <Input type="text"
          placeholder="Ort oder Adresse eingeben"
          value={fromLocation}
          onChange={(e) => {

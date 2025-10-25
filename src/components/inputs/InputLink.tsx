@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { ExternalLink } from "lucide-react";
+import { Input } from "../ui/input";
 
 interface InputLinkProps {
    value: string;
@@ -18,7 +19,7 @@ export const InputLink = ({ value, onChange }: InputLinkProps) => {
       <>
          Hier kannst Du die URL der Immobilie eingeben.
          <div className="flex gap-1">
-            <input type="text" className="w-full p-1.5 border rounded-md" placeholder="URL der Immobilie eingeben..." value={data} onChange={(e) => setData(e.target.value)} />
+            <Input type="text" placeholder="URL der Immobilie eingeben..." value={data} onChange={(e) => setData(e.target.value)} />
             <Button variant="outline" onClick={onOpen}><ExternalLink size={16} /></Button>
          </div>
          <div className="flex justify-end"><Button onClick={() => onChange(data)}>Übernehmen</Button></div>

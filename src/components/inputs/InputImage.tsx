@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface Props {
    value: string;
@@ -19,7 +20,7 @@ export const InputImage = ({ value, onChange }: Props) => {
          <div className="flex gap-2 items-center">
             <img src={imageSrc}
                className="w-24 h-24 rounded-full object-cover" />
-            <input type="text" className="w-full p-1.5 border rounded-md" value={data} onChange={(e) => setData(e.target.value)} />
+            <Input type="text" value={data} onChange={(e) => setData(e.target.value)} />
          </div>
 
          <div className="flex justify-end"><Button onClick={() => onChange(data)}>Übernehmen</Button></div>

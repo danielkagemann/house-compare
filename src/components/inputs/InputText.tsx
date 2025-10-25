@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface Props {
    description?: string;
@@ -20,7 +21,7 @@ export const InputText = ({ description, value, onChange, children, type = 'text
             <textarea className="w-full p-1.5 border rounded-md" rows={3} value={data} onChange={(e) => setData(e.target.value)} />
          )}
          {type === 'text' && (
-            <input type="text" className="w-full p-1.5 border rounded-md" value={data} onChange={(e) => setData(e.target.value)} />
+            <Input type="text" value={data} onChange={(e) => setData(e.target.value)} />
          )}
          {children}
          <div className="flex justify-end">

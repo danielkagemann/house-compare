@@ -1,6 +1,8 @@
 import { Trash } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 interface Props {
    value: string[],
@@ -17,7 +19,7 @@ export const InputFeatures = ({ value, onChange }: Props) => {
       return (
          <div className="flex gap-1">
             <Button variant="ghost" onClick={() => setData(prev => prev.filter((_, i) => i !== index))}><Trash size={14} className="text-red-700" /></Button>
-            <input type="text" className="w-full p-1.5 border rounded-md" value={item} onChange={(e) => setData(prev => {
+            <Input type="text" value={item} onChange={(e) => setData(prev => {
                const ls = [...prev];
                ls[index] = e.target.value;
                return ls;
@@ -29,7 +31,7 @@ export const InputFeatures = ({ value, onChange }: Props) => {
    return (
       <>
          <p>Bitte gib die Ausstattungsmerkmale der Immobilie an. Nutzer hierzu das Eingabefeld (komma getrennt) oder die Liste darunter.</p>
-         <textarea className="w-full p-1.5 border rounded-md mb-2" rows={3} placeholder="z.B. Balkon, Garten, Garage" value={flatList} onChange={(e) => setFlatList(e.target.value)}></textarea>
+         <Textarea rows={3} placeholder="z.B. Balkon, Garten, Garage" value={flatList} onChange={(e) => setFlatList(e.target.value)} />
          <div className="flex justify-end">
             <Button variant="outline" disabled={flatList.trim().length === 0} onClick={() => {
                const featuresFromList = flatList.split(',').map(f => f.trim()).filter(f => f.length > 0);
@@ -44,7 +46,7 @@ export const InputFeatures = ({ value, onChange }: Props) => {
             }
          </div>
          <div className="flex gap-1">
-            <input type="text" className="w-full p-1.5 border rounded-md" value={feature} onChange={(e) => setFeature(e.target.value)} />
+            <Input type="text" value={feature} onChange={(e) => setFeature(e.target.value)} />
             <Button variant="outline" disabled={feature.trim().length === 0} onClick={() => {
                setData(prev => [...prev, feature]);
                setFeature('');

@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { useCoordinates } from "@/hooks/useCoordinates";
 import { Coordinates } from "@/model/Listing";
 import { MapPin } from "lucide-react";
+import { Input } from "../ui/input";
 
 interface Props {
    value: string;
@@ -26,7 +27,7 @@ export const InputLocation = ({ value, onChange }: Props) => {
       <>
          <p>Bitte gib den Standort der Immobilie an. Es wird vesucht eine ungefähre Adresse zu finden. </p>
          <div className="flex gap-1">
-            <input type="text" className="w-full p-1.5 border rounded-md" value={data} onChange={(e) => setData(e.target.value)} />
+            <Input type="text" value={data} onChange={(e) => setData(e.target.value)} />
             <Button variant="outline" onClick={onFindAddr}><MapPin size={16} /></Button>
          </div>
          <p className="text-sm">{coords ? `Gefundene Koordinaten: ${coords.lat}, ${coords.lon}` : "Keine gültige Adresse."}</p>
