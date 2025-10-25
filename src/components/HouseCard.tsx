@@ -1,9 +1,11 @@
-import { Listing } from "@/model/Listing"
+import { getSquareMeterPrice, Listing } from "@/model/Listing"
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { BedDouble, Calendar, Heart, MapPin, Ruler, Trash } from "lucide-react";
 import { ListingPreview } from "./ListingPreview";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { use } from "react";
+import { useStorage } from "@/hooks/storage-provider";
 
 interface HouseCardProps {
    data: Listing;
@@ -12,6 +14,9 @@ interface HouseCardProps {
 }
 
 export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
+
+   const $save = useStorage();
+
    return (
       <Card className="w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip">
          <CardHeader className="p-0 relative">
@@ -37,9 +42,10 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
                <p className="text-sm text-gray-500 flex items-center gap-1">
                   <MapPin size={14} /> {data.location}
                </p>
-               <p className="text-xl font-semibold text-green-700 mt-2">
-                  € {data.price.toLocaleString()}
+               <p className="text-xl font-semibold text-primary mt-2">
+                  € {parseFloat(data.price).toLocaleString()}
                </p>
+               <p className="text-sm text-gray-500 -mt-1">{getSquareMeterPrice(data.price, data.sqm)}</p>
             </div>
             <div className="flex gap-1 justify-between text-sm px-2">
                <div className="flex items-center gap-1">

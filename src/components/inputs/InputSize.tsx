@@ -1,3 +1,4 @@
+import { getSquareMeterPrice } from "@/model/Listing";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { InputNext } from "./InputNext";
@@ -10,25 +11,14 @@ interface Props {
 }
 
 export const InputSize = ({ price, value, onChange, onNext }: Props) => {
-   function getPrice() {
-      const p = parseFloat(price);
-      let res = 0;
-      if (p > 0) {
-         const v = parseFloat(value);
-         if (v !== 0) {
-            res = p / v;
-         }
-      }
-      return res;
-   }
 
-   const quote = getPrice();
+   const quote = getSquareMeterPrice(price, value);
 
    return (
       <>
          <p>Gib hier die Wohnfläche oder Nutzfläche in m² an. Der Quadratmeterpreis wird automatisch berechnet.</p>
          <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
-         {quote > 0 && <p>Der Preis pro Quadratmeter beträgt {Math.round(quote)} €.</p>}
+         {quote !== '---' && <p>Der Preis pro Quadratmeter beträgt {quote} €.</p>}
          <InputNext onClick={onNext} />
       </>
    );

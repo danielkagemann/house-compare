@@ -13,7 +13,6 @@ export const ListingPreview = ({ data }: Props) => {
       const keys = Object.keys(data);
       const filled = keys.filter(key => {
          const value = data[key as keyof Listing];
-         console.log('Checking key ', key, ' with value ', value);
          if (Array.isArray(value)) {
             return value.length > 0;
          }
@@ -23,9 +22,6 @@ export const ListingPreview = ({ data }: Props) => {
          if (value?.lat && value?.lon) {
             return true;
          }
-
-         console.log('---> NOT FILLED ', key, ' is not filled.');
-
          return false;
       });
       return Math.round((filled.length * 100) / keys.length);
@@ -54,7 +50,7 @@ export const ListingPreview = ({ data }: Props) => {
             <div className="text-sm text-gray-500 flex items-center gap-1">
                <MapPin size={14} /> {data.location}
             </div>}
-         {data.price.length > 0 && <p className="text-primary font-bold text-md">{`€ ${data.price}` || '--'}</p>}
+         {data.price.length > 0 && <p className="text-primary font-bold text-xl">{`€ ${parseFloat(data.price).toLocaleString()}` || '--'}</p>}
 
          <div className="flex gap-1 justify-between text-sm px-2">
             {data.sqm.length > 0 && (
