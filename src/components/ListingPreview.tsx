@@ -74,7 +74,7 @@ export const ListingPreview = ({ data }: Props) => {
                   <div key={index} className="text-xs bg-gray-200 text-gray-700 rounded-md p-1">{feature}</div>
                ))}
             </div>)}
-         {data.description.length > 0 && <p className="text-sm text-gray-700"><ReadMore text={data.description} /></p>}
+         {data.description.length > 0 && <div className="text-sm text-gray-700"><ReadMore text={data.description} /></div>}
       </div>
    );
 }

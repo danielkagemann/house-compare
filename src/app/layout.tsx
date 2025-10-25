@@ -24,7 +24,7 @@ export default function RootLayout({
         <main className="h-screen grid grid-rows-[100px_1fr]">
           <StorageProvider>
             <Header />
-            <div className="overflow-auto">
+            <div className="overflow-auto mb-16">
               {children}
             </div>
           </StorageProvider>
