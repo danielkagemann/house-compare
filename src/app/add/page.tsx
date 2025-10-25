@@ -52,25 +52,38 @@ export default function AddPage() {
    const $save = useStorage();
    const $router = useRouter();
 
-   const onUpdateListing = (attr: string, next: string) => (value: string) => {
+   /**
+    * updating value for given attribute
+    * @param attr 
+    * @returns 
+    */
+   const onUpdateListing = (attr: string) => (value: string) => {
       setListing((prev) => ({ ...prev, [attr]: value }));
+   };
+
+   /**
+    * move to next field
+    * @param next 
+    * @returns 
+    */
+   const onNext = (next: string) => () => {
       setCurrent(next);
    };
 
    // locals
    const order: InputOrder[] = [
-      { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url', 'sourcecode')} /> },
+      { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url')} onNext={() => listing.url.includes('idealista') ? onNext('sourcecode')() : onNext('title')()} /> },
       { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...listing, ...v }); setCurrent('title') }} /> },
-      { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title', 'location')} /> },
-      { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} onChange={(value, coords) => { setListing({ ...listing, location: value, coordinates: coords || undefined }); setCurrent('image') }} /> },
-      { title: 'Link zum Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image', 'price')} /> },
-      { title: 'Preis', attr: 'price', children: <InputText description="Preis der Immobilie" value={listing.price} onChange={onUpdateListing('price', 'sqm')} /> },
-      { title: 'Wohnfläche', attr: 'sqm', children: <InputSize price={listing.price} value={listing.sqm} onChange={(v, p) => { setListing({ ...listing, sqm: v, pricePerSqm: p }); setCurrent('rooms') }} /> },
-      { title: 'Schlafzimmer', attr: 'rooms', children: <InputText description="Anzahl der Schlafzimmer" value={listing.rooms} onChange={onUpdateListing('rooms', 'description')} /> },
-      { title: 'Beschreibung', attr: 'description', children: <InputText type="area" description="Beschreibung der Immobilie" value={listing.description} onChange={onUpdateListing('description', 'year')} /> },
-      { title: 'Baujahr', attr: 'year', children: <InputText description="Baujahr der Immobilie" value={listing.year} onChange={onUpdateListing('year', 'features')} /> },
-      { title: 'Eigenschaften', attr: 'features', children: <InputFeatures value={listing.features} onChange={(value) => { setListing({ ...listing, features: value }); setCurrent('contact'); }} /> },
-      { title: 'Makler & Agentur', attr: 'contact', children: <InputText description="Von welcher Agentur/Makler wird die Immobilie angeboten?" value={listing.contact} onChange={onUpdateListing('contact', 'year')} /> },
+      { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title')} onNext={onNext('location')} /> },
+      { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} coords={listing.coordinates} onChange={onUpdateListing('location')} onCoords={(v) => setListing({ ...listing, coordinates: v })} onNext={onNext('image')} /> },
+      { title: 'Link zum Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image')} onNext={onNext('price')} /> },
+      { title: 'Preis', attr: 'price', children: <InputText description="Preis der Immobilie" value={listing.price} onChange={onUpdateListing('price')} onNext={onNext('sqm')} /> },
+      { title: 'Wohnfläche', attr: 'sqm', children: <InputSize price={listing.price} value={listing.sqm} onChange={onUpdateListing('sqm')} onNext={onNext('rooms')} /> },
+      { title: 'Schlafzimmer', attr: 'rooms', children: <InputText description="Anzahl der Schlafzimmer" value={listing.rooms} onChange={onUpdateListing('rooms')} onNext={onNext('description')} /> },
+      { title: 'Beschreibung', attr: 'description', children: <InputText type="area" description="Beschreibung der Immobilie" value={listing.description} onChange={onUpdateListing('description')} onNext={onNext('year')} /> },
+      { title: 'Baujahr', attr: 'year', children: <InputText description="Baujahr der Immobilie" value={listing.year} onChange={onUpdateListing('year')} onNext={onNext('features')} /> },
+      { title: 'Eigenschaften', attr: 'features', children: <InputFeatures value={listing.features} onChange={(value) => { setListing({ ...listing, features: value }); }} onNext={onNext('contact')} /> },
+      { title: 'Makler & Agentur', attr: 'contact', children: <InputText description="Von welcher Agentur/Makler wird die Immobilie angeboten?" value={listing.contact} onChange={onUpdateListing('contact')} onNext={onNext('')} /> },
    ];
 
    function onSave() {

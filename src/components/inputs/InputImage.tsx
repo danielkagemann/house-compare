@@ -1,17 +1,14 @@
-import { useState } from "react";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { InputNext } from "./InputNext";
 
 interface Props {
    value: string;
    onChange: (value: string) => void;
+   onNext: () => void;
 }
 
-export const InputImage = ({ value, onChange }: Props) => {
-   // state
-   const [data, setData] = useState<string>(value);
-
-   const imageSrc = data || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/no-image.png`;
+export const InputImage = ({ value, onChange, onNext }: Props) => {
+   const imageSrc = value || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/no-image.png`;
 
    return (
       <>
@@ -20,10 +17,9 @@ export const InputImage = ({ value, onChange }: Props) => {
          <div className="flex gap-2 items-center">
             <img src={imageSrc}
                className="w-24 h-24 rounded-full object-cover" />
-            <Input type="text" value={data} onChange={(e) => setData(e.target.value)} />
+            <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
          </div>
-
-         <div className="flex justify-end"><Button onClick={() => onChange(data)}>Übernehmen</Button></div>
+         <InputNext onClick={onNext} />
       </>
    );
 }

@@ -1,8 +1,8 @@
 import { Listing } from "@/model/Listing";
 import { parseHtml } from "@/lib/parse";
-import { useState } from "react";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { useState } from "react";
 
 interface Props {
    onChange: (listing: Listing) => void;
@@ -36,7 +36,7 @@ export const InputSourceCode = ({ onChange }: Props) => {
             }}
          />
          {error.length > 0 && <p className="text-red-700 font-sm">{error}</p>}
-         <div className="flex justify-end"><Button onClick={onSourcecodeChange}>Übernehmen</Button></div>
+         <div className="flex justify-end"><Button onClick={onSourcecodeChange}>Überprüfen</Button></div>
       </div>
    );
 }

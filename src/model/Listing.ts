@@ -15,7 +15,6 @@ export type Listing = {
   description: string;
   contact: string;
   year: string;
-  pricePerSqm: string;
   features: string[];
   coordinates?: Coordinates;
 };
@@ -28,7 +27,6 @@ export const LISTING_AVAILABLE_ATTRIBUTES = [
   "description",
   "price",
   "sqm",
-  "pricePerSqm",
   "rooms",
   "features",
   "contact",
@@ -47,7 +45,6 @@ export function listingAttributeToText(attr: string): string {
     description: "Beschreibung",
     contact: "Makler",
     year: "Baujahr",
-    pricePerSqm: "Quad. Preis",
     features: "Eigenschaften",
   };
   return mapper[attr] ?? attr;
