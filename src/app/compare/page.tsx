@@ -6,7 +6,7 @@ import { Results } from "@/components/Results";
 import { useStorage } from "@/hooks/useStorage";
 import { SidebarNewHouse } from "@/components/sidebars/SidebarNewHouse";
 import { ActionPanel } from "@/components/ActionPanel";
-import SlideIn from "@/motion/SlideIn";
+import SlideIn from "@/components/motion/SlideIn";
 
 export default function Home() {
   // states

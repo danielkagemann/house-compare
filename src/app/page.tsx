@@ -1,7 +1,7 @@
 "use client";
 
 import { useStorage } from "@/hooks/useStorage";
-import SlideIn from "@/motion/SlideIn";
+import SlideIn from "@/components/motion/SlideIn";
 import { HouseCard } from "@/components/HouseCard";
 import { ActionPanel } from "@/components/ActionPanel";
 

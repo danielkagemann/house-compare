@@ -1,5 +1,5 @@
 import { Listing } from "@/model/Listing";
-import { parseHtml } from "@/utils/parse";
+import { parseHtml } from "@/lib/parse";
 import { useState } from "react";
 import { Button } from "../ui/button";
 
