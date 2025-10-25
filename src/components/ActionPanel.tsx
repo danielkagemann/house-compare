@@ -1,13 +1,13 @@
 import { Download, PlusCircle, Trash } from "lucide-react";
 import { Tooltip } from "./ui/Tooltip";
 import { useEffect, useState } from "react";
-import { useStorage } from "@/hooks/useStorage";
+import { useStorage } from "@/hooks/storage-provider";
 
 export const ActionPanel = () => {
    // states
    const [isDraggingOver, setIsDraggingOver] = useState(false);
 
-   // hooks
+   // context
    const $save = useStorage();
 
    useEffect(() => {
@@ -45,7 +45,7 @@ export const ActionPanel = () => {
 
       const content = await e.dataTransfer.files?.[0]?.text();
       if (content) {
-         // TODO onAction('import', content);
+         $save.importJson(content || '');
       }
    };
 
@@ -58,7 +58,7 @@ export const ActionPanel = () => {
          <>
             <a
                href="/add"
-               className="enabled:cursor-pointer p-2 enabled:hover:scale-125 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+               className="enabled:cursor-pointer p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
             >
                <Tooltip text="Neue Immobilie hinzufügen">
                   <PlusCircle size={18} />
@@ -66,16 +66,16 @@ export const ActionPanel = () => {
             </a>
             <button
                disabled={$save.listings.length === 0}
-               onClick={() => {/*TODO delete*/ }}
-               className="enabled:cursor-pointer p-2 enabled:hover:scale-125 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+               onClick={() => { $save.listingClear(); }}
+               className="enabled:cursor-pointer p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
             >
                <Tooltip text="Alle Immobilien löschen">
                   <Trash size={18} />
                </Tooltip>
             </button>
             <button
-               onClick={() => {/*TODO save*/ }}
-               className="enabled:cursor-pointer p-2 enabled:hover:scale-125 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+               onClick={() => { $save.exportAsJson(); }}
+               className="enabled:cursor-pointer p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
             >
                <Tooltip text="Daten speichern">
                   <Download size={18} />
@@ -83,7 +83,18 @@ export const ActionPanel = () => {
             </button>
          </>
       );
-   }
+   };
+
+   const renderSelection = () => {
+      if ($save.selected.length === 0) {
+         return null;
+      }
+      return (
+         <div className="mt-2 text-sm text-gray-700">
+            {`Ausgewählte Immobilien: ${$save.selected.length}`}
+         </div>
+      );
+   };
 
    return (
       <div>
@@ -100,6 +111,7 @@ export const ActionPanel = () => {
                <div className="flex items-center">
                   {renderContent()}
                </div>
+               {renderSelection()}
             </div>
          </div>
       </div>

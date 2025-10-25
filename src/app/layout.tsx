@@ -2,7 +2,7 @@
 
 import { Header } from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
-
+import { StorageProvider } from "@/hooks/storage-provider";
 import "./globals.css";
 
 export default function RootLayout({
@@ -22,12 +22,14 @@ export default function RootLayout({
       </head>
       <body>
         <main className="h-screen grid grid-rows-[100px_1fr]">
-          <Header />
-          <div className="overflow-auto">
-            {children}
-          </div>
+          <StorageProvider>
+            <Header />
+            <div className="overflow-auto">
+              {children}
+            </div>
+          </StorageProvider>
         </main>
-        <Toaster />
+        <Toaster position="top-center" expand={true} richColors />
       </body>
     </html>
   );

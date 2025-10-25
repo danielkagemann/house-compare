@@ -29,7 +29,7 @@ export const InputSize = ({ price, value, onChange }: Props) => {
          <input type="text" className="w-full p-1.5 border rounded-md" value={data} onChange={(e) => setData(e.target.value)} />
          <p>Der Preis pro Quadratmeter beträgt {getPrice()} €.</p>
          <div className="flex justify-end">
-            <Button onClick={() => onChange(data, getPrice().toString())}>Weiter</Button>
+            <Button onClick={() => onChange(data, getPrice().toString())}>Übernehmen</Button>
          </div>
       </>
    );

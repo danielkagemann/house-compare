@@ -1,9 +1,9 @@
 "use client";
 
-import { useStorage } from "@/hooks/useStorage";
 import SlideIn from "@/components/motion/SlideIn";
 import { HouseCard } from "@/components/HouseCard";
 import { ActionPanel } from "@/components/ActionPanel";
+import { useStorage } from "@/hooks/storage-provider";
 
 export default function Home() {
 
@@ -31,8 +31,11 @@ export default function Home() {
   return (
     <>
       {renderEmpty()}
-      <div className="flex flex-wrap justify-start gap-1">
-        {$storage.listings.map((item) => (<HouseCard key={item.uuid} data={item} />))}
+      <div className="flex flex-wrap justify-start gap-1 p-4">
+        {$storage.listings.map((item) => (<HouseCard key={item.uuid}
+          data={item}
+          isSelected={$storage.selectionContains(item.uuid)}
+          onSelect={() => $storage.selectionToggle(item.uuid)} />))}
       </div>
       <ActionPanel />
     </>

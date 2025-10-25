@@ -30,7 +30,7 @@ export const InputLocation = ({ value, onChange }: Props) => {
             <Button variant="outline" onClick={onFindAddr}><MapPin size={16} /></Button>
          </div>
          <p className="text-sm">{coords ? `Gefundene Koordinaten: ${coords.lat}, ${coords.lon}` : "Keine gültige Adresse."}</p>
-         <div className="flex justify-end"><Button onClick={() => onChange(data, coords)}>Weiter</Button></div>
+         <div className="flex justify-end"><Button onClick={() => onChange(data, coords)}>Übernehmen</Button></div>
       </>
    );
 };

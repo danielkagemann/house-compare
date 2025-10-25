@@ -1,10 +1,9 @@
 import { useCoordinates } from "@/hooks/useCoordinates";
-import { Coordinates } from "@/model/Listing";
-import { MapPinHouse } from "lucide-react";
+import { CircleX, MapPinHouse, Search } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { useStorage } from "@/hooks/useStorage";
 import { toast } from "sonner";
+import { useStorage } from "@/hooks/storage-provider";
 
 export const LocationInput = () => {
    // states
@@ -49,7 +48,8 @@ export const LocationInput = () => {
                });
             }
          }}>
-         Suchen
+         <Search size={14} />
       </Button>
-   </div>;
+      <Button variant="outline" onClick={() => setCompact(true)}><CircleX size={14} /></Button>
+   </div >;
 };

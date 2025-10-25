@@ -1,25 +1,29 @@
 # house-compare
 
-This is a small project to compare different houses (from idealista) and show them enxt to each other.
-Sorting can be changed by dropdown.
+This is a private project to collect favorite real estates to be able to compare them. You can add as many real estates you want and also
+entering the data is done half-automatic or completely manually.
 
-Because websites do not like webcrawling, I decided to add new data by using pasted HTML source. I tried different things for crawling but
-captcha hits hard and could not get it done in less effort (tried puppeteer, playwright).
+Because websites do not like webcrawling, there is a half-automatic import for idealista links by using pasted HTML source. I tried different things for crawling but
+captcha hits hard and could not get it done in less effort (tried puppeteer, playwright, proxy, ...).
+
+## ideas for future implementations
+
+- add translation of description possibility
+- edit some attributes later
+- share links via datenkommo.de
+- add personal notes
+- show map on compare
+- show map when entering location
+- native language filtgering via input line (maybe use panel)
+- show preview in overview
 
 ## features
 
 - set real estate data manually or from idealista html
-- filter options to show/hide attributes
-- sorting possibility (ascending/descending) for attributes
 - redirect to google map
 - export and import of data
 - storage in browser
 - add starting point to calculate distance (air)
-
-## some additional ideas to think about
-
-- missing or invalid image
-- correct location
 
 ## Some insights
 

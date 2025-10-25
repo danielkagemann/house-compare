@@ -35,7 +35,7 @@ export const InputSourceCode = ({ onChange }: Props) => {
             }}
          />
          {error.length > 0 && <p className="text-red-700 font-sm">{error}</p>}
-         <div className="flex justify-end"><Button onClick={onSourcecodeChange}>Weiter</Button></div>
+         <div className="flex justify-end"><Button onClick={onSourcecodeChange}>Übernehmen</Button></div>
       </div>
    );
 }

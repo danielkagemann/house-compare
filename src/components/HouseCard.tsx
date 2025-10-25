@@ -1,13 +1,15 @@
 import { Listing } from "@/model/Listing"
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
-import { BedDouble, Calendar, Home, MapPin, PlusCircle, Ruler, Trash } from "lucide-react";
+import { BedDouble, Calendar, Heart, Home, MapPin, PlusCircle, Ruler, Trash } from "lucide-react";
 
 interface HouseCardProps {
    data: Listing;
+   isSelected: boolean;
+   onSelect?: () => void;
 }
 
-export const HouseCard = ({ data }: HouseCardProps) => {
+export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
    return (
       <Card className="w-1/3 rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip">
          <CardHeader className="p-0 relative">
@@ -23,8 +25,8 @@ export const HouseCard = ({ data }: HouseCardProps) => {
                <Trash size={14} className="text-white" />
             </button>
 
-            <button type="button" className="absolute top-2 left-2 bg-black bg-opacity-75 rounded-full p-2">
-               <Trash size={14} className="text-white" />
+            <button type="button" className={`absolute top-2 right-2 ${isSelected ? 'bg-red-700' : 'bg-black'} bg-opacity-75 rounded-full p-2`} onClick={onSelect}>
+               <Heart size={14} className="text-white" />
             </button>
 
             <div className="p-2 min-w-0">
@@ -50,14 +52,11 @@ export const HouseCard = ({ data }: HouseCardProps) => {
             </div>
          </CardHeader>
          <CardContent className="p-2">
-            <details>
-               <summary className="text-sm font-semi-bold text-gray-600 cursor-pointer">
-                  Beschreibung
-               </summary>
-               <p className="text-sm text-gray-700 mt-1 leading-snug">
-                  {data.description}
-               </p>
-            </details>
+
+            <p className="text-sm text-gray-700 mt-1 leading-snug">
+               {data.description.slice(0, 100)}{data.description.length > 100 ? '...' : ''}
+            </p>
+
          </CardContent>
       </Card>
    );

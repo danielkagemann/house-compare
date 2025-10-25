@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Listing } from "@/model/Listing";
 import { Results } from "@/components/Results";
-import { useStorage } from "@/hooks/useStorage";
+import { useStorage } from "@/hooks/useStorageInternal";
 import { SidebarNewHouse } from "@/components/sidebars/SidebarNewHouse";
 import { ActionPanel } from "@/components/ActionPanel";
 import SlideIn from "@/components/motion/SlideIn";

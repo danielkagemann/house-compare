@@ -19,9 +19,9 @@ export const ListingPreview = ({ data }: Props) => {
          {data.title.length > 0 && <h2 className="font-bold text-lg">{data.title}</h2>}
 
          {data.location.length > 0 &&
-            <p className="text-sm text-gray-500 flex items-center gap-1">
+            <div className="text-sm text-gray-500 flex items-center gap-1">
                <MapPin size={14} /> {data.location}
-            </p>}
+            </div>}
          {data.price.length > 0 && <p className="text-primary font-bold text-md">{`€ ${data.price}` || '--'}</p>}
 
          <div className="flex gap-1 justify-between text-sm px-2">
@@ -38,7 +38,12 @@ export const ListingPreview = ({ data }: Props) => {
                   <Calendar size={16} /> {data.year}
                </div>)}
          </div>
-
+         {data.features.length > 0 && (
+            <div className="flex items-center flex-wrap gap-1">
+               {data.features.map((feature, index) => (
+                  <div key={index} className="text-xs bg-gray-200 text-gray-700 rounded-md p-1">{feature}</div>
+               ))}
+            </div>)}
          {data.description.length > 0 && <p className="text-sm text-gray-700"><ReadMore text={data.description} /></p>}
       </div>
    );

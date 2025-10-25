@@ -22,7 +22,7 @@ export const InputImage = ({ value, onChange }: Props) => {
             <input type="text" className="w-full p-1.5 border rounded-md" value={data} onChange={(e) => setData(e.target.value)} />
          </div>
 
-         <div className="flex justify-end"><Button onClick={() => onChange(data)}>Weiter</Button></div>
+         <div className="flex justify-end"><Button onClick={() => onChange(data)}>Übernehmen</Button></div>
       </>
    );
 }
