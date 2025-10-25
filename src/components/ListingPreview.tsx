@@ -13,6 +13,7 @@ export const ListingPreview = ({ data }: Props) => {
       const keys = Object.keys(data);
       const filled = keys.filter(key => {
          const value = data[key as keyof Listing];
+         console.log('Checking key ', key, ' with value ', value);
          if (Array.isArray(value)) {
             return value.length > 0;
          }
@@ -23,7 +24,7 @@ export const ListingPreview = ({ data }: Props) => {
             return true;
          }
 
-         console.log('The key ', key, ' is not filled.');
+         console.log('---> NOT FILLED ', key, ' is not filled.');
 
          return false;
       });
@@ -46,6 +47,7 @@ export const ListingPreview = ({ data }: Props) => {
             alt={data.title}
             className="w-full h-48 object-cover rounded-xl"
          />
+         {data.contact.length > 0 && <div className="text-xs text-gray-700 truncate w-min-0">{data.contact}</div>}
          {data.title.length > 0 && <h2 className="font-bold text-lg">{data.title}</h2>}
 
          {data.location.length > 0 &&

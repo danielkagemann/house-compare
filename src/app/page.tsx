@@ -31,12 +31,15 @@ export default function Home() {
   return (
     <>
       {renderEmpty()}
-      <div className="flex flex-wrap justify-start gap-1 p-4">
-        {$storage.listings.map((item) => (<HouseCard
-          key={item.uuid}
-          data={item}
-          isSelected={$storage.selectionContains(item.uuid)}
-          onSelect={() => $storage.selectionToggle(item.uuid)} />))}
+      <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {
+          $storage.listings.map((item) => (
+            <HouseCard
+              key={item.uuid}
+              data={item}
+              isSelected={$storage.selectionContains(item.uuid)}
+              onSelect={() => $storage.selectionToggle(item.uuid)} />))
+        }
       </div>
       <ActionPanel />
     </>

@@ -13,7 +13,7 @@ interface HouseCardProps {
 
 export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
    return (
-      <Card className="lg:w-1/4 md:w-1/3 w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip">
+      <Card className="w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip">
          <CardHeader className="p-0 relative">
             <motion.img
                src={data.image}

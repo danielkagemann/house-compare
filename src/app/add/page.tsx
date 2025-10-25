@@ -39,7 +39,6 @@ export default function AddPage() {
       location: '',
       price: '',
       sqm: '',
-      pricePerSqm: '',
       rooms: '',
       image: '',
       description: '',
