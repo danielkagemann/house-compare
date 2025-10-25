@@ -23,7 +23,7 @@ export default function RootLayout({
       <body>
         <main className="h-screen grid grid-rows-[100px_1fr]">
           <Header />
-          <div className="overflow-auto p-4">
+          <div className="overflow-auto">
             {children}
           </div>
         </main>
