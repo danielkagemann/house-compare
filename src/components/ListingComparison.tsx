@@ -32,7 +32,7 @@ export const ListingComparison = () => {
             {attr === 'title' && <strong>{item.title}</strong>}
             {attr === 'price' && <div className="text-primary">€ {item.price}</div>}
             {attr === 'location' && <div className="flex gap-1 items-center text-gray-700"><MapPin size={14} /> {item.location}</div>}
-            {attr === 'year' && <div className="flex gap-1 items-center text-gray-700"><Calendar size={14} /> {item.year} m²</div>}
+            {attr === 'year' && <div className="flex gap-1 items-center text-gray-700"><Calendar size={14} /> {item.year}</div>}
             {attr === 'rooms' && <div className="flex gap-1 items-center text-gray-700"><BedDouble size={14} /> {item.rooms}</div>}
             {attr === 'sqm' && <div className="flex gap-1 items-center text-gray-700"><Ruler size={14} /> {item.sqm} m²</div>}
             {attr === 'sqmPrice' && getSquareMeterPrice(item.price, item.sqm)}
