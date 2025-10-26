@@ -9,28 +9,34 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 ## ideas for future implementations
 
 - add translation of description possibility
-- edit some attributes later
 - share links via datenkommo.de
 - add personal notes
 - show map on compare
 - show map when entering location
-- native language filtering via input line (maybe use panel). gray out estates out of filter
 
 ## features
 
 - set real estate data manually or from idealista html
-- redirect to google map
 - export and import of data
 - storage in browser
+- favorite colelction
+- comparison of real estates by user selection (up to 3)
 - add starting point to calculate distance (air)
+- works on mobile and desktop
 
 ## Some insights
 
 ### Overview
 
-This is the overview where you can sort, filter and compare your dream houses.
+Collect all your favorite real estates. Mark them by click on the heart and go into compare mode.
 
 ![](./screen1.jpg)
+
+![](./screen2.jpg)
+
+Some filters help to reduce your favorites to focus on your criterias.
+
+![](./screen3.jpg)
 
 ### Location
 
@@ -44,7 +50,6 @@ You can define a starting point and the (air) distance is calculated to give you
 - tailwind css
 - ~~cheerio (server api parses the HTML here)~~ replaced with DOM parsing to be deployable on GH pages
 - lucide-react for nice symbols
-- motion for microanimations
 
 ## Getting Started
 
