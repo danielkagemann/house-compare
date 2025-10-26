@@ -16,7 +16,7 @@ export default function Home() {
     return (<div>
       <h2 className="font-bold text-lg">Herzlich Willkommen,</h2>
       <p className="text-gray-600 text-md mt-4">
-        Speichere Deine Immobilien hier und wähle aus der Liste aus, welche Du miteinander vergleichen möchtests.
+        Speichere Deine Immobilien hier und wähle aus der Liste aus, welche Du miteinander vergleichen möchtest.
         Füge neue Immobilien von Idealista oder manuell hinzu. Alle Daten werden lokale gespeichert und sind beim nächsten Besuch wieder verfügbar.<br />
         Diese Webanwendung ist ein privates Projekt von <a className="text-primary hover:underline font-bold" href="https://danielkagemann.name">Daniel Kagemann</a>.
       </p>
