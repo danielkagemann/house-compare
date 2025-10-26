@@ -14,7 +14,7 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - add personal notes
 - show map on compare
 - show map when entering location
-- native language filtgering via input line (maybe use panel). gray out estates out of filter
+- native language filtering via input line (maybe use panel). gray out estates out of filter
 
 ## features
 
