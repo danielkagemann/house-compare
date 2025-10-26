@@ -15,7 +15,6 @@ export type Listing = {
   description: string;
   contact: string;
   year: string;
-  pricePerSqm: string;
   features: string[];
   coordinates?: Coordinates;
 };
@@ -28,27 +27,17 @@ export const LISTING_AVAILABLE_ATTRIBUTES = [
   "description",
   "price",
   "sqm",
-  "pricePerSqm",
   "rooms",
   "features",
   "contact",
 ];
 
-export function listingAttributeToText(attr: string): string {
-  const mapper: Record<string, string> = {
-    uuid: "ID",
-    url: "Link",
-    title: "Titel",
-    location: "Standort",
-    price: "Preis",
-    sqm: "Wohnfläche",
-    rooms: "Schlafzimmer",
-    image: "Bild",
-    description: "Beschreibung",
-    contact: "Makler",
-    year: "Baujahr",
-    pricePerSqm: "Quad. Preis",
-    features: "Eigenschaften",
-  };
-  return mapper[attr] ?? attr;
+export function getSquareMeterPrice(price: string, sqm: string): string {
+  const priceNum = parseFloat(price.replace(/\./g, "").replace(",", "."));
+  const sqmNum = parseFloat(sqm.replace(/\./g, "").replace(",", "."));
+  if (!isNaN(priceNum) && !isNaN(sqmNum) && sqmNum > 0) {
+    const pricePerSqm = Math.round(priceNum / sqmNum);
+    return `€ ${pricePerSqm.toLocaleString()}`;
+  }
+  return "--";
 }

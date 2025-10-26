@@ -1,6 +1,8 @@
 "use client";
 
-import { ToastProvider } from "@/hooks/useToast";
+import { Header } from "@/components/Header";
+import { Toaster } from "@/components/ui/sonner";
+import { StorageProvider } from "@/hooks/storage-provider";
 import "./globals.css";
 
 export default function RootLayout({
@@ -19,9 +21,15 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <ToastProvider>
-          {children}
-        </ToastProvider>
+        <main className="h-screen grid grid-rows-[100px_1fr]">
+          <StorageProvider>
+            <Header />
+            <div className="overflow-auto mb-16">
+              {children}
+            </div>
+          </StorageProvider>
+        </main>
+        <Toaster position="top-center" expand={true} richColors />
       </body>
     </html>
   );

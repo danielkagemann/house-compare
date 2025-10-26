@@ -1,14 +1,14 @@
-import { Dot, Download, SquarePlus, Trash } from "lucide-react";
+import { Download, PlusCircle, Trash } from "lucide-react";
 import { Tooltip } from "./ui/Tooltip";
 import { useEffect, useState } from "react";
+import { useStorage } from "@/hooks/storage-provider";
 
-type Props = {
-   onAction: (type: string, data?: string) => void
-   disabled?: string[]
-};
-
-export const ActionPanel = ({ onAction, disabled = [] }: Props) => {
+export const ActionPanel = () => {
+   // states
    const [isDraggingOver, setIsDraggingOver] = useState(false);
+
+   // context
+   const $save = useStorage();
 
    useEffect(() => {
       // avoid dropping outside of actionpanel
@@ -45,7 +45,7 @@ export const ActionPanel = ({ onAction, disabled = [] }: Props) => {
 
       const content = await e.dataTransfer.files?.[0]?.text();
       if (content) {
-         onAction('import', content);
+         $save.importJson(content || '');
       }
    };
 
@@ -56,37 +56,45 @@ export const ActionPanel = ({ onAction, disabled = [] }: Props) => {
 
       return (
          <>
-            <button
-               disabled={disabled.includes('delete')}
-               onClick={() => onAction('delete')}
-               className="enabled:cursor-pointer p-2 enabled:hover:scale-125 transition-all disabled:cursor-not-allowed disabled:opacity-50"
-            >
-               <Tooltip text="Alle Immobilien löschen">
-                  <Trash className="w-4 h-4" />
-               </Tooltip>
-            </button>
-            <Dot className="w-4 h-4 text-gray-700" />
-            <button
-               disabled={disabled.includes('add')}
-               onClick={() => onAction('add')}
-               className="enabled:cursor-pointer p-2 enabled:hover:scale-125 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            <a
+               href="/details/?id=-1"
+               className="enabled:cursor-pointer p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
             >
                <Tooltip text="Neue Immobilie hinzufügen">
-                  <SquarePlus className="w-4 h-4" />
+                  <PlusCircle size={18} />
+               </Tooltip>
+            </a>
+            <button
+               disabled={$save.listings.length === 0}
+               onClick={() => { $save.listingClear(); }}
+               className="enabled:cursor-pointer p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            >
+               <Tooltip text="Alle Immobilien löschen">
+                  <Trash size={18} />
                </Tooltip>
             </button>
             <button
-               disabled={disabled.includes('save')}
-               onClick={() => onAction('save')}
-               className="enabled:cursor-pointer p-2 enabled:hover:scale-125 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+               onClick={() => { $save.exportAsJson(); }}
+               className="enabled:cursor-pointer p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
             >
                <Tooltip text="Daten speichern">
-                  <Download className="w-4 h-4" />
+                  <Download size={18} />
                </Tooltip>
             </button>
          </>
       );
-   }
+   };
+
+   const renderSelection = () => {
+      if ($save.selected.length === 0) {
+         return null;
+      }
+      return (
+         <div className="mt-2 text-sm text-gray-700 flex justify-center text-center">
+            <a href="/compare" className="text-primary font-bold ml-1">Vergleichen ({$save.selected.length})</a>
+         </div>
+      );
+   };
 
    return (
       <div>
@@ -95,7 +103,7 @@ export const ActionPanel = ({ onAction, disabled = [] }: Props) => {
          )}
 
          <div className="fixed inset-x-0 bottom-4 flex justify-center z-20">
-            <div className={`bg-white shadow-2xl rounded-2xl px-6 py-3 border-1 border-gray-200 transition-all ${isDraggingOver ? 'border-4 border-white' : ''}`}
+            <div className={`bg-gray-100 shadow-2xl rounded-full px-6 py-4 border-1 border-gray-200 transition-all ${isDraggingOver ? 'border-4 border-white' : ''}`}
                onDragEnter={handleDragEnter}
                onDragOver={handleDragOver}
                onDragLeave={handleDragLeave}
@@ -103,6 +111,7 @@ export const ActionPanel = ({ onAction, disabled = [] }: Props) => {
                <div className="flex items-center">
                   {renderContent()}
                </div>
+               {renderSelection()}
             </div>
          </div>
       </div>
