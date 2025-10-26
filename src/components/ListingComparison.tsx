@@ -27,7 +27,7 @@ export const ListingComparison = () => {
 
    function renderCell(item: Listing, attr: string) {
       return (
-         <td key={`comparison-cell-${item.uuid}`} className="border-b border-gray-200 p-2 align-top w-1/3">
+         <td key={`comparison-cell-${item.uuid}`} className="border-b border-gray-200 p-2 align-top w-full md:w-1/3">
             {attr === 'image' && <img src={item.image} alt={`Listing ${item.uuid}`} className="w-full h-52 object-cover rounded-xl" />}
             {attr === 'title' && <strong>{item.title}</strong>}
             {attr === 'price' && <div className="text-primary">€ {item.price}</div>}
@@ -55,21 +55,23 @@ export const ListingComparison = () => {
       <div className="p-4">
          <h2 className="font-bold text-lg">Immobilienvergleich</h2>
 
-         <table className="border-collapse w-full">
-            <tbody>
-               {renderRow('image')}
-               {renderRow('title')}
-               {renderRow('location')}
-               {renderRow('price')}
-               {renderRow('sqm')}
-               {renderRow('sqmPrice')}
-               {renderRow('year')}
-               {renderRow('rooms')}
-               {renderRow('description')}
-               {renderRow('features')}
-               {renderRow('contact')}
-            </tbody>
-         </table>
+         <div className="overflow-x-auto block">
+            <table className="border-collapse min-w-full">
+               <tbody>
+                  {renderRow('image')}
+                  {renderRow('title')}
+                  {renderRow('location')}
+                  {renderRow('price')}
+                  {renderRow('sqm')}
+                  {renderRow('sqmPrice')}
+                  {renderRow('year')}
+                  {renderRow('rooms')}
+                  {renderRow('description')}
+                  {renderRow('features')}
+                  {renderRow('contact')}
+               </tbody>
+            </table>
+         </div>
       </div>
    );
 }

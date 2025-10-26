@@ -24,7 +24,7 @@ export const LocationInput = () => {
       return (
          <Button variant="outline"
             onClick={() => setCompact(false)}><MapPinHouse size={14} />
-            {!$storage.location ? 'Startpunkt setzen' : `Startpunkt: ${fromLocation} ändern`}
+            {!$storage.location ? 'Startpunkt' : fromLocation}
          </Button>
       );
    }

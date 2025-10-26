@@ -114,7 +114,7 @@ export const ListingDetails = () => {
    }
 
    return (
-      <div className="min-h-screen grid grid-cols-[1fr_40%]">
+      <div className="min-h-screen grid grid-cols-1 md:grid-cols-[1fr_40%]">
          {/*user input*/}
          <div className="p-4">
             <h2 className="font-bold text-lg">{isEditing() ? 'Immobilie bearbeiten' : 'Neue Immobilie hinzufügen'}</h2>
@@ -146,7 +146,9 @@ export const ListingDetails = () => {
          </div>
 
          {/*preview*/}
-         <ListingPreview data={listing} />
+         <div className="hidden md:block">
+            <ListingPreview data={listing} />
+         </div>
       </div>
    );
 }

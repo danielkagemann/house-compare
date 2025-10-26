@@ -31,7 +31,9 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
    const [selected, setSelected] = useState<string[]>([]);
    const [flt, setFilter] = useState<FilterOptions>({
       compactView: false,
+      removeFromList: false,
       maxPrice: 0,
+      minArea: 0,
    });
 
    // initial load
