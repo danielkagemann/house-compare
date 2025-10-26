@@ -7,13 +7,14 @@ import { useStorage } from "@/hooks/storage-provider";
 import { Input } from "./ui/input";
 
 export const LocationInput = () => {
+   // hooks
+   const $coords = useCoordinates();
+   const $storage = useStorage();
+
    // states
    const [fromLocation, setFromLocation] = useState<string>('');
    const [compact, setCompact] = useState<boolean>(true);
 
-   // hooks
-   const $coords = useCoordinates();
-   const $storage = useStorage();
 
    if ($storage.listings.length === 0) {
       return null;

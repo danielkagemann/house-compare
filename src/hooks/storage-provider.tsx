@@ -9,6 +9,7 @@ interface StorageContextType {
    location: Coordinates | null;
    selected: string[];
    listingAdd: (val: Listing) => void;
+   listingUpdate: (val: Listing) => void;
    listingRemove: (id: string) => void;
    listingClear: () => void;
    selectionToggle: (id: string) => void;
@@ -18,7 +19,7 @@ interface StorageContextType {
 
 const StorageContext = createContext<StorageContextType | null>(null);
 
-const KEY = { LISTINGS: "lst", LOCATION: "loc", SELECTED: "sel" };
+const KEY = { LISTINGS: "lst", SELECTED: "sel" };
 
 export const StorageProvider = ({ children }: { children: React.ReactNode }) => {
    // state
@@ -30,9 +31,6 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
    useEffect(() => {
       const lraw = localStorage.getItem(KEY.LISTINGS) ?? "[]";
       setListings(JSON.parse(lraw));
-
-      const loc = localStorage.getItem(KEY.LOCATION) ?? null;
-      setLocation(loc ? JSON.parse(loc) : null);
 
       const sel = localStorage.getItem(KEY.SELECTED) ?? "[]";
       setSelected(JSON.parse(sel));
@@ -88,8 +86,18 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       toast.success("Immobilie hinzugefügt");
    };
 
+   const listingUpdate = (val: Listing) => {
+      const index = listings.findIndex((item) => item.uuid.trim() === val.uuid.trim());
+      if (index !== -1) {
+         const newValues = [...listings];
+         newValues[index] = val;
+         setListings(newValues);
+         localStorage.setItem(KEY.LISTINGS, JSON.stringify(newValues));
+      }
+   };
+
    const listingRemove = (id: string) => {
-      const newValues = listings.filter((item) => item.uuid !== id);
+      const newValues = listings.filter((item) => item.uuid.trim() !== id.trim());
       setListings(newValues);
       localStorage.setItem(KEY.LISTINGS, JSON.stringify(newValues));
       toast.success("Immobilie entfernt");
@@ -102,23 +110,22 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
    };
 
    const selectionToggle = (id: string) => {
-      const isSelected = selected.includes(id);
+      const isSelected = selected.includes(id.trim());
       if (isSelected) {
-         const newValues = selected.filter((item) => item !== id);
+         const newValues = selected.filter((item) => item.trim() !== id.trim());
          setSelected(newValues);
          localStorage.setItem(KEY.SELECTED, JSON.stringify(newValues));
       } else {
-         const newValues = Array.from(new Set([...selected, id]));
+         const newValues = Array.from(new Set([...selected, id.trim()]));
          setSelected(newValues);
          localStorage.setItem(KEY.SELECTED, JSON.stringify(newValues));
       }
    };
 
-   const selectionContains = (id: string) => selected.includes(id);
+   const selectionContains = (id: string) => selected.includes(id.trim());
 
    const locationSet = (coords: Coordinates | null) => {
       setLocation(coords);
-      localStorage.setItem(KEY.LOCATION, JSON.stringify(coords));
    };
 
    return <StorageContext.Provider value={{
@@ -129,6 +136,7 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       selected,
       listingAdd,
       listingRemove,
+      listingUpdate,
       listingClear,
       selectionToggle,
       selectionContains,

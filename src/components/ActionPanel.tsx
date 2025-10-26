@@ -57,7 +57,7 @@ export const ActionPanel = () => {
       return (
          <>
             <a
-               href="/add"
+               href="/details/?id=-1"
                className="enabled:cursor-pointer p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
             >
                <Tooltip text="Neue Immobilie hinzufügen">

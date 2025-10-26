@@ -3,7 +3,7 @@
 import { ListingPreview } from "@/components/ListingPreview";
 import { Button } from "@/components/ui/button";
 import { Listing } from "@/model/Listing";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
    Accordion,
    AccordionContent,
@@ -17,10 +17,9 @@ import { InputLocation } from "@/components/inputs/InputLocation";
 import { InputImage } from "@/components/inputs/InputImage";
 import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { useStorage } from "@/hooks/storage-provider";
-
+import { useSearchParams, useRouter } from "next/navigation";
+import { i } from "motion/react-client";
 
 type InputOrder = {
    title: string;
@@ -28,8 +27,12 @@ type InputOrder = {
    children: React.ReactNode;
 };
 
+export const ListingDetails = () => {
+   // hooks
+   const $save = useStorage();
+   const $router = useRouter();
+   const $url = useSearchParams();
 
-export default function AddPage() {
    // state
    const [current, setCurrent] = useState<string>('url');
    const [listing, setListing] = useState<Listing>({
@@ -47,15 +50,27 @@ export default function AddPage() {
       features: []
    });
 
-   // hooks
-   const $save = useStorage();
-   const $router = useRouter();
+   useEffect(() => {
+      const uuid = $url.get('id');
+      console.log(`details::search for given id: "${uuid}"`);
+      if (uuid) {
+         const existing = $save.listings.find((item) => item.uuid === uuid);
+         if (existing) {
+            console.log(`details::existing listing found, loading data: "${existing.uuid}"`);
+            setListing({ ...existing });
+         } else {
+            // else create a new one
+            console.log('details::no existing listing found, creating new one');
+            $save.listings.forEach((item) => console.log(` - existing listing: "${item.uuid}"`));
+         }
+      }
+   }, [$save.listings, $url]);
 
    /**
-    * updating value for given attribute
-    * @param attr 
-    * @returns 
-    */
+  * updating value for given attribute
+  * @param attr 
+  * @returns 
+  */
    const onUpdateListing = (attr: string) => (value: string) => {
       setListing((prev) => ({ ...prev, [attr]: value }));
    };
@@ -85,8 +100,17 @@ export default function AddPage() {
       { title: 'Makler & Agentur', attr: 'contact', children: <InputText description="Von welcher Agentur/Makler wird die Immobilie angeboten?" value={listing.contact} onChange={onUpdateListing('contact')} onNext={onNext('')} /> },
    ];
 
+   function isEditing() {
+      const uuid = $url.get('id');
+      return uuid === listing.uuid;
+   }
+
    function onSave() {
-      $save.listingAdd(listing);
+      if (isEditing()) {
+         $save.listingUpdate(listing);
+      } else {
+         $save.listingAdd(listing);
+      }
       $router.push('/');
    }
 
@@ -94,7 +118,7 @@ export default function AddPage() {
       <div className="min-h-screen grid grid-cols-[1fr_40%]">
          {/*user input*/}
          <div className="p-4">
-            <h2 className="font-bold text-lg">Neue Immobilie hinzufügen</h2>
+            <h2 className="font-bold text-lg">{isEditing() ? 'Immobilie bearbeiten' : 'Neue Immobilie hinzufügen'}</h2>
 
             <Accordion
                type="single"
@@ -112,11 +136,11 @@ export default function AddPage() {
                   ))
                }
             </Accordion>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 text-sm border-t-1 border-gray-300 py-2">
                <strong>Speichern</strong>
-               <p>Wenn alle Informationen korrekt sind, dann klicke auf "Speichern"</p>
+               <p>Prüfe ob alle Eingaben korrekt sind. In der Vorschau siehst Du, zu wieviel Prozent alle Felder befüllt sind.</p>
                <div className="flex justify-end">
-                  <Button onClick={onSave}>Speichern</Button>
+                  <Button onClick={onSave}>{isEditing() ? 'Aktualisieren' : 'Erstellen'}</Button>
                </div>
 
             </div>
@@ -126,4 +150,4 @@ export default function AddPage() {
          <ListingPreview data={listing} />
       </div>
    );
-};
+}
