@@ -50,6 +50,7 @@ You can define a starting point and the (air) distance is calculated to give you
 - tailwind css
 - ~~cheerio (server api parses the HTML here)~~ replaced with DOM parsing to be deployable on GH pages
 - lucide-react for nice symbols
+- motion for microanimations
 
 ## Getting Started
 

@@ -3,6 +3,7 @@ import { Tooltip } from "./ui/Tooltip";
 import { useEffect, useState } from "react";
 import { useStorage } from "@/hooks/storage-provider";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 
 export const ActionPanel = () => {
    // states
@@ -89,9 +90,15 @@ export const ActionPanel = () => {
                onClick={() => $router.push('/compare')}
             >
                {$save.selected.length > 0 && (
-                  <div className="absolute -right-1 -top-1">
+                  <motion.div
+                     className="absolute -right-1 -top-1"
+                     key={$save.selected.length}
+                     initial={{ scale: 1 }}
+                     animate={{ scale: [1, 1.3, 1] }}
+                     transition={{ duration: 0.3, ease: "easeOut" }}
+                  >
                      <div className="w-4 h-4 bg-red-700 text-[9px] flex justify-center text-white rounded-full">{$save.selected.length}</div>
-                  </div>)}
+                  </motion.div>)}
                <Tooltip text="Immobilien vergleichen">
                   <GitCompare size={18} />
                </Tooltip>

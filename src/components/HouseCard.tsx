@@ -6,6 +6,7 @@ import { Sheet, SheetContent } from "./ui/sheet";
 import { useState } from "react";
 import { useStorage } from "@/hooks/storage-provider";
 import { useCoordinates } from "@/hooks/useCoordinates";
+import { motion } from "motion/react";
 
 interface HouseCardProps {
    data: Listing;
@@ -38,6 +39,10 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
       return null;
    }
 
+   function onDelete() {
+      $save.listingRemove(data.uuid);
+   }
+
    return (
       <>
          <Card className={`w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip relative ${shouldHide ? 'grayscale' : ''}`}>
@@ -59,17 +64,42 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
                   className="w-full h-48 object-cover rounded-t-2xl hover:scale-110 transition-all"
                />
 
-               <button type="button" className="absolute top-2 left-2 bg-black bg-opacity-75 rounded-full p-2">
+               <motion.button
+                  type="button"
+                  className="absolute top-2 left-2 bg-black bg-opacity-75 rounded-full p-2"
+                  onClick={onDelete}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ rotate: 360 }}
+                  transition={{ duration: 0.3 }}
+               >
                   <Trash size={14} className="text-white" />
-               </button>
+               </motion.button>
 
-               <button type="button" className={`absolute top-2 right-10 bg-black bg-opacity-75 rounded-full p-2`} onClick={() => setShow(true)}>
+               <motion.button
+                  type="button"
+                  className={`absolute top-2 right-10 bg-black bg-opacity-75 rounded-full p-2`}
+                  onClick={() => setShow(true)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ y: -5 }}
+                  transition={{ duration: 0.2 }}
+               >
                   <PencilLine size={14} className="text-white" />
-               </button>
-
-               <button type="button" className={`absolute top-2 right-2 ${isSelected ? 'bg-red-700' : 'bg-black'} bg-opacity-75 rounded-full p-2`} onClick={onSelect}>
+               </motion.button>
+               <motion.button
+                  type="button"
+                  className={`absolute top-2 right-2 ${isSelected ? 'bg-red-700' : 'bg-black'} bg-opacity-75 rounded-full p-2`}
+                  onClick={onSelect}
+                  whileHover={{
+                     scale: [1, 1.2, 1]
+                  }}
+                  whileTap={{ y: -5 }}
+                  transition={{
+                     duration: 0.3,
+                     scale: { repeat: 1, duration: 0.5 }
+                  }}
+               >
                   <Heart size={14} className="text-white" />
-               </button>
+               </motion.button>
 
                <div className="p-2 min-w-0">
                   <div className="text-gray-700 text-xs truncate">{data.contact}</div>

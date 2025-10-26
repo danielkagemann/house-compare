@@ -3,6 +3,7 @@
 import { HouseCard } from "@/components/HouseCard";
 import { ActionPanel } from "@/components/ActionPanel";
 import { useStorage } from "@/hooks/storage-provider";
+import { motion } from "motion/react";
 
 export default function Home() {
 
@@ -28,12 +29,22 @@ export default function Home() {
       {renderEmpty()}
       <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {
-          $storage.listings.map((item) => (
-            <HouseCard
+          $storage.listings.map((item, index) => (
+            <motion.div
               key={item.uuid}
-              data={item}
-              isSelected={$storage.selectionContains(item.uuid)}
-              onSelect={() => $storage.selectionToggle(item.uuid)} />))
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.3,
+                delay: index * 0.1
+              }}
+            >
+              <HouseCard
+                data={item}
+                isSelected={$storage.selectionContains(item.uuid)}
+                onSelect={() => $storage.selectionToggle(item.uuid)} />
+            </motion.div>
+          ))
         }
       </div>
       <ActionPanel />
