@@ -13,7 +13,7 @@ export default function Home() {
     if ($storage.listings.length > 0) {
       return null;
     }
-    return (<div>
+    return (<div className="p-4">
       <h2 className="font-bold text-lg">Herzlich Willkommen,</h2>
       <p className="text-gray-600 text-md mt-4">
         Speichere Deine Immobilien hier und wähle aus der Liste aus, welche Du miteinander vergleichen möchtest.

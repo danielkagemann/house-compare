@@ -1,7 +1,8 @@
-import { Download, PlusCircle, Trash } from "lucide-react";
+import { Download, GitCompare, PlusCircle, Trash } from "lucide-react";
 import { Tooltip } from "./ui/Tooltip";
 import { useEffect, useState } from "react";
 import { useStorage } from "@/hooks/storage-provider";
+import { useRouter } from "next/navigation";
 
 export const ActionPanel = () => {
    // states
@@ -9,6 +10,7 @@ export const ActionPanel = () => {
 
    // context
    const $save = useStorage();
+   const $router = useRouter();
 
    useEffect(() => {
       // avoid dropping outside of actionpanel
@@ -31,7 +33,7 @@ export const ActionPanel = () => {
    };
 
    const handleDragOver = (e: React.DragEvent) => {
-      e.preventDefault(); // wichtig, sonst feuert onDrop nicht
+      e.preventDefault();
    };
 
    const handleDragLeave = (e: React.DragEvent) => {
@@ -81,18 +83,21 @@ export const ActionPanel = () => {
                   <Download size={18} />
                </Tooltip>
             </button>
-         </>
-      );
-   };
+            <button
+               disabled={$save.selected.length < 2}
+               className="enabled:cursor-pointer p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50 relative"
+               onClick={() => $router.push('/compare')}
+            >
+               {$save.selected.length > 0 && (
+                  <div className="absolute -right-1 -top-1">
+                     <div className="w-4 h-4 bg-red-700 text-[9px] flex justify-center text-white rounded-full">{$save.selected.length}</div>
+                  </div>)}
+               <Tooltip text="Immobilien vergleichen">
+                  <GitCompare size={18} />
+               </Tooltip>
+            </button>
 
-   const renderSelection = () => {
-      if ($save.selected.length === 0) {
-         return null;
-      }
-      return (
-         <div className="mt-2 text-sm text-gray-700 flex justify-center text-center">
-            <a href="/compare" className="text-primary font-bold ml-1">Vergleichen ({$save.selected.length})</a>
-         </div>
+         </>
       );
    };
 
@@ -111,7 +116,6 @@ export const ActionPanel = () => {
                <div className="flex items-center">
                   {renderContent()}
                </div>
-               {renderSelection()}
             </div>
          </div>
       </div>

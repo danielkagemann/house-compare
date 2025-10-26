@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Coordinates, Listing, LISTING_AVAILABLE_ATTRIBUTES } from "@/model/Listing";
 import { toast } from "sonner";
+import { FilterOptions } from "@/model/filter";
 
 interface StorageContextType {
    importJson: (data: string) => void;
@@ -15,22 +16,31 @@ interface StorageContextType {
    selectionToggle: (id: string) => void;
    selectionContains: (id: string) => boolean;
    locationSet: (coords: Coordinates | null) => void;
+   filter: FilterOptions;
+   filterUpdate: (filter: FilterOptions) => void;
 }
 
 const StorageContext = createContext<StorageContextType | null>(null);
 
-const KEY = { LISTINGS: "lst", SELECTED: "sel" };
+const KEY = { LISTINGS: "lst", FILTER: 'flt', SELECTED: "sel" };
 
 export const StorageProvider = ({ children }: { children: React.ReactNode }) => {
    // state
    const [listings, setListings] = useState<Listing[]>([]);
    const [location, setLocation] = useState<Coordinates | null>(null);
    const [selected, setSelected] = useState<string[]>([]);
+   const [flt, setFilter] = useState<FilterOptions>({
+      compactView: false,
+      maxPrice: 0,
+   });
 
    // initial load
    useEffect(() => {
       const lraw = localStorage.getItem(KEY.LISTINGS) ?? "[]";
       setListings(JSON.parse(lraw));
+
+      const flt = localStorage.getItem(KEY.FILTER) ?? "{}";
+      setFilter(JSON.parse(flt));
 
       const sel = localStorage.getItem(KEY.SELECTED) ?? "[]";
       setSelected(JSON.parse(sel));
@@ -132,6 +142,11 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       setLocation(coords);
    };
 
+   const filterUpdate = (filter: FilterOptions) => {
+      setFilter(filter);
+      localStorage.setItem(KEY.FILTER, JSON.stringify(filter));
+   };
+
    return <StorageContext.Provider value={{
       importJson,
       exportAsJson,
@@ -144,7 +159,9 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       listingClear,
       selectionToggle,
       selectionContains,
-      locationSet
+      locationSet,
+      filter: flt,
+      filterUpdate
    }}>
       {children}
    </StorageContext.Provider>;

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { LocationInput } from './LocationInput';
 import Link from 'next/link';
+import { FilterPanel } from './FilterPanel';
 
 export const Header = () => {
 
@@ -13,7 +14,10 @@ export const Header = () => {
          <Link href="/">
             <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/logo.png`} width={height * 4.055} height={height} alt="logo" />
          </Link>
-         <LocationInput />
+         <div className="flex gap-1 items-center">
+            <FilterPanel />
+            <LocationInput />
+         </div>
       </header>
    );
 }

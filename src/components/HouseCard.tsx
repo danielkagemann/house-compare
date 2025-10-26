@@ -23,9 +23,27 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
 
    const distance = $save.location && data.coordinates ? $coords.distanceBetween($save.location, data.coordinates) : null;
 
+   const isFilteredOut = (): boolean => {
+      if ($save.filter.maxPrice > 0 && parseFloat(data.price) > $save.filter.maxPrice) {
+         return true;
+      }
+      return false;
+   }
+
    return (
       <>
-         <Card className="w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip">
+         <Card className={`w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip relative ${isFilteredOut() ? 'grayscale' : ''}`}>
+            {isFilteredOut() && (
+               <div
+                  className="absolute inset-0 z-10 pointer-events-none"
+                  style={{
+                     backgroundImage:
+                        "repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 6px)",
+                     backgroundColor: "rgba(255,255,255,0.4)",
+                  }}
+               />
+            )}
+
             <CardHeader className="p-0 relative">
                <img
                   src={data.image}
@@ -60,23 +78,27 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
                   </p>
                   <p className="text-sm text-gray-500 -mt-1">{getSquareMeterPrice(data.price, data.sqm)}</p>
                </div>
-               <div className="flex gap-1 justify-between text-sm px-2">
-                  <div className="flex items-center gap-1">
-                     <Ruler size={14} /> {data.sqm || '---'} m²
+               {!$save.filter.compactView && (
+                  <div className="flex gap-1 justify-between text-sm px-2">
+                     <div className="flex items-center gap-1">
+                        <Ruler size={14} /> {data.sqm || '---'} m²
+                     </div>
+                     <div className="flex items-center gap-1">
+                        <BedDouble size={14} /> {data.rooms || '--'}
+                     </div>
+                     <div className="flex items-center gap-1">
+                        <Calendar size={14} /> {data.year || '--'}
+                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                     <BedDouble size={14} /> {data.rooms || '--'}
-                  </div>
-                  <div className="flex items-center gap-1">
-                     <Calendar size={14} /> {data.year || '--'}
-                  </div>
-               </div>
+               )}
             </CardHeader>
-            <CardContent className="p-2">
-               <p className="text-sm text-gray-700 mt-1 leading-snug">
-                  {data.description.slice(0, 100)}{data.description.length > 100 ? '...' : ''}
-               </p>
-            </CardContent>
+            {!$save.filter.compactView && (
+               <CardContent className="p-2">
+                  <p className="text-sm text-gray-700 mt-1 leading-snug">
+                     {data.description.slice(0, 100)}{data.description.length > 100 ? '...' : ''}
+                  </p>
+               </CardContent>
+            )}
          </Card >
          <Sheet open={show} onOpenChange={setShow}>
             <SheetContent side="right" className="min-w-[40%]">
