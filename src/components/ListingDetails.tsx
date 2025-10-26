@@ -19,7 +19,6 @@ import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
 import { useStorage } from "@/hooks/storage-provider";
 import { useSearchParams, useRouter } from "next/navigation";
-import { i } from "motion/react-client";
 
 type InputOrder = {
    title: string;

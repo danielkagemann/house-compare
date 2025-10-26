@@ -72,6 +72,5 @@ export function parseHtml(html: string): Listing | null {
     features,
     year,
     url: "",
-    pricePerSqm,
   };
 }
