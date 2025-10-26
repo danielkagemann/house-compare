@@ -48,6 +48,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
             alt={data.title}
             className="w-full h-48 object-cover rounded-xl"
          />
+         {data.url && <a href={data.url} target="_blank" rel="noopener noreferrer" className="text-primary font-bold text-sm hover:underline break-all">Link zum Angebot</a>}
          {data.contact.length > 0 && <div className="text-xs text-gray-700 truncate w-min-0">{data.contact}</div>}
          {data.title.length > 0 && <h2 className="font-bold text-lg">{data.title}</h2>}
 

@@ -87,7 +87,7 @@ export const ListingDetails = () => {
    // locals
    const order: InputOrder[] = [
       { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url')} onNext={() => listing.url.includes('idealista') ? onNext('sourcecode')() : onNext('title')()} /> },
-      { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...listing, ...v }); setCurrent('title') }} /> },
+      { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...v, url: listing.url }); setCurrent('title') }} /> },
       { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title')} onNext={onNext('location')} /> },
       { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} coords={listing.coordinates} onChange={onUpdateListing('location')} onCoords={(v) => setListing({ ...listing, coordinates: v })} onNext={onNext('image')} /> },
       { title: 'Link zum Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image')} onNext={onNext('price')} /> },
