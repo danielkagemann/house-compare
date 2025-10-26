@@ -12,7 +12,7 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
 
    return (
       <>
-         <p>Gib hier die URL zum Bild der Immmobilie an. Eine kleine Vorschau wird angezeigt, sofern der Link korrekt ist, </p>
+         <p>Gib hier die URL zum Bild der Immobilie an. Eine kleine Vorschau wird angezeigt, sofern der Link korrekt ist, </p>
 
          <div className="flex gap-2 items-center">
             <img src={imageSrc}
