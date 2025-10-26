@@ -4,6 +4,7 @@ import { HouseCard } from "@/components/HouseCard";
 import { ActionPanel } from "@/components/ActionPanel";
 import { useStorage } from "@/hooks/storage-provider";
 import { motion } from "motion/react";
+import { Listing } from "@/model/Listing";
 
 export default function Home() {
 
@@ -24,12 +25,26 @@ export default function Home() {
     </div>);
   }
 
+  const isFilteredOut = (data: Listing): boolean => {
+    if ($storage.filter.maxPrice > 0 && parseFloat(data.price) > $storage.filter.maxPrice) {
+      return true;
+    }
+    if ($storage.filter.minArea > 0 && Number(data.sqm) < $storage.filter.minArea) {
+      return true;
+    }
+    return false;
+  }
+
+  const getFilteredListings = (): Listing[] => {
+    return $storage.filter.removeFromList ? $storage.listings.filter(item => !isFilteredOut(item)) : $storage.listings;
+  };
+
   return (
     <>
       {renderEmpty()}
       <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {
-          $storage.listings.map((item, index) => (
+          getFilteredListings().map((item, index) => (
             <motion.div
               key={item.uuid}
               initial={{ opacity: 0, y: 20 }}
@@ -42,7 +57,8 @@ export default function Home() {
               <HouseCard
                 data={item}
                 isSelected={$storage.selectionContains(item.uuid)}
-                onSelect={() => $storage.selectionToggle(item.uuid)} />
+                onSelect={() => $storage.selectionToggle(item.uuid)}
+                isMarked={isFilteredOut(item)} />
             </motion.div>
           ))
         }

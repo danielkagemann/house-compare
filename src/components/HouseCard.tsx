@@ -12,9 +12,10 @@ interface HouseCardProps {
    data: Listing;
    isSelected: boolean;
    onSelect?: () => void;
+   isMarked?: boolean;
 }
 
-export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
+export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: HouseCardProps) => {
    // state
    const [show, setShow] = useState(false);
 
@@ -24,29 +25,14 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
 
    const distance = $save.location && data.coordinates ? $coords.distanceBetween($save.location, data.coordinates) : null;
 
-   const isFilteredOut = (): boolean => {
-      if ($save.filter.maxPrice > 0 && parseFloat(data.price) > $save.filter.maxPrice) {
-         return true;
-      }
-      if ($save.filter.minArea > 0 && Number(data.sqm) < $save.filter.minArea) {
-         return true;
-      }
-      return false;
-   }
-
-   const shouldHide = isFilteredOut();
-   if (shouldHide && $save.filter.removeFromList) {
-      return null;
-   }
-
    function onDelete() {
       $save.listingRemove(data.uuid);
    }
 
    return (
       <>
-         <Card className={`w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip relative ${shouldHide ? 'grayscale' : ''}`}>
-            {shouldHide && (
+         <Card className={`w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip relative ${isMarked ? 'grayscale' : ''}`}>
+            {isMarked && (
                <div
                   className="absolute inset-0 z-10 pointer-events-none"
                   style={{
