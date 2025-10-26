@@ -113,6 +113,13 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       setListings(newValues);
       localStorage.setItem(KEY.LISTINGS, JSON.stringify(newValues));
       toast.success("Immobilie entfernt");
+
+      // check if this is in selection
+      if (selectionContains(id)) {
+         const newSelection = selected.filter((item) => item.trim() !== id.trim());
+         setSelected(newSelection);
+         localStorage.setItem(KEY.SELECTED, JSON.stringify(newSelection));
+      }
    };
 
    const listingClear = () => {
