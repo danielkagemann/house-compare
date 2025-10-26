@@ -117,8 +117,12 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
          localStorage.setItem(KEY.SELECTED, JSON.stringify(newValues));
       } else {
          const newValues = Array.from(new Set([...selected, id.trim()]));
-         setSelected(newValues);
-         localStorage.setItem(KEY.SELECTED, JSON.stringify(newValues));
+         if (newValues.length > 3) {
+            toast.error("Es können maximal 3 Immobilien zum Vergleich ausgewählt werden.");
+         } else {
+            setSelected(newValues);
+            localStorage.setItem(KEY.SELECTED, JSON.stringify(newValues));
+         }
       }
    };
 
