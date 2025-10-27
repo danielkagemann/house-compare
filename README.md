@@ -10,16 +10,26 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 - add translation of description possibility
 - share links via datenkommo.de
+- store in database (datenkommo.de)
 - add personal notes
 - show map on compare
 - show map when entering location
+- detect countries
+- filter by countries (if more than one)
+- big map with all favorites
+- image as base64 instead of link due to permission issues
+- possibility to add coordinates instead of location
+- auto get coords for idealista
+- add whats new screen/info screen
+- own domain instead of github pages?
 
+- domainnames: favoritehomes, like estate,topestate, housecompare
 ## features
 
 - set real estate data manually or from idealista html
 - export and import of data
 - storage in browser
-- favorite colelction
+- store your favorite collection
 - comparison of real estates by user selection (up to 3)
 - add starting point to calculate distance (air)
 - works on mobile and desktop

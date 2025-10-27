@@ -25,11 +25,12 @@ export const InputLocation = ({ value, onChange, coords, onCoords, onNext }: Pro
 
    return (
       <>
-         <p>Bitte gib den Standort der Immobilie an. Es wird versucht eine ungefähre Adresse zu finden. </p>
+         <p>Bitte gib den Standort der Immobilie an. Gib die ungefähre Adresse ein. </p>
          <div className="flex gap-1">
             <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
             <Button variant="outline" onClick={onFindAddr}><MapPin size={16} /></Button>
          </div>
+
          <p className="text-sm">{coords ? `Gefundene Koordinaten: ${coords.lat}, ${coords.lon}` : "Keine gültige Adresse."}</p>
          <InputNext onClick={onNext} />
       </>

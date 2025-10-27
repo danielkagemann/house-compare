@@ -17,6 +17,15 @@ export const useCoordinates = () => {
     return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
   };
 
+  const fromCoords = async (lat: number, lon: number) => {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`
+    );
+    const data = await response.json();
+
+    return data;
+  };
+
   const distanceBetween = (from: Coordinates, to: Coordinates) => {
     const R = 6371;
     const toRad = (deg: number) => (deg * Math.PI) / 180;
@@ -38,6 +47,7 @@ export const useCoordinates = () => {
 
   return {
     fromAddress,
+    fromCoords,
     distanceBetween,
   };
 };
