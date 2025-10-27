@@ -2,7 +2,7 @@ import { Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Drawer, DrawerContent } from "./ui/drawer";
-import { useStorage } from "@/hooks/storage-provider";
+import { useStorage } from "@/context/storage-provider";
 import { Input } from "./ui/input";
 import { Switch } from "./ui/switch";
 

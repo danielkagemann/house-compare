@@ -1,38 +1,45 @@
+"use client";
+
 import { Button } from "../ui/button";
-import { useCoordinates } from "@/hooks/useCoordinates";
-import { Coordinates } from "@/model/Listing";
 import { MapPin } from "lucide-react";
 import { Input } from "../ui/input";
 import { InputNext } from "./InputNext";
+import { Location } from "@/model/Listing";
+import { useState } from "react";
+import { flushSync } from "react-dom";
+import { Spinner } from "../ui/spinner";
 
 interface Props {
-   value: string;
-   coords?: Coordinates;
-   onChange: (value: string) => void;
-   onCoords: (coords?: Coordinates) => void;
+   value: Location;
+   onChange: (value: Location) => void;
    onNext: () => void;
 }
 
-export const InputLocation = ({ value, onChange, coords, onCoords, onNext }: Props) => {
-
-   // hooks
-   const addr = useCoordinates();
-
+export const InputLocation = ({ value, onChange, onNext }: Props) => {
+   // state
+   const [working, setWorking] = useState(false);
    const onFindAddr = async () => {
-      const result = await addr.fromAddress(value);
-      onCoords(result);
+      flushSync(() => {
+         setWorking(true);
+      });
+      const result = await fetch(`/api/location?q=${encodeURIComponent(value.display)}`);
+      if (result.ok) {
+         const data = await result.json();
+         onChange({ ...value, ...data });
+      }
+      setWorking(false);
    };
 
    return (
       <>
-         <p>Bitte gib den Standort der Immobilie an. Gib die ungefähre Adresse ein. </p>
-         <div className="flex gap-1">
-            <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
-            <Button variant="outline" onClick={onFindAddr}><MapPin size={16} /></Button>
+         <p>Bitte gib den Standort der Immobilie an. Gib die ungefähre Adresse ein oder Koordinaten in der Form Latitude,Longitude.</p>
+         <div className="flex gap-1 items-center">
+            <Input type="text" value={value.display} onChange={(e) => onChange({ ...value, display: e.target.value })} />
+            {working ? <Spinner /> : <Button variant="outline" onClick={onFindAddr}><MapPin size={16} /></Button>}
          </div>
 
-         <p className="text-sm">{coords ? `Gefundene Koordinaten: ${coords.lat}, ${coords.lon}` : "Keine gültige Adresse."}</p>
-         <InputNext onClick={onNext} />
+         <p className="text-sm">{value.lat && value.lon ? `${value.lat}, ${value.lon} in ${value.country}` : "Keine gültige Adresse."}</p>
+         {!working && <InputNext onClick={onNext} />}
       </>
    );
 };

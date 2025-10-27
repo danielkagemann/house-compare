@@ -1,7 +1,7 @@
 import { Download, GitCompare, PlusCircle, Trash } from "lucide-react";
 import { Tooltip } from "./ui/Tooltip";
 import { useEffect, useState } from "react";
-import { useStorage } from "@/hooks/storage-provider";
+import { useStorage } from "@/context/storage-provider";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 

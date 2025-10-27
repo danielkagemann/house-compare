@@ -17,7 +17,7 @@ import { InputLocation } from "@/components/inputs/InputLocation";
 import { InputImage } from "@/components/inputs/InputImage";
 import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
-import { useStorage } from "@/hooks/storage-provider";
+import { useStorage } from "@/context/storage-provider";
 import { useSearchParams, useRouter } from "next/navigation";
 
 type InputOrder = {
@@ -38,7 +38,7 @@ export const ListingDetails = () => {
       uuid: Date.now().toString(),
       url: '',
       title: '',
-      location: '',
+      location: { lat: 0, lon: 0, country: '', code: '', display: '' },
       price: '',
       sqm: '',
       rooms: '',
@@ -70,7 +70,8 @@ export const ListingDetails = () => {
   * @param attr 
   * @returns 
   */
-   const onUpdateListing = (attr: string) => (value: string) => {
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   const onUpdateListing = (attr: string) => (value: any) => {
       setListing((prev) => ({ ...prev, [attr]: value }));
    };
 
@@ -88,7 +89,7 @@ export const ListingDetails = () => {
       { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url')} onNext={() => listing.url.includes('idealista') ? onNext('sourcecode')() : onNext('title')()} /> },
       { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...v, url: listing.url }); setCurrent('title') }} /> },
       { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title')} onNext={onNext('location')} /> },
-      { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} coords={listing.coordinates} onChange={onUpdateListing('location')} onCoords={(v) => setListing({ ...listing, coordinates: v })} onNext={onNext('image')} /> },
+      { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} onChange={onUpdateListing('location')} onNext={onNext('image')} /> },
       { title: 'Link zum Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image')} onNext={onNext('price')} /> },
       { title: 'Preis', attr: 'price', children: <InputText description="Preis der Immobilie" value={listing.price} onChange={onUpdateListing('price')} onNext={onNext('sqm')} /> },
       { title: 'Wohnfläche', attr: 'sqm', children: <InputSize price={listing.price} value={listing.sqm} onChange={onUpdateListing('sqm')} onNext={onNext('rooms')} /> },

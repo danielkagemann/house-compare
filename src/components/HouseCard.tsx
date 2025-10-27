@@ -1,11 +1,10 @@
-import { getSquareMeterPrice, Listing } from "@/model/Listing"
+import { distanceBetweenCoordinates, getSquareMeterPrice, Listing } from "@/model/Listing"
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { BedDouble, Calendar, Car, Heart, PencilLine, MapPin, Ruler, Trash } from "lucide-react";
 import { ListingPreview } from "./ListingPreview";
 import { Sheet, SheetContent } from "./ui/sheet";
 import { useState } from "react";
-import { useStorage } from "@/hooks/storage-provider";
-import { useCoordinates } from "@/hooks/useCoordinates";
+import { useStorage } from "@/context/storage-provider";
 import { motion } from "motion/react";
 
 interface HouseCardProps {
@@ -20,10 +19,9 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
    const [show, setShow] = useState(false);
 
    // hooks
-   const $coords = useCoordinates();
    const $save = useStorage();
 
-   const distance = $save.location && data.coordinates ? $coords.distanceBetween($save.location, data.coordinates) : null;
+   const distance = $save.location && data.location ? distanceBetweenCoordinates($save.location, { lat: data.location.lat, lon: data.location.lon }) : null;
 
    function onDelete() {
       $save.listingRemove(data.uuid);
@@ -91,7 +89,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   <div className="text-gray-700 text-xs truncate">{data.contact}</div>
                   <h2 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap w-full">{data.title}</h2>
                   <p className="text-sm text-gray-500 flex items-center gap-1">
-                     <MapPin size={14} /> {data.location}
+                     <MapPin size={14} /> {data.location.display}
                   </p>
                   {distance && (<p className="text-sm text-gray-500 flex items-center gap-1">
                      <Car size={14} /> {distance.toFixed(1)} km entfernt

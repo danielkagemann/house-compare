@@ -1,20 +1,17 @@
-import { useCoordinates } from "@/hooks/useCoordinates";
 import { CircleX, MapPinHouse, Search } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { useStorage } from "@/hooks/storage-provider";
+import { useStorage } from "@/context/storage-provider";
 import { Input } from "./ui/input";
 
 export const LocationInput = () => {
    // hooks
-   const $coords = useCoordinates();
    const $storage = useStorage();
 
    // states
    const [fromLocation, setFromLocation] = useState<string>('');
    const [compact, setCompact] = useState<boolean>(true);
-
 
    if ($storage.listings.length === 0) {
       return null;
@@ -29,6 +26,23 @@ export const LocationInput = () => {
       );
    }
 
+   async function onLocationCheck() {
+      if (fromLocation.length === 0) {
+         return;
+      }
+
+      const result = await fetch(`/api/location?q=${encodeURIComponent(fromLocation)}`);
+
+      if (!result.ok) {
+         $storage.locationSet(null);
+         toast.error("Fehler: Keine Koordinaten gefunden");
+      } else {
+         // $storage.locationSet(res);
+         console.log(result);
+         setCompact(true);
+      }
+   }
+
    return <div className="flex gap-1 items-center">
       <Input type="text"
          placeholder="Ort oder Adresse eingeben"
@@ -39,17 +53,7 @@ export const LocationInput = () => {
       <Button variant="default"
          className="bg-primary text-white disabled:text-gray-700 disabled:bg-gray-300"
          disabled={fromLocation.length === 0}
-         onClick={() => {
-            if (fromLocation.length > 0) {
-               $coords.fromAddress(fromLocation).then((res) => {
-                  $storage.locationSet(res);
-                  setCompact(true);
-               }).catch(() => {
-                  $storage.locationSet(null);
-                  toast.error("Fehler: Keine Koordinaten gefunden");
-               });
-            }
-         }}>
+         onClick={onLocationCheck}>
          <Search size={14} />
       </Button>
       <Button variant="outline" onClick={() => setCompact(true)}><CircleX size={14} /></Button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useStorage } from "@/hooks/storage-provider";
+import { useStorage } from "@/context/storage-provider";
 import { getSquareMeterPrice, Listing } from "@/model/Listing";
 import { BedDouble, Calendar, MapPin, Ruler, User } from "lucide-react";
 import { useEffect, useState } from "react";

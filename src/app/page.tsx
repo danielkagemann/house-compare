@@ -2,7 +2,7 @@
 
 import { HouseCard } from "@/components/HouseCard";
 import { ActionPanel } from "@/components/ActionPanel";
-import { useStorage } from "@/hooks/storage-provider";
+import { useStorage } from "@/context/storage-provider";
 import { motion } from "motion/react";
 import { Listing } from "@/model/Listing";
 
