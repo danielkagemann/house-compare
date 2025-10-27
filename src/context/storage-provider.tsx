@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Coordinates, Listing, LISTING_AVAILABLE_ATTRIBUTES } from "@/model/Listing";
+import { Coordinates, Location, Listing, LISTING_AVAILABLE_ATTRIBUTES } from "@/model/Listing";
 import { toast } from "sonner";
 import { FilterOptions } from "@/model/filter";
 
@@ -7,7 +7,7 @@ interface StorageContextType {
    importJson: (data: string) => void;
    exportAsJson: (filename?: string) => void;
    listings: Listing[];
-   location: Coordinates | null;
+   location: Location | null;
    selected: string[];
    listingAdd: (val: Listing) => void;
    listingUpdate: (val: Listing) => void;
@@ -15,7 +15,7 @@ interface StorageContextType {
    listingClear: () => void;
    selectionToggle: (id: string) => void;
    selectionContains: (id: string) => boolean;
-   locationSet: (coords: Coordinates | null) => void;
+   locationSet: (loc: Location | null) => void;
    filter: FilterOptions;
    filterUpdate: (filter: FilterOptions) => void;
 }
@@ -27,7 +27,7 @@ const KEY = { LISTINGS: "lst", FILTER: 'flt', SELECTED: "sel" };
 export const StorageProvider = ({ children }: { children: React.ReactNode }) => {
    // state
    const [listings, setListings] = useState<Listing[]>([]);
-   const [location, setLocation] = useState<Coordinates | null>(null);
+   const [location, setLocation] = useState<Location | null>(null);
    const [selected, setSelected] = useState<string[]>([]);
    const [flt, setFilter] = useState<FilterOptions>({
       compactView: false,
@@ -147,8 +147,8 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
 
    const selectionContains = (id: string) => selected.includes(id.trim());
 
-   const locationSet = (coords: Coordinates | null) => {
-      setLocation(coords);
+   const locationSet = (loc: Location | null) => {
+      setLocation(loc);
    };
 
    const filterUpdate = (filter: FilterOptions) => {

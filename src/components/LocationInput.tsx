@@ -4,25 +4,32 @@ import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useStorage } from "@/context/storage-provider";
 import { Input } from "./ui/input";
+import { flushSync } from "react-dom";
+import { Spinner } from "./ui/spinner";
+import { Tooltip } from "./ui/Tooltip";
 
 export const LocationInput = () => {
    // hooks
    const $storage = useStorage();
 
    // states
-   const [fromLocation, setFromLocation] = useState<string>('');
-   const [compact, setCompact] = useState<boolean>(true);
+   const [fromLocation, setFromLocation] = useState<string>($storage.location?.display ?? '');
+   const [enterLocation, setEnterLocation] = useState<boolean>(false);
+   const [working, setWorking] = useState<boolean>(false);
 
    if ($storage.listings.length === 0) {
       return null;
    }
 
-   if (compact) {
+   if (!enterLocation) {
+      const hasLocation = fromLocation.length > 0;
       return (
-         <Button variant="outline"
-            onClick={() => setCompact(false)}><MapPinHouse size={14} />
-            {!$storage.location ? 'Startpunkt' : fromLocation}
-         </Button>
+         <Tooltip text={hasLocation ? fromLocation : "Startpunkt für Entfernungsangaben festlegen"}>
+            <Button variant="outline"
+               onClick={() => setEnterLocation(true)}><MapPinHouse size={14} />
+               {hasLocation ? fromLocation.substring(0, 15) : 'Startpunkt'}
+            </Button>
+         </Tooltip>
       );
    }
 
@@ -31,16 +38,23 @@ export const LocationInput = () => {
          return;
       }
 
+      flushSync(() => {
+         setWorking(true);
+      });
+
       const result = await fetch(`/api/location?q=${encodeURIComponent(fromLocation)}`);
 
       if (!result.ok) {
          $storage.locationSet(null);
          toast.error("Fehler: Keine Koordinaten gefunden");
       } else {
-         // $storage.locationSet(res);
+         const res = await result.json();
+         $storage.locationSet(res);
+         setFromLocation(res.display);
          console.log(result);
-         setCompact(true);
+         setEnterLocation(false);
       }
+      setWorking(false);
    }
 
    return <div className="flex gap-1 items-center">
@@ -50,12 +64,14 @@ export const LocationInput = () => {
          onChange={(e) => {
             setFromLocation(e.target.value);
          }} />
-      <Button variant="default"
-         className="bg-primary text-white disabled:text-gray-700 disabled:bg-gray-300"
-         disabled={fromLocation.length === 0}
-         onClick={onLocationCheck}>
-         <Search size={14} />
-      </Button>
-      <Button variant="outline" onClick={() => setCompact(true)}><CircleX size={14} /></Button>
+      {working ? <Spinner /> : (<>
+         <Button variant="default"
+            className="bg-primary text-white disabled:text-gray-700 disabled:bg-gray-300"
+            disabled={fromLocation.length === 0}
+            onClick={onLocationCheck}>
+            <Search size={14} />
+         </Button>
+         <Button variant="outline" onClick={() => setEnterLocation(false)}><CircleX size={14} /></Button>
+      </>)}
    </div >;
 };
