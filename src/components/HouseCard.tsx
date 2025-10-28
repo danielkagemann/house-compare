@@ -6,6 +6,7 @@ import { Sheet, SheetContent } from "./ui/sheet";
 import { useState } from "react";
 import { useStorage } from "@/context/storage-provider";
 import { motion } from "motion/react";
+import Flag from 'react-world-flags';
 
 interface HouseCardProps {
    data: Listing;
@@ -88,9 +89,9 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                <div className="p-2 min-w-0">
                   <div className="text-gray-700 text-xs truncate">{data.contact}</div>
                   <h2 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap w-full">{data.title}</h2>
-                  <p className="text-sm text-gray-500 flex items-center gap-1">
-                     <MapPin size={14} /> {data.location.display}
-                  </p>
+                  <div className="text-sm text-gray-500 flex items-center gap-1">
+                     <MapPin size={14} /> <span className="truncate">{data.location.display}</span> <Flag code={data.location.code} width={16} />
+                  </div>
                   {distance && (<p className="text-sm text-gray-500 flex items-center gap-1">
                      <Car size={14} /> {distance.toFixed(1)} km entfernt
                   </p>)}

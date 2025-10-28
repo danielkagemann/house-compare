@@ -17,16 +17,16 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - filter by countries (if more than one)
 - big map with all favorites
 - image as base64 instead of link due to permission issues
-- possibility to add coordinates instead of location
 - auto get coords for idealista
-- add whats new screen/info screen
 - own domain instead of github pages?
-
 - domainnames: favoritehomes, like estate,topestate, housecompare
+- make big menu instead of smalle buttons
 
 ## features
 
+- add whats new screen/info screen
 - set real estate data manually or from idealista html
+- possibility to add coordinates instead of location
 - export and import of data
 - storage in browser
 - store your favorite collection
