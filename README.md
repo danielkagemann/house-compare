@@ -19,8 +19,8 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - image as base64 instead of link due to permission issues
 - auto get coords for idealista
 - own domain instead of github pages?
-- domainnames: favoritehomes, like estate,topestate, housecompare
 - make big menu instead of smalle buttons
+- domainnames: collecthomes, maisonlist
 
 ## features
 
