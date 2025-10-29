@@ -20,7 +20,26 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - auto get coords for idealista
 - own domain instead of github pages?
 - make big menu instead of smalle buttons
-- domainnames: collecthomes, maisonlist
+
+## finding a domain name
+
+This was harder than expected. I asked chatGPT a lot and also used services like namelix.com. The results were awesome but nothing really kicked.
+So I used namelix.com examples and threw them into chatgpt to match them against my requirements.
+Here are the top 3 results.
+
+🏆 Top 3 Gesamt (nach deinem Konzept)
+
+1. Villaya ⭐ 9/10
+    → Emotional, weich, klingt modern & markenfähig. Villa + Gefühl = Herz & Verstand in einem.
+    → Würde sich super als App-/Web-Brand machen.
+
+2. EstateMate ⭐ 9/10
+    → Smart, menschlich, sozial. „Dein Begleiter bei der Haussuche.“
+    → Passt perfekt zum Teilen-Feature und zum Vergleichs-Charakter.
+
+3. CollectHomes ⭐ 9/10
+    → Funktional & logisch, ideal für Fokus auf Vergleich & Sammlung.
+    → Neutraler, aber universell einsetzbar.
 
 ## features
 
