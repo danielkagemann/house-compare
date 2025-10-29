@@ -11,6 +11,7 @@ export type Location = Coordinates & {
 
 export type Listing = {
   uuid: string;
+  creationdate: string;
   url: string;
   title: string;
   location: Location;
@@ -22,6 +23,7 @@ export type Listing = {
   contact: string;
   year: string;
   features: string[];
+  notes: string;
 };
 
 export const LISTING_AVAILABLE_ATTRIBUTES = [

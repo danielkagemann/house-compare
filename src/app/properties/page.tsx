@@ -4,14 +4,28 @@ import { HouseCard } from "@/components/HouseCard";
 import { ActionPanel } from "@/components/ActionPanel";
 import { motion } from "motion/react";
 import { Listing } from "@/model/Listing";
+import { use } from "react";
+import { useStorage } from "@/context/storage-provider";
+
+/**
+ * fetch all properties from the api
+ * @returns 
+ */
+async function getProperties(): Promise<Listing[]> {
+  const res = await fetch("/api/properties");
+  const data = await res.json();
+  return data;
+}
 
 export default function Home() {
+  // hook
+  const $storage = useStorage();
 
   // query
-  const $properties = use(fetch("/api/propertiexs").then(res => res.json()) as Promise<Listing[]>);
+  const $properties = use(getProperties());
 
   function renderEmpty() {
-    if ($storage.listings.length > 0) {
+    if ($properties.length > 0) {
       return null;
     }
     return (<div className="p-4">
@@ -35,7 +49,7 @@ export default function Home() {
   }
 
   const getFilteredListings = (): Listing[] => {
-    return $storage.filter.removeFromList ? $storage.listings.filter(item => !isFilteredOut(item)) : $storage.listings;
+    return $storage.filter.removeFromList ? $properties.filter(item => !isFilteredOut(item)) : $properties;
   };
 
   return (

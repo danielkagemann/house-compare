@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Save } from "@/model/save";
+import { useStorage } from "@/context/storage-provider";
+import { User } from "@/model/user";
 import { Heart, Send } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,9 +20,10 @@ export default function Home() {
 
   // hooks
   const $router = useRouter();
+  const $save = useStorage();
 
-  function validAndContinue(data: any) {
-    Save.set(data);
+  function validAndContinue(data: User) {
+    $save.setUser(data);
     $router.push("/properties")
   }
 

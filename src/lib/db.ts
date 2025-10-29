@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 
 const db = new Database("data.db", { verbose: console.log });
 
-// Tabelle anlegen, falls sie noch nicht existiert
+// create user table if not existing
 db.prepare(
   `
   CREATE TABLE IF NOT EXISTS USER (
@@ -12,6 +12,32 @@ db.prepare(
     access TEXT NOT NULL,
     editlink TEXT,
     sharelink TEXT
+  )
+`
+).run();
+
+// create table basedon Listing model
+/*
+  location: Location;
+  features: string[];
+  */
+db.prepare(
+  `
+  CREATE TABLE IF NOT EXISTS LISTING (
+    uuid TEXT NOT NULL UNIQUE,
+    creationdate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    title TEXT,
+    url TEXT,
+    price TEXT,
+    sqm TEXT,
+    rooms TEXT,
+    location TEXT,   
+    image TEXT,
+    description TEXT,
+    contact TEXT,
+    year TEXT,
+    features TEXT,
+    notes TEXT
   )
 `
 ).run();

@@ -2,6 +2,7 @@
 
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
+import { StorageProvider } from "@/context/storage-provider";
 
 export default function RootLayout({
   children,
@@ -20,7 +21,9 @@ export default function RootLayout({
       </head>
       <body>
         <main>
-          {children}
+          <StorageProvider>
+            {children}
+          </StorageProvider>
         </main>
         <Toaster position="top-center" expand={true} richColors />
       </body>

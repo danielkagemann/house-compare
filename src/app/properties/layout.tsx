@@ -22,21 +22,6 @@ export default function RootLayout({
       </head>
       <body>
         <main className="h-screen grid grid-rows-[100px_1fr]">
-          <Header />
-          <div className="overflow-auto mb-16">
-            {children}
-          </div>
-        </main>
-        <Toaster position="top-center" expand={true} richColors />
-      </body>
-    </html>
-  );
-}
-
-
-/*
-<body>
-        <main className="h-screen grid grid-rows-[100px_1fr]">
           <StorageProvider>
             <Header />
             <div className="overflow-auto mb-16">
@@ -46,4 +31,6 @@ export default function RootLayout({
         </main>
         <Toaster position="top-center" expand={true} richColors />
       </body>
-      */
+    </html>
+  );
+}
