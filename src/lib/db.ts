@@ -1,6 +1,7 @@
+import { User } from "@/model/user";
 import Database from "better-sqlite3";
 
-const db = new Database("data.db", { verbose: console.log });
+const db = new Database("villaya-data.db", { verbose: console.log });
 
 // create user table if not existing
 db.prepare(
@@ -17,14 +18,11 @@ db.prepare(
 ).run();
 
 // create table basedon Listing model
-/*
-  location: Location;
-  features: string[];
-  */
 db.prepare(
   `
   CREATE TABLE IF NOT EXISTS LISTING (
     uuid TEXT NOT NULL UNIQUE,
+    userId INTEGER NOT NULL,
     creationdate DATETIME DEFAULT CURRENT_TIMESTAMP,
     title TEXT,
     url TEXT,
@@ -43,3 +41,19 @@ db.prepare(
 ).run();
 
 export default db;
+
+export function getUserIdFromAccessToken(accessToken?: string): number | null {
+  if (!accessToken) {
+    return null;
+  }
+
+  const user = db
+    .prepare("SELECT * FROM USER WHERE access = ?")
+    .get(accessToken) as User;
+
+  if (!user) {
+    return null;
+  }
+
+  return user.id;
+}

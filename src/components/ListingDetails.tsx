@@ -19,6 +19,8 @@ import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
 import { useStorage } from "@/context/storage-provider";
 import { useSearchParams, useRouter } from "next/navigation";
+import { fetchProperty } from "@/lib/fetch";
+import { Header } from "./Header";
 
 type InputOrder = {
    title: string;
@@ -34,9 +36,13 @@ export const ListingDetails = () => {
 
    // state
    const [current, setCurrent] = useState<string>('url');
+   const [isEditing, setIsEditing] = useState<boolean>(false);
    const [listing, setListing] = useState<Listing>({
       uuid: Date.now().toString(),
+      userId: $save.user?.id || 0,
       url: '',
+      creationdate: Date.now().toString(),
+      notes: '',
       title: '',
       location: { lat: 0, lon: 0, country: '', code: '', display: '' },
       price: '',
@@ -52,18 +58,16 @@ export const ListingDetails = () => {
    useEffect(() => {
       const uuid = $url.get('id');
       console.log(`details::search for given id: "${uuid}"`);
+
       if (uuid) {
-         const existing = $save.listings.find((item) => item.uuid === uuid);
-         if (existing) {
-            console.log(`details::existing listing found, loading data: "${existing.uuid}"`);
-            setListing({ ...existing });
-         } else {
-            // else create a new one
-            console.log('details::no existing listing found, creating new one');
-            $save.listings.forEach((item) => console.log(` - existing listing: "${item.uuid}"`));
-         }
+
+         fetchProperty(uuid, $save.user?.access || '').then((data) => {
+            console.log(`details::loaded listing from api: "${data.uuid}"`);
+            setListing({ ...data });
+            setIsEditing(true);
+         });
       }
-   }, [$save.listings, $url]);
+   }, [$url]);
 
    /**
   * updating value for given attribute
@@ -97,59 +101,64 @@ export const ListingDetails = () => {
       { title: 'Beschreibung', attr: 'description', children: <InputText type="area" description="Beschreibung der Immobilie" value={listing.description} onChange={onUpdateListing('description')} onNext={onNext('year')} /> },
       { title: 'Baujahr', attr: 'year', children: <InputText description="Baujahr der Immobilie" value={listing.year} onChange={onUpdateListing('year')} onNext={onNext('features')} /> },
       { title: 'Eigenschaften', attr: 'features', children: <InputFeatures value={listing.features} onChange={(value) => { setListing({ ...listing, features: value }); }} onNext={onNext('contact')} /> },
-      { title: 'Makler & Agentur', attr: 'contact', children: <InputText description="Von welcher Agentur/Makler wird die Immobilie angeboten?" value={listing.contact} onChange={onUpdateListing('contact')} onNext={onNext('')} /> },
+      { title: 'Makler & Agentur', attr: 'contact', children: <InputText description="Von welcher Agentur/Makler wird die Immobilie angeboten?" value={listing.contact} onChange={onUpdateListing('contact')} onNext={onNext('notes')} /> },
+      { title: 'Notizen', attr: 'notes', children: <InputText type="area" description="Notizen zur Immobilie" value={listing.notes} onChange={onUpdateListing('notes')} onNext={onNext('')} /> },
    ];
 
-   function isEditing() {
-      const uuid = $url.get('id');
-      return uuid === listing.uuid;
-   }
 
+   /**
+    * save or update listing
+    */
    function onSave() {
-      if (isEditing()) {
-         $save.listingUpdate(listing);
+      if (isEditing) {
+         //$save.listingUpdate(listing);
       } else {
-         $save.listingAdd(listing);
+         //$save.listingAdd(listing);
       }
-      $router.push('/');
+      $router.push('/properties');
    }
 
    return (
-      <div className="min-h-screen grid grid-cols-1 md:grid-cols-[1fr_40%]">
-         {/*user input*/}
-         <div className="p-4">
-            <h2 className="font-bold text-lg">{isEditing() ? 'Immobilie bearbeiten' : 'Neue Immobilie hinzufügen'}</h2>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-8 space-y-12">
+         <div className="max-w-5xl w-full flex flex-col items-center gap-4">
+            <Header />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               {/*user input*/}
+               <div>
+                  <h2 className="font-bold text-lg">{isEditing ? 'Immobilie bearbeiten' : 'Neue Immobilie hinzufügen'}</h2>
 
-            <Accordion
-               type="single"
-               collapsible
-               className="w-full"
-               value={current}
-               onValueChange={setCurrent}
-            >
-               {
-                  order.map((item: InputOrder) => (
-                     <AccordionItem value={item.attr} key={item.attr} className={item.attr === current ? 'bg-gray-100 border-l-2 border-gray-700' : 'transparent'}>
-                        <AccordionTrigger className={`py-2 px-1 ${item.attr === current ? 'font-bold text-primary' : 'font-normal'}`}>{item.title}</AccordionTrigger>
-                        <AccordionContent className="flex flex-col gap-1 text-balance p-2">{item.children}</AccordionContent>
-                     </AccordionItem>
-                  ))
-               }
-            </Accordion>
-            <div className="flex flex-col gap-1 text-sm border-t-1 border-gray-300 py-2">
-               <strong>Speichern</strong>
-               <p>Prüfe ob alle Eingaben korrekt sind. In der Vorschau siehst Du, zu wieviel Prozent alle Felder befüllt sind.</p>
-               <div className="flex justify-end">
-                  <Button onClick={onSave}>{isEditing() ? 'Aktualisieren' : 'Erstellen'}</Button>
+                  <Accordion
+                     type="single"
+                     collapsible
+                     className="w-full"
+                     value={current}
+                     onValueChange={setCurrent}
+                  >
+                     {
+                        order.map((item: InputOrder) => (
+                           <AccordionItem value={item.attr} key={item.attr} className={item.attr === current ? 'bg-gray-100 rounded-md border-0' : 'transparent'}>
+                              <AccordionTrigger className={`p-2 ${item.attr === current ? 'font-bold text-primary' : 'font-normal'}`}>{item.title}</AccordionTrigger>
+                              <AccordionContent className="flex flex-col gap-1 text-balance px-4">{item.children}</AccordionContent>
+                           </AccordionItem>
+                        ))
+                     }
+                  </Accordion>
+                  <div className="flex flex-col gap-1 text-sm border-t-1 border-gray-300 py-2">
+                     <strong>Speichern</strong>
+                     <p>Prüfe ob alle Eingaben korrekt sind. In der Vorschau siehst Du, zu wieviel Prozent alle Felder befüllt sind.</p>
+                     <div className="flex justify-end">
+                        <Button onClick={onSave}>{isEditing ? 'Aktualisieren' : 'Erstellen'}</Button>
+                     </div>
+
+                  </div>
                </div>
 
+               {/*preview*/}
+               <div className="hidden md:block">
+                  <ListingPreview data={listing} />
+               </div>
             </div>
          </div>
-
-         {/*preview*/}
-         <div className="hidden md:block">
-            <ListingPreview data={listing} />
-         </div>
-      </div>
+      </div >
    );
 }

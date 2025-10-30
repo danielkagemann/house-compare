@@ -11,6 +11,7 @@ export type Location = Coordinates & {
 
 export type Listing = {
   uuid: string;
+  userId: number;
   creationdate: string;
   url: string;
   title: string;

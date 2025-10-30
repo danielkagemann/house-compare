@@ -8,11 +8,11 @@ import { About } from './About';
 
 export const Header = () => {
    return (
-      <header className="w-full border-b-1 border-gray-300 bg-white p-4 flex items-center justify-between ">
-         <Link href="/">
-            <Image src="/assets/images/main-logo.png" width={50} height={50} alt="logo" /> Villaya
+      <header className="w-full bg-white p-4 flex items-center justify-between ">
+         <Link href="/" className="flex gap-2 items-center">
+            <Image src="/assets/images/main-logo.png" width={42} height={42} alt="logo" /> <div className="text-2xl font-bold">Villaya</div>
          </Link>
-         <div className="flex gap-1 items-center">
+         <div className="flex gap-2 items-center">
             <About />
             <FilterPanel />
             <LocationInput />

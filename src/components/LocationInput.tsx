@@ -1,5 +1,5 @@
 import { CircleX, MapPinHouse, Search } from "lucide-react";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useStorage } from "@/context/storage-provider";
@@ -7,6 +7,8 @@ import { Input } from "./ui/input";
 import { flushSync } from "react-dom";
 import { Spinner } from "./ui/spinner";
 import { Tooltip } from "./ui/Tooltip";
+import { fetchProperties } from "@/lib/fetch";
+import { Listing } from "@/model/Listing";
 
 export const LocationInput = () => {
    // hooks
@@ -16,8 +18,17 @@ export const LocationInput = () => {
    const [fromLocation, setFromLocation] = useState<string>($storage.location?.display ?? '');
    const [enterLocation, setEnterLocation] = useState<boolean>(false);
    const [working, setWorking] = useState<boolean>(false);
+   const [listings, setListings] = useState<Listing[]>([]);
 
-   if ($storage.listings.length === 0) {
+   useEffect(() => {
+      if ($storage.user && $storage.user.id > 0) {
+         fetchProperties($storage.user.id).then((data) => {
+            setListings(data);
+         });
+      }
+   }, [$storage.user]);
+
+   if (listings.length === 0) {
       return null;
    }
 

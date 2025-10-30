@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       )
       .run(
         email,
-        generateLinkToken(8),
+        generateLinkToken(6),
         generateLinkToken(),
         generateLinkToken()
       );

@@ -15,7 +15,7 @@ interface StorageContextType {
    filter: FilterOptions;
    filterUpdate: (filter: FilterOptions) => void;
    user: User | null;
-   setUser: (user: User | null) => void;
+   userSet: (user: User | null) => void;
 }
 
 const StorageContext = createContext<StorageContextType | null>(null);
@@ -121,6 +121,15 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       localStorage.setItem(KEY.FILTER, JSON.stringify(filter));
    };
 
+   const userSet = (usr: User | null) => {
+      setUser(usr);
+      if (usr) {
+         localStorage.setItem(KEY.USER, JSON.stringify(usr));
+      } else {
+         localStorage.removeItem(KEY.USER);
+      }
+   };
+
    return <StorageContext.Provider value={{
       location,
       selected,
@@ -130,7 +139,7 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       filter: flt,
       filterUpdate,
       user,
-      setUser,
+      userSet,
    }}>
       {children}
    </StorageContext.Provider>;

@@ -9,7 +9,7 @@ interface Props {
 
 export const ListingPreview = ({ data, hasEdit = false }: Props) => {
 
-   const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/no-image.png`;
+   const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/main-bg.jpg`;
 
    function calculateAllFilled() {
       const keys = Object.keys(data);
@@ -21,7 +21,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
          if (typeof value === 'string') {
             return value.trim().length > 0;
          }
-         if (value?.lat && value?.lon) {
+         if (value.lat !== undefined && value.lon !== undefined) {
             return true;
          }
          return false;
@@ -37,7 +37,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
 
          <div className="flex justify-between text-xs">
             <div className="text-xs">refID: {data.uuid}
-               {hasEdit && (<><br /><a href={`/details/?id=${data.uuid}`} className="text-primary font-bold text-sm hover:underline">Informationen bearbeiten</a></>)}
+               {hasEdit && (<><br /><a href={`/properties/details/?id=${data.uuid}`} className="text-primary font-bold text-sm hover:underline">Informationen bearbeiten</a></>)}
             </div>
             <div className={`w-10 h-10 ${percentage < 50 ? 'bg-red-800' : percentage < 80 ? 'bg-yellow-800' : 'bg-green-800'} rounded-full flex items-center justify-center text-white`}>
                {percentage}%
@@ -52,9 +52,9 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
          {data.contact.length > 0 && <div className="text-xs text-gray-700 truncate w-min-0">{data.contact}</div>}
          {data.title.length > 0 && <h2 className="font-bold text-lg">{data.title}</h2>}
 
-         {data.location.length > 0 &&
+         {data.location.display.length > 0 &&
             <div className="text-sm text-gray-500 flex items-center gap-1">
-               <MapPin size={14} /> {data.location}
+               <MapPin size={14} /> {data.location.display}
             </div>}
          {data.price.length > 0 && <p className="text-primary font-bold text-xl">{`€ ${parseFloat(data.price).toLocaleString()}` || '--'}</p>}
 

@@ -1,41 +1,45 @@
 "use client";
 
 import { HouseCard } from "@/components/HouseCard";
-import { ActionPanel } from "@/components/ActionPanel";
 import { motion } from "motion/react";
 import { Listing } from "@/model/Listing";
-import { use } from "react";
+import { useEffect, useState } from "react";
 import { useStorage } from "@/context/storage-provider";
-
-/**
- * fetch all properties from the api
- * @returns 
- */
-async function getProperties(): Promise<Listing[]> {
-  const res = await fetch("/api/properties");
-  const data = await res.json();
-  return data;
-}
+import { fetchProperties } from "@/lib/fetch";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { Hero } from "@/components/Hero";
 
 export default function Home() {
   // hook
   const $storage = useStorage();
+  const $router = useRouter();
 
-  // query
-  const $properties = use(getProperties());
+  // state
+  const [listings, setListings] = useState<Listing[]>([]);
 
-  function renderEmpty() {
-    if ($properties.length > 0) {
-      return null;
+  useEffect(() => {
+    if ($storage.user && $storage.user.access) {
+      fetchProperties($storage.user.access).then((data) => {
+        setListings(data);
+      });
     }
-    return (<div className="p-4">
-      <h2 className="font-bold text-lg">Herzlich Willkommen,</h2>
-      <p className="text-gray-600 text-md mt-4">
-        Speichere Deine Immobilien hier und wähle aus der Liste aus, welche Du miteinander vergleichen möchtest.
-        Füge neue Immobilien von Idealista oder manuell hinzu. Alle Daten werden lokale gespeichert und sind beim nächsten Besuch wieder verfügbar.<br />
-        Diese Webanwendung ist ein privates Projekt von <a className="text-primary hover:underline font-bold" href="https://danielkagemann.name">Daniel Kagemann</a>.
-      </p>
-    </div>);
+
+  }, [$storage.user]);
+
+  // render empty data
+  if (listings.length === 0) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12 space-y-12">
+        <Hero>
+          <div className="flex flex-col gap-2">
+            <p>Du hast bisher noch keine Traumhäuser gespeichert. Suche nach Deinem persönlichen Traumhaus und speichere die Informationen hier.</p>
+            <div className="font-bold text-sm">Du hast eine Immobilie gefunden? Dann schnell eintragen</div>
+            <Button onClick={() => $router.push("/properties/details")}>Immobilie hinzufügen</Button>
+          </div>
+        </Hero>
+      </div>
+    );
   }
 
   const isFilteredOut = (data: Listing): boolean => {
@@ -49,12 +53,11 @@ export default function Home() {
   }
 
   const getFilteredListings = (): Listing[] => {
-    return $storage.filter.removeFromList ? $properties.filter(item => !isFilteredOut(item)) : $properties;
+    return $storage.filter.removeFromList ? listings.filter(item => !isFilteredOut(item)) : listings;
   };
 
   return (
     <>
-      {renderEmpty()}
       <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {
           getFilteredListings().map((item, index) => (
@@ -76,7 +79,6 @@ export default function Home() {
           ))
         }
       </div>
-      <ActionPanel />
     </>
   );
 };
