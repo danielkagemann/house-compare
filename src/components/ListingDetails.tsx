@@ -57,13 +57,10 @@ export const ListingDetails = () => {
 
    useEffect(() => {
       const uuid = $url.get('id');
-      console.log(`details::search for given id: "${uuid}"`);
 
       if (uuid) {
-
          Endpoints.propertyGet(uuid, $save.user?.access || '').then((data) => {
-            console.log(`details::loaded listing from api: "${data.uuid}"`);
-            setListing({ ...data });
+            setListing({ ...data, userId: $save.user?.id || 0 });
             setIsEditing(true);
          });
       }
@@ -91,7 +88,7 @@ export const ListingDetails = () => {
    // locals
    const order: InputOrder[] = [
       { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url')} onNext={() => listing.url.includes('idealista') ? onNext('sourcecode')() : onNext('title')()} /> },
-      { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...v, url: listing.url }); setCurrent('title') }} /> },
+      { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...v, url: listing.url, userId: $save?.user?.id ?? 0 }); setCurrent('title') }} /> },
       { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title')} onNext={onNext('location')} /> },
       { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} onChange={onUpdateListing('location')} onNext={onNext('image')} /> },
       { title: 'Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image')} onNext={onNext('price')} /> },
