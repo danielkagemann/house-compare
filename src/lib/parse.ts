@@ -62,7 +62,7 @@ export function parseHtml(html: string): Listing | null {
   return {
     uuid,
     title,
-    location,
+    location: { lat: 0, lon: 0, country: "", code: "", display: location },
     price: parseFloat(price.replace(/[^\d]/g, "")).toString(),
     sqm: parseFloat(sqm.replace(/[^\d]/g, "")).toString(),
     rooms: parseFloat(rooms.replace(/[^\d]/g, "")).toString(),
@@ -72,5 +72,8 @@ export function parseHtml(html: string): Listing | null {
     features,
     year,
     url: "",
+    userId: 0,
+    notes: "",
+    creationdate: Date.now().toString(),
   };
 }

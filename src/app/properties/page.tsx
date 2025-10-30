@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { Listing } from "@/model/Listing";
 import { useEffect, useState } from "react";
 import { useStorage } from "@/context/storage-provider";
-import { fetchProperties } from "@/lib/fetch";
+import { Endpoints } from "@/lib/fetch";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Hero } from "@/components/Hero";
@@ -20,7 +20,7 @@ export default function Home() {
 
   useEffect(() => {
     if ($storage.user && $storage.user.access) {
-      fetchProperties($storage.user.access).then((data) => {
+      Endpoints.propertyList($storage.user.access).then((data) => {
         setListings(data);
       });
     }

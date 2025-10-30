@@ -1,5 +1,9 @@
+import { useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { InputNext } from "./InputNext";
+import { Button } from "../ui/button";
+import { Trash } from "lucide-react";
+import { Endpoints } from "@/lib/fetch";
 
 interface Props {
    value: string;
@@ -8,34 +12,51 @@ interface Props {
 }
 
 export const InputImage = ({ value, onChange, onNext }: Props) => {
-   const imageSrc = value || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/no-image.png`;
+   const imageSrc = value || '/assets/images/main-bg.jpg';
+   const [link, setLink] = useState<string>(value);
 
-   const loadImage = (url: string): Promise<string> => {
-      return new Promise((resolve, reject) => {
-         const img = new Image();
-         img.crossOrigin = "anonymous";
-         img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx?.drawImage(img, 0, 0);
-            const base64 = canvas.toDataURL();
-            resolve(base64);
-         };
-         img.onerror = () => reject(new Error('Image failed to load'));
-         img.src = url;
-      });
-   };
+   async function onPaste(event: React.ClipboardEvent<HTMLInputElement>) {
+      const items = event.clipboardData.items;
+      for (const item of items) {
+         if (item.type.indexOf("image") !== -1) {
+            const file = item.getAsFile();
+            if (file) {
+               const reader = new FileReader();
+               reader.onload = function (e) {
+                  const base64Image = e.target?.result as string;
+                  onChange(base64Image);
+               };
+               reader.readAsDataURL(file);
+            }
+         }
+      }
+   }
+
+   async function onCheckLink() {
+      const resposnse = await Endpoints.imageProxy(link);
+      onChange(resposnse);
+   }
 
    return (
       <>
-         <p>Gib hier die URL zum Bild der Immobilie an. Eine kleine Vorschau wird angezeigt, sofern der Link korrekt ist, </p>
-
-         <div className="flex gap-2 items-center">
+         <div className="flex gap-2 items-start">
             <img src={imageSrc}
-               className="w-24 h-24 rounded-full object-cover" />
-            <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
+               className="w-24 h-24 rounded-xl object-cover" />
+            <div>Du kannst hier das Bild über eine URL oder aus der Zwischenablage hinzufügen. Es wird intern eine Kopie gespeichert.<br />
+               <Button variant="outline" onClick={() => onChange('')}><Trash size={18} /></Button></div>
+         </div>
+         <div className="flex flex-col gap-1 mt-4">
+            <div className="flex gap-1">
+               <Input type="text"
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
+                  placeholder="Link einfügen..."
+                  className="w-full" />
+               <Button variant="outline" onClick={onCheckLink}>Prüfen</Button>
+            </div>
+            <p>Alternativ kannst Du auch ein Bild aus der Zwischenablage einfügen. </p>
+            <Input placeholder="Hier Bild aus Zwischenablage einfügen..." onPaste={onPaste} />
+
          </div>
          <InputNext onClick={onNext} />
       </>

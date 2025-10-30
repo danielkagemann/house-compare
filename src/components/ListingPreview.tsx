@@ -21,8 +21,8 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
          if (typeof value === 'string') {
             return value.trim().length > 0;
          }
-         if (value.lat !== undefined && value.lon !== undefined) {
-            return true;
+         if (typeof value === 'object' && value !== null && 'lat' in value && 'lon' in value) {
+            return value.lat !== undefined && value.lon !== undefined;
          }
          return false;
       });
@@ -32,7 +32,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
    const percentage = calculateAllFilled();
 
    return (
-      <div className="h-screen border-l-1 border-gray-200 p-4 flex flex-col space-y-2">
+      <div className={`shadow-xl rounded-xl bg-white p-4 flex flex-col space-y-2`}>
          <strong>Vorschau</strong>
 
          <div className="flex justify-between text-xs">

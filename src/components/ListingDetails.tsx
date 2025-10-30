@@ -19,7 +19,7 @@ import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
 import { useStorage } from "@/context/storage-provider";
 import { useSearchParams, useRouter } from "next/navigation";
-import { fetchProperty } from "@/lib/fetch";
+import { Endpoints } from "@/lib/fetch";
 import { Header } from "./Header";
 
 type InputOrder = {
@@ -61,7 +61,7 @@ export const ListingDetails = () => {
 
       if (uuid) {
 
-         fetchProperty(uuid, $save.user?.access || '').then((data) => {
+         Endpoints.propertyGet(uuid, $save.user?.access || '').then((data) => {
             console.log(`details::loaded listing from api: "${data.uuid}"`);
             setListing({ ...data });
             setIsEditing(true);
@@ -94,7 +94,7 @@ export const ListingDetails = () => {
       { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...v, url: listing.url }); setCurrent('title') }} /> },
       { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title')} onNext={onNext('location')} /> },
       { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} onChange={onUpdateListing('location')} onNext={onNext('image')} /> },
-      { title: 'Link zum Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image')} onNext={onNext('price')} /> },
+      { title: 'Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image')} onNext={onNext('price')} /> },
       { title: 'Preis', attr: 'price', children: <InputText description="Preis der Immobilie" value={listing.price} onChange={onUpdateListing('price')} onNext={onNext('sqm')} /> },
       { title: 'Wohnfläche', attr: 'sqm', children: <InputSize price={listing.price} value={listing.sqm} onChange={onUpdateListing('sqm')} onNext={onNext('rooms')} /> },
       { title: 'Schlafzimmer', attr: 'rooms', children: <InputText description="Anzahl der Schlafzimmer" value={listing.rooms} onChange={onUpdateListing('rooms')} onNext={onNext('description')} /> },
@@ -105,16 +105,11 @@ export const ListingDetails = () => {
       { title: 'Notizen', attr: 'notes', children: <InputText type="area" description="Notizen zur Immobilie" value={listing.notes} onChange={onUpdateListing('notes')} onNext={onNext('')} /> },
    ];
 
-
    /**
     * save or update listing
     */
-   function onSave() {
-      if (isEditing) {
-         //$save.listingUpdate(listing);
-      } else {
-         //$save.listingAdd(listing);
-      }
+   async function onSave() {
+      await Endpoints.propertySet(listing, $save.user?.access || '');
       $router.push('/properties');
    }
 

@@ -40,18 +40,30 @@ export async function GET(
  * @returns
  */
 export async function POST(request: NextRequest) {
-  const listing = await request.json();
+  const accessToken = request.headers.get("Authorization")?.split(" ")[1];
+  const userId = getUserIdFromAccessToken(accessToken);
+  if (!userId) {
+    return new Response(JSON.stringify({ error: "Nicht berechtigt" }), {
+      status: 401,
+    });
+  }
 
-  const insert = db
-    .prepare(
+  const listing = (await request.json()) as Listing;
+
+  // check if existing
+  const existing = db
+    .prepare("SELECT * FROM LISTING WHERE uuid = ?")
+    .get(listing.uuid);
+
+  // if existing -> update otherwise insert new
+  if (existing) {
+    db.prepare(
       `
-    INSERT INTO LISTING 
-    (uuid, title, url, price, sqm, rooms, location, image, description, contact, year, features, notes) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `
-    )
-    .run(
-      listing.uuid,
+      UPDATE LISTING SET 
+      title = ?, url = ?, price = ?, sqm = ?, rooms = ?, location = ?, image = ?, description = ?, contact = ?, year = ?, features = ?, notes = ?
+      WHERE uuid = ?
+      `
+    ).run(
       listing.title,
       listing.url,
       listing.price,
@@ -63,8 +75,41 @@ export async function POST(request: NextRequest) {
       listing.contact,
       listing.year,
       JSON.stringify(listing.features),
-      listing.notes
+      listing.notes,
+      listing.uuid
     );
+
+    const updatedListing = db
+      .prepare("SELECT * FROM LISTING WHERE uuid = ?")
+      .get(listing.uuid);
+
+    return new Response(JSON.stringify(updatedListing), {
+      status: 200,
+    });
+  }
+
+  // insert new listing
+  db.prepare(
+    `
+    INSERT INTO LISTING 
+    (uuid, title, url, price, sqm, rooms, location, image, description, contact, year, features, notes) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `
+  ).run(
+    listing.uuid,
+    listing.title,
+    listing.url,
+    listing.price,
+    listing.sqm,
+    listing.rooms,
+    JSON.stringify(listing.location),
+    listing.image,
+    listing.description,
+    listing.contact,
+    listing.year,
+    JSON.stringify(listing.features),
+    listing.notes
+  );
 
   const newListing = db
     .prepare("SELECT * FROM LISTING WHERE uuid = ?")
@@ -81,6 +126,14 @@ export async function POST(request: NextRequest) {
  * @returns
  */
 export async function DELETE(request: NextRequest) {
+  const accessToken = request.headers.get("Authorization")?.split(" ")[1];
+  const userId = getUserIdFromAccessToken(accessToken);
+  if (!userId) {
+    return new Response(JSON.stringify({ error: "Nicht berechtigt" }), {
+      status: 401,
+    });
+  }
+
   const { searchParams } = new URL(request.url);
   const uuid = searchParams.get("uuid");
 

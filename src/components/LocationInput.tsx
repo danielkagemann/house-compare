@@ -7,7 +7,7 @@ import { Input } from "./ui/input";
 import { flushSync } from "react-dom";
 import { Spinner } from "./ui/spinner";
 import { Tooltip } from "./ui/Tooltip";
-import { fetchProperties } from "@/lib/fetch";
+import { Endpoints } from "@/lib/fetch";
 import { Listing } from "@/model/Listing";
 
 export const LocationInput = () => {
@@ -22,7 +22,7 @@ export const LocationInput = () => {
 
    useEffect(() => {
       if ($storage.user && $storage.user.id > 0) {
-         fetchProperties($storage.user.id).then((data) => {
+         Endpoints.propertyList($storage.user.access).then((data) => {
             setListings(data);
          });
       }
@@ -53,15 +53,14 @@ export const LocationInput = () => {
          setWorking(true);
       });
 
-      const result = await fetch(`/api/location?q=${encodeURIComponent(fromLocation)}`);
+      const result = await Endpoints.locationLookup(fromLocation);
 
-      if (!result.ok) {
+      if (!result) {
          $storage.locationSet(null);
          toast.error("Fehler: Keine Koordinaten gefunden");
       } else {
-         const res = await result.json();
-         $storage.locationSet(res);
-         setFromLocation(res.display);
+         $storage.locationSet(result);
+         setFromLocation(result.display);
          console.log(result);
          setEnterLocation(false);
       }
