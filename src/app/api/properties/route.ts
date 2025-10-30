@@ -1,7 +1,5 @@
 import { type NextRequest } from "next/server";
 import db, { getUserIdFromAccessToken } from "@/lib/db";
-import { User } from "@/model/user";
-import { access } from "fs";
 
 /**
  * GET api/properties
@@ -17,11 +15,14 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const listings = db
+  let listings = db
     .prepare("SELECT * FROM LISTING where userId = ?")
     .get(userId) as any[];
 
-  console.log("properties::fetched listings:", listings?.length);
+  if (!Array.isArray(listings)) {
+    listings = [listings];
+  }
+  console.log("listings:", listings);
 
   if (listings) {
     // convert json data back to object

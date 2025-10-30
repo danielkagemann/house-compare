@@ -14,17 +14,21 @@ export async function POST(request: NextRequest) {
   const { email } = await request.json();
 
   if (!email) {
-    console.log("signin::no email");
     return new Response(JSON.stringify({ error: "Keine EMail angegeben." }), {
       status: 400,
     });
   }
 
   // search in database for email
-  const user = db.prepare("SELECT * FROM USER WHERE email = ?").get(email);
+  const user = db
+    .prepare("SELECT access FROM USER WHERE email = ?")
+    .get(email) as
+    | {
+        access: string;
+      }
+    | undefined;
   // if user not found, create new user and send email with token
   if (!user) {
-    console.log("signin::no user found, creating new user");
     const insert = db
       .prepare(
         "INSERT INTO USER (email, access, editlink, sharelink) VALUES (?, ?, ?, ?)"
@@ -46,7 +50,6 @@ export async function POST(request: NextRequest) {
       sharelink: string;
     };
 
-    console.log("signin::sending email with token");
     // send email with token logic here
     sendEMail(email, `Dein Bestätigungs-Code lautet: ${newUser.access}`);
 
@@ -54,8 +57,7 @@ export async function POST(request: NextRequest) {
       status: 204,
     });
   }
-  console.log("signin::user existing, returning user data");
-  return new Response(JSON.stringify(user), {
+  return new Response(JSON.stringify({ token: user.access }), {
     status: 200,
   });
 }

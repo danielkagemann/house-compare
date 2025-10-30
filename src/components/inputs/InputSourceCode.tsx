@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 import { Endpoints } from "@/lib/fetch";
+import { flushSync } from "react-dom";
+import { Spinner } from "../ui/spinner";
 
 interface Props {
    onChange: (listing: Listing) => void;
@@ -12,8 +14,14 @@ interface Props {
 export const InputSourceCode = ({ onChange }: Props) => {
    const [data, setData] = useState<string>('');
    const [error, setError] = useState<string>('');
+   const [working, setWorking] = useState<boolean>(false);
 
    async function onSourcecodeChange() {
+
+      flushSync(() => {
+         setWorking(true);
+      });
+
       const parsed = parseHtml(data);
       setError('');
       if (parsed) {
@@ -31,10 +39,11 @@ export const InputSourceCode = ({ onChange }: Props) => {
             }
          }
 
-         onChange({ ...parsed });
+         onChange({ ...parsed as Listing });
       } else {
          setError('Informationen der Immobilie konnte nicht ermittelt werden.');
       }
+      setWorking(false);
    }
 
    return (
@@ -51,7 +60,10 @@ export const InputSourceCode = ({ onChange }: Props) => {
             }}
          />
          {error.length > 0 && <p className="text-red-700 font-sm">{error}</p>}
-         <div className="flex justify-end"><Button onClick={onSourcecodeChange}>Überprüfen</Button></div>
+
+         <div className="flex justify-end items-center">
+            {working ? <Spinner /> : <Button variant="outline" onClick={onSourcecodeChange}>Überprüfen</Button>}
+         </div>
       </div>
    );
 }

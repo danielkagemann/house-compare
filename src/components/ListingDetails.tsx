@@ -21,6 +21,7 @@ import { useStorage } from "@/context/storage-provider";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Endpoints } from "@/lib/fetch";
 import { Header } from "./Header";
+import { toast } from "sonner";
 
 type InputOrder = {
    title: string;
@@ -37,9 +38,8 @@ export const ListingDetails = () => {
    // state
    const [current, setCurrent] = useState<string>('url');
    const [isEditing, setIsEditing] = useState<boolean>(false);
-   const [listing, setListing] = useState<Listing>({
+   const [listing, setListing] = useState<Omit<Listing, "userId">>({
       uuid: Date.now().toString(),
-      userId: $save.user?.id || 0,
       url: '',
       creationdate: Date.now().toString(),
       notes: '',
@@ -59,8 +59,8 @@ export const ListingDetails = () => {
       const uuid = $url.get('id');
 
       if (uuid) {
-         Endpoints.propertyGet(uuid, $save.user?.access || '').then((data) => {
-            setListing({ ...data, userId: $save.user?.id || 0 });
+         Endpoints.propertyGet(uuid, $save.token || '').then((data) => {
+            setListing({ ...data });
             setIsEditing(true);
          });
       }
@@ -88,7 +88,7 @@ export const ListingDetails = () => {
    // locals
    const order: InputOrder[] = [
       { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url')} onNext={() => listing.url.includes('idealista') ? onNext('sourcecode')() : onNext('title')()} /> },
-      { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...v, url: listing.url, userId: $save?.user?.id ?? 0 }); setCurrent('title') }} /> },
+      { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...v, url: listing.url }); setCurrent('title') }} /> },
       { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title')} onNext={onNext('location')} /> },
       { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} onChange={onUpdateListing('location')} onNext={onNext('image')} /> },
       { title: 'Bild', attr: 'image', children: <InputImage value={listing.image} onChange={onUpdateListing('image')} onNext={onNext('price')} /> },
@@ -106,7 +106,12 @@ export const ListingDetails = () => {
     * save or update listing
     */
    async function onSave() {
-      await Endpoints.propertySet(listing, $save.user?.access || '');
+      const res = await Endpoints.propertySet(listing as Listing, $save.token || '');
+
+      if (!res) {
+         toast.error('Fehler beim Speichern der Immobilie.');
+         return;
+      }
       $router.push('/properties');
    }
 
@@ -147,7 +152,7 @@ export const ListingDetails = () => {
 
                {/*preview*/}
                <div className="hidden md:block">
-                  <ListingPreview data={listing} />
+                  <ListingPreview data={listing as Listing} />
                </div>
             </div>
          </div>

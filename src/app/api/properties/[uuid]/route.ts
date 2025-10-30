@@ -6,6 +6,8 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { uuid: string } }
 ) {
+  const { uuid } = params;
+
   const accessToken = req.headers.get("Authorization")?.split(" ")[1];
   const userId = getUserIdFromAccessToken(accessToken);
   if (!userId) {
@@ -17,7 +19,7 @@ export async function GET(
   // get the listing for the given uuid
   const listing = db
     .prepare("SELECT * FROM LISTING WHERE uuid = ? AND userId = ?")
-    .get(params.uuid, userId) as Listing;
+    .get(uuid, userId) as Listing;
 
   if (!listing) {
     return new Response(JSON.stringify({ error: "Objekt nicht gefunden" }), {
@@ -39,7 +41,11 @@ export async function GET(
  * @param request
  * @returns
  */
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { uuid: string } }
+) {
+  const { uuid } = params;
   const accessToken = request.headers.get("Authorization")?.split(" ")[1];
   const userId = getUserIdFromAccessToken(accessToken);
   if (!userId) {
@@ -49,6 +55,9 @@ export async function POST(request: NextRequest) {
   }
 
   const listing = (await request.json()) as Listing;
+  // extend listing with userid
+  listing.userId = userId;
+  listing.uuid = uuid;
 
   // check if existing
   const existing = db
@@ -92,8 +101,8 @@ export async function POST(request: NextRequest) {
   db.prepare(
     `
     INSERT INTO LISTING 
-    (uuid, title, url, price, sqm, rooms, location, image, description, contact, year, features, notes) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (uuid, title, url, price, sqm, rooms, location, image, description, contact, year, features, notes, userId) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `
   ).run(
     listing.uuid,
@@ -108,7 +117,8 @@ export async function POST(request: NextRequest) {
     listing.contact,
     listing.year,
     JSON.stringify(listing.features),
-    listing.notes
+    listing.notes,
+    listing.userId
   );
 
   const newListing = db

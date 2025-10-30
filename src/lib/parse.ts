@@ -1,6 +1,8 @@
 import { Listing } from "@/model/Listing";
 
-export function parseHtml(html: string): Listing | null {
+export function parseHtml(
+  html: string
+): Omit<Listing, "userId" | "url"> | null {
   if (!html) {
     return null;
   }
@@ -54,10 +56,6 @@ export function parseHtml(html: string): Listing | null {
 
   const priceNum = parseFloat(price.replace(/[^\d]/g, ""));
   const sqmNum = parseFloat(sqm.replace(/[^\d]/g, ""));
-  const pricePerSqm =
-    !isNaN(priceNum) && !isNaN(sqmNum) && sqmNum > 0
-      ? Math.round(priceNum / sqmNum) + " €"
-      : "";
 
   return {
     uuid,
@@ -71,8 +69,6 @@ export function parseHtml(html: string): Listing | null {
     contact,
     features,
     year,
-    url: "",
-    userId: 0,
     notes: "",
     creationdate: Date.now().toString(),
   };

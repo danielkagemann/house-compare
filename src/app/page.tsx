@@ -28,8 +28,8 @@ export default function Home() {
    * validate data and continue
    * @param data 
    */
-  function validAndContinue(data: User) {
-    $save.userSet(data);
+  function validAndContinue(data: { token: string }) {
+    $save.tokenSet(data.token);
     $router.push("/properties")
   }
 
@@ -40,7 +40,7 @@ export default function Home() {
   async function onSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const response = await fetch("/api/signin", {
+    const response = await fetch("/api/auth/signin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default function Home() {
   async function onConfirmCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const response = await fetch(`/api/verify-code?code=${action.value}`, {
+    const response = await fetch(`/api/auth/verify-code?code=${action.value}`, {
       method: "GET",
     });
 

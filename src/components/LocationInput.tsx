@@ -21,12 +21,12 @@ export const LocationInput = () => {
    const [listings, setListings] = useState<Listing[]>([]);
 
    useEffect(() => {
-      if ($storage.user && $storage.user.id > 0) {
-         Endpoints.propertyList($storage.user.access).then((data) => {
+      if ($storage.token && $storage.token.length > 0) {
+         Endpoints.propertyList($storage.token).then((data) => {
             setListings(data);
          });
       }
-   }, [$storage.user]);
+   }, [$storage.token]);
 
    if (listings.length === 0) {
       return null;

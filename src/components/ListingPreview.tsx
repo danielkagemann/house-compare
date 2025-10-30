@@ -12,7 +12,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
    const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/main-bg.jpg`;
 
    function calculateAllFilled() {
-      const keys = Object.keys(data);
+      const keys = Object.keys(data).filter(key => key !== 'userId' && key !== 'notes');
       const filled = keys.filter(key => {
          const value = data[key as keyof Listing];
          if (Array.isArray(value)) {

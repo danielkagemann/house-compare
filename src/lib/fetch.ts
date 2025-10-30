@@ -35,7 +35,7 @@ async function propertyGet(uuid: string, token: string): Promise<Listing> {
  * @param listing
  * @param token
  */
-async function propertySet(listing: Listing, token: string): Promise<void> {
+async function propertySet(listing: Listing, token: string): Promise<boolean> {
   const res = await fetch(`/api/properties/${listing.uuid}`, {
     method: "POST",
     headers: {
@@ -45,12 +45,20 @@ async function propertySet(listing: Listing, token: string): Promise<void> {
     body: JSON.stringify(listing),
   });
   if (!res.ok) {
-    return;
+    return false;
   }
+  return true;
 }
 
+/**
+ * get image from backend and return as base64 string
+ * @param url
+ * @returns
+ */
 async function imageProxy(url: string): Promise<string> {
-  const res = await fetch(`/api/image?url=${encodeURIComponent(url)}`);
+  const res = await fetch(
+    `/api/properties/image?url=${encodeURIComponent(url)}`
+  );
   if (!res.ok) throw new Error("Image not found");
   const blob = await res.blob();
   const reader = new FileReader();
@@ -66,8 +74,15 @@ async function imageProxy(url: string): Promise<string> {
   });
 }
 
+/**
+ * get location with logic if from address or from coordinates
+ * @param query
+ * @returns
+ */
 async function locationLookup(query: string): Promise<Location | null> {
-  const result = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
+  const result = await fetch(
+    `/api/properties/location?q=${encodeURIComponent(query)}`
+  );
   if (!result.ok) {
     return null;
   }

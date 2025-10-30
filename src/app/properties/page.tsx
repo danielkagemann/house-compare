@@ -9,6 +9,7 @@ import { Endpoints } from "@/lib/fetch";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Hero } from "@/components/Hero";
+import { Header } from "@/components/Header";
 
 export default function Home() {
   // hook
@@ -19,13 +20,13 @@ export default function Home() {
   const [listings, setListings] = useState<Listing[]>([]);
 
   useEffect(() => {
-    if ($storage.user && $storage.user.access) {
-      Endpoints.propertyList($storage.user.access).then((data) => {
+    if ($storage.token && $storage.token.length > 0) {
+      Endpoints.propertyList($storage.token).then((data) => {
         setListings(data);
       });
     }
 
-  }, [$storage.user]);
+  }, [$storage.token]);
 
   // render empty data
   if (listings.length === 0) {
@@ -57,29 +58,32 @@ export default function Home() {
   };
 
   return (
-    <>
-      <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {
-          getFilteredListings().map((item, index) => (
-            <motion.div
-              key={item.uuid}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.3,
-                delay: index * 0.1
-              }}
-            >
-              <HouseCard
-                data={item}
-                isSelected={$storage.selectionContains(item.uuid)}
-                onSelect={() => $storage.selectionToggle(item.uuid)}
-                isMarked={isFilteredOut(item)} />
-            </motion.div>
-          ))
-        }
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-4">
+      <div className="max-w-5xl w-full flex flex-col gap-4">
+        <Header />
+        <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {
+            getFilteredListings().map((item, index) => (
+              <motion.div
+                key={item.uuid}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  delay: index * 0.1
+                }}
+              >
+                <HouseCard
+                  data={item}
+                  isSelected={$storage.selectionContains(item.uuid)}
+                  onSelect={() => $storage.selectionToggle(item.uuid)}
+                  isMarked={isFilteredOut(item)} />
+              </motion.div>
+            ))
+          }
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

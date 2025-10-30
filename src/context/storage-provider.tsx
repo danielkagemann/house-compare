@@ -14,8 +14,8 @@ interface StorageContextType {
    locationSet: (loc: Location | null) => void;
    filter: FilterOptions;
    filterUpdate: (filter: FilterOptions) => void;
-   user: User | null;
-   userSet: (user: User | null) => void;
+   token: string | null;
+   tokenSet: (value: string | null) => void;
 }
 
 const StorageContext = createContext<StorageContextType | null>(null);
@@ -24,7 +24,7 @@ const KEY = { USER: 'usr', FILTER: 'flt', SELECTED: "sel" };
 
 export const StorageProvider = ({ children }: { children: React.ReactNode }) => {
    // state
-   const [user, setUser] = useState<User | null>(null);
+   const [token, setToken] = useState<string | null>(null);
    const [selected, setSelected] = useState<string[]>([]);
    const [location, setLocation] = useState<Location | null>(null);
    const [flt, setFilter] = useState<FilterOptions>({
@@ -41,7 +41,7 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
 
       const usr = localStorage.getItem(KEY.USER);
       if (usr) {
-         setUser(JSON.parse(usr) ?? null);
+         setToken(usr || null);
       }
 
       const sel = localStorage.getItem(KEY.SELECTED) ?? "[]";
@@ -121,10 +121,10 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       localStorage.setItem(KEY.FILTER, JSON.stringify(filter));
    };
 
-   const userSet = (usr: User | null) => {
-      setUser(usr);
-      if (usr) {
-         localStorage.setItem(KEY.USER, JSON.stringify(usr));
+   const tokenSet = (val: string | null) => {
+      setToken(val);
+      if (val) {
+         localStorage.setItem(KEY.USER, val);
       } else {
          localStorage.removeItem(KEY.USER);
       }
@@ -138,8 +138,8 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
       locationSet,
       filter: flt,
       filterUpdate,
-      user,
-      userSet,
+      token,
+      tokenSet,
    }}>
       {children}
    </StorageContext.Provider>;
