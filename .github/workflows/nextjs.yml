@@ -40,7 +40,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: next-build
-          path: ./release
+          path: release/
 
       - name: Deploy to Netcup via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -48,6 +48,5 @@ jobs:
           server: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASS }}
-          local-dir: ./release
+          local-dir: release/
           server-dir: /
-          method: ftp
