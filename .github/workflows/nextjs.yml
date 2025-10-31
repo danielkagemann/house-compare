@@ -29,9 +29,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: next-build
-          path: |
-            .next
-            out
+          path: release
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,10 +40,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: next-build
-          path: ./dist
-
-      - name: Check exported files
-        run: ls -R ./dist
+          path: ./release
 
       - name: Deploy to Netcup via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -53,6 +48,6 @@ jobs:
           server: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASS }}
-          local-dir: ./dist/out
+          local-dir: ./release
           server-dir: /
           method: ftp
