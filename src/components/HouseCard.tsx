@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useStorage } from "@/context/storage-provider";
 import { motion } from "motion/react";
 import Flag from 'react-world-flags';
+import { Endpoints } from "@/lib/fetch";
+import { toast } from "sonner";
 
 interface HouseCardProps {
    data: Listing;
@@ -25,7 +27,11 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
    const distance = $save.location && data.location ? distanceBetweenCoordinates($save.location, { lat: data.location.lat, lon: data.location.lon }) : null;
 
    function onDelete() {
-      $save.listingRemove(data.uuid);
+      if (!Endpoints.propertyDelete(data.uuid, $save.token || '')) {
+         toast.error('Fehler beim Löschen der Immobilie');
+         return;
+      }
+      toast.success('Immobilie gelöscht');
    }
 
    return (

@@ -58,13 +58,13 @@ export const ListingDetails = () => {
    useEffect(() => {
       const uuid = $url.get('id');
 
-      if (uuid) {
+      if (uuid && $save.token) {
          Endpoints.propertyGet(uuid, $save.token || '').then((data) => {
             setListing({ ...data });
             setIsEditing(true);
          });
       }
-   }, [$url]);
+   }, [$url, $save.token]);
 
    /**
   * updating value for given attribute

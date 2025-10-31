@@ -17,12 +17,12 @@ export async function GET(request: NextRequest) {
 
   let listings = db
     .prepare("SELECT * FROM LISTING where userId = ?")
-    .get(userId) as any[];
+    .all(userId) as any[];
 
   if (!Array.isArray(listings)) {
     listings = [listings];
   }
-  console.log("listings:", listings);
+  console.log("listings:", listings.length);
 
   if (listings) {
     // convert json data back to object

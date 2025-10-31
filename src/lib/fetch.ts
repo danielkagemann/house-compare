@@ -89,10 +89,30 @@ async function locationLookup(query: string): Promise<Location | null> {
   return result.json();
 }
 
+/**
+ * delete a properti
+ * @param uuid
+ * @param token
+ * @returns
+ */
+async function propertyDelete(uuid: string, token: string): Promise<boolean> {
+  const res = await fetch(`/api/properties/${uuid}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Authentication ${token}`,
+    },
+  });
+  if (!res.ok) {
+    return false;
+  }
+  return true;
+}
+
 export const Endpoints = {
   propertyList,
   propertyGet,
   propertySet,
+  propertyDelete,
   imageProxy,
   locationLookup,
 };

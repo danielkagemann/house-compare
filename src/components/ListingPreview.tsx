@@ -32,7 +32,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
    const percentage = calculateAllFilled();
 
    return (
-      <div className={`shadow-xl rounded-xl bg-white p-4 flex flex-col space-y-2`}>
+      <div className={`${!hasEdit && 'shadow-xl rounded-xl'} bg-white p-4 flex flex-col space-y-2`}>
          <strong>Vorschau</strong>
 
          <div className="flex justify-between text-xs">
