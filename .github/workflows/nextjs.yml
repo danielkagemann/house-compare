@@ -1,4 +1,4 @@
-name: build & deploy: villaya
+name: villaya
 
 on:
   push:
@@ -43,11 +43,11 @@ jobs:
           path: ./release
 
       - name: Deploy to Netcup via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASS }}
           local-dir: ./release
-          server-dir: / 
+          server-dir: /
           method: ftp
