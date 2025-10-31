@@ -44,12 +44,15 @@ jobs:
           name: next-build
           path: ./dist
 
+      - name: Check exported files
+        run: ls -R ./dist
+
       - name: Deploy to Netcup via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASS }}
           local-dir: ./dist/out
-          server-dir: / 
+          server-dir: /
           method: ftp
