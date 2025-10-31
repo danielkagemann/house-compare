@@ -79,6 +79,13 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
                ))}
             </div>)}
          {data.description.length > 0 && <div className="text-sm text-gray-700"><ReadMore text={data.description} /></div>}
+
+         {data.notes.length > 0 && (
+            <div className="mt-2 p-2 bg-yellow-300 border-l-4 border-yellow-700">
+               <strong className="font-bold">Notizen: &nbsp;</strong>
+               <em className="text-sm text-gray-700">{data.notes}</em>
+            </div>
+         )}
       </div>
    );
 }

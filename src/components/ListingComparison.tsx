@@ -2,11 +2,14 @@
 
 import { useStorage } from "@/context/storage-provider";
 import { getSquareMeterPrice, Listing } from "@/model/Listing";
-import { BedDouble, Calendar, MapPin, Ruler, User } from "lucide-react";
+import { BedDouble, Calendar, Layout, MapPin, Ruler, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ReadMore } from "./ui/Readmore";
 import { FeatureList, Features } from "./Features";
 import Flag from 'react-world-flags'
+import { Endpoints } from "@/lib/fetch";
+import { PageLayout } from "./PageLayout";
+import { Header } from "./Header";
 
 export const ListingComparison = () => {
    // hooks
@@ -16,15 +19,20 @@ export const ListingComparison = () => {
    const [items, setItems] = useState<Listing[]>([]);
 
    useEffect(() => {
-      const ls = [];
-      for (const uuid of $storage.selected) {
-         const item = $storage.listings.find(l => l.uuid.trim() === uuid.trim());
-         if (item) {
-            ls.push(item);
-         }
+
+      if ($storage.token && $storage.token.length > 0) {
+         Endpoints.propertyList($storage.token).then((data) => {
+            const ls = [];
+            for (const uuid of $storage.selected) {
+               const item = data.find(l => l.uuid.trim() === uuid.trim());
+               if (item) {
+                  ls.push(item);
+               }
+            }
+            setItems(ls);
+         });
       }
-      setItems(ls);
-   }, [$storage.selected, $storage.listings]);
+   }, [$storage.selected, $storage.token]);
 
 
    function getFeatures(index: number): FeatureList[] {
@@ -74,9 +82,9 @@ export const ListingComparison = () => {
    }
 
    return (
-      <div className="p-4">
+      <PageLayout>
+         <Header />
          <h2 className="font-bold text-lg">Immobilienvergleich</h2>
-
          <div className="overflow-x-auto block">
             <table className="border-collapse min-w-full">
                <tbody>
@@ -95,6 +103,6 @@ export const ListingComparison = () => {
                </tbody>
             </table>
          </div>
-      </div>
+      </PageLayout>
    );
 }

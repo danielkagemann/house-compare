@@ -22,6 +22,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Endpoints } from "@/lib/fetch";
 import { Header } from "./Header";
 import { toast } from "sonner";
+import { PageLayout } from "./PageLayout";
 
 type InputOrder = {
    title: string;
@@ -116,46 +117,44 @@ export const ListingDetails = () => {
    }
 
    return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-8 space-y-12">
-         <div className="max-w-5xl w-full flex flex-col items-center gap-4">
-            <Header />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               {/*user input*/}
-               <div>
-                  <h2 className="font-bold text-lg">{isEditing ? 'Immobilie bearbeiten' : 'Neue Immobilie hinzufügen'}</h2>
+      <PageLayout>
+         <Header />
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/*user input*/}
+            <div>
+               <h2 className="font-bold text-lg">{isEditing ? 'Immobilie bearbeiten' : 'Neue Immobilie hinzufügen'}</h2>
 
-                  <Accordion
-                     type="single"
-                     collapsible
-                     className="w-full"
-                     value={current}
-                     onValueChange={setCurrent}
-                  >
-                     {
-                        order.map((item: InputOrder) => (
-                           <AccordionItem value={item.attr} key={item.attr} className={item.attr === current ? 'bg-gray-100 rounded-md border-0' : 'transparent'}>
-                              <AccordionTrigger className={`p-2 ${item.attr === current ? 'font-bold text-primary' : 'font-normal'}`}>{item.title}</AccordionTrigger>
-                              <AccordionContent className="flex flex-col gap-1 text-balance px-4">{item.children}</AccordionContent>
-                           </AccordionItem>
-                        ))
-                     }
-                  </Accordion>
-                  <div className="flex flex-col gap-1 text-sm border-t-1 border-gray-300 py-2">
-                     <strong>Speichern</strong>
-                     <p>Prüfe ob alle Eingaben korrekt sind. In der Vorschau siehst Du, zu wieviel Prozent alle Felder befüllt sind.</p>
-                     <div className="flex justify-end">
-                        <Button onClick={onSave}>{isEditing ? 'Aktualisieren' : 'Erstellen'}</Button>
-                     </div>
-
+               <Accordion
+                  type="single"
+                  collapsible
+                  className="w-full"
+                  value={current}
+                  onValueChange={setCurrent}
+               >
+                  {
+                     order.map((item: InputOrder) => (
+                        <AccordionItem value={item.attr} key={item.attr} className={item.attr === current ? 'bg-gray-100 rounded-md border-0' : 'transparent'}>
+                           <AccordionTrigger className={`p-2 ${item.attr === current ? 'font-bold text-primary' : 'font-normal'}`}>{item.title}</AccordionTrigger>
+                           <AccordionContent className="flex flex-col gap-1 text-balance px-4">{item.children}</AccordionContent>
+                        </AccordionItem>
+                     ))
+                  }
+               </Accordion>
+               <div className="flex flex-col gap-1 text-sm border-t-1 border-gray-300 py-2">
+                  <strong>Speichern</strong>
+                  <p>Prüfe ob alle Eingaben korrekt sind. In der Vorschau siehst Du, zu wieviel Prozent alle Felder befüllt sind.</p>
+                  <div className="flex justify-end">
+                     <Button onClick={onSave}>{isEditing ? 'Aktualisieren' : 'Erstellen'}</Button>
                   </div>
-               </div>
 
-               {/*preview*/}
-               <div className="hidden md:block">
-                  <ListingPreview data={listing as Listing} />
                </div>
             </div>
+
+            {/*preview*/}
+            <div className="hidden md:block">
+               <ListingPreview data={listing as Listing} />
+            </div>
          </div>
-      </div >
+      </PageLayout>
    );
 }

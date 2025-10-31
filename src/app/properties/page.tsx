@@ -6,15 +6,13 @@ import { Listing } from "@/model/Listing";
 import { useEffect, useState } from "react";
 import { useStorage } from "@/context/storage-provider";
 import { Endpoints } from "@/lib/fetch";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { Hero } from "@/components/Hero";
 import { Header } from "@/components/Header";
+import { NoListings } from "@/components/NoListings";
+import { PageLayout } from "@/components/PageLayout";
 
 export default function Home() {
   // hook
   const $storage = useStorage();
-  const $router = useRouter();
 
   // state
   const [listings, setListings] = useState<Listing[]>([]);
@@ -30,17 +28,7 @@ export default function Home() {
 
   // render empty data
   if (listings.length === 0) {
-    return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12 space-y-12">
-        <Hero>
-          <div className="flex flex-col gap-2">
-            <p>Du hast bisher noch keine Traumhäuser gespeichert. Suche nach Deinem persönlichen Traumhaus und speichere die Informationen hier.</p>
-            <div className="font-bold text-sm">Du hast eine Immobilie gefunden? Dann schnell eintragen</div>
-            <Button onClick={() => $router.push("/properties/details")}>Immobilie hinzufügen</Button>
-          </div>
-        </Hero>
-      </div>
-    );
+    return <NoListings />;
   }
 
   const isFilteredOut = (data: Listing): boolean => {
@@ -57,12 +45,21 @@ export default function Home() {
     return $storage.filter.removeFromList ? listings.filter(item => !isFilteredOut(item)) : listings;
   };
 
+  const list = getFilteredListings();
+
   return (
-    <div className="max-w-5xl w-full flex flex-col gap-4 mx-auto">
+    <PageLayout>
       <Header />
       <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {
-          getFilteredListings().map((item, index) => (
+          list.length === 0 && (
+            <div className="col-span-full">
+              <p className="text-gray-500">Keine Immobilien für diese Filterkriterien gefunden.</p>
+            </div>
+          )
+        }
+        {
+          list.map((item, index) => (
             <motion.div
               key={item.uuid}
               initial={{ opacity: 0, y: 20 }}
@@ -81,7 +78,7 @@ export default function Home() {
           ))
         }
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

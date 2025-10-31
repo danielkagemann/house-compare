@@ -31,7 +31,7 @@ export const Tooltip = ({ children, text, delay = 300 }: Props) => {
       >
          {children}
          {visible && (
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mb-2 
                         px-2 py-1 text-white bg-gray-800 rounded-md shadow-lg 
                         whitespace-nowrap text-xs z-50">
                {text}

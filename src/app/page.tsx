@@ -1,6 +1,7 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
+import { Layout } from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
@@ -95,7 +96,7 @@ export default function Home() {
       return (
         <Hero>
           <form className="flex flex-col gap-2" onSubmit={onSignIn}>
-            <div className="font-bold text-sm">Beginne mit Deiner Sammlung</div>
+            <div className="font-bold text-sm">Direkt loslegen...</div>
             <Input type="email" placeholder="Deine E-Mail Adresse" value={action.value} onChange={(e) => setAction({ type: "email", value: e.target.value })} />
             <Button type="submit">Anmelden</Button>
           </form>
@@ -149,15 +150,15 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12 space-y-12">
-
-      {renderAction()}
-
-      <div className="max-w-5xl w-full flex flex-col lg:flex-row gap-8 justify-center items-start">
+    <>
+      <Layout className="min-h-screen items-center justify-center">
+        {renderAction()}
+      </Layout>
+      <Layout className="flex flex-row items-start gap-4">
         {renderFeature("Sammle Deine Favoriten", <Heart size={16} />, "Suche atemberaubende Villen aus aller Welt und speichere diejenigen, die deine Fantasie beflügeln. Erstelle eine persönliche Sammlung, die deinen einzigartigen Geschmack widerspiegelt.")}
         {renderFeature("Speichere mit Deiner Email", <Send size={16} />, "Melde dich einfach mit deiner E-Mail-Adresse an, um eine Sammlung zu erstellen und von überall darauf zuzugreifen.")}
         {renderFeature("Teile Deine Sammlung", <Heart size={16} />, "Erstelle einen teilbaren Link, um deine Sammlung mit Familie und Freunden zu teilen.")}
-      </div>
-    </div>
+      </Layout>
+    </>
   );
 }

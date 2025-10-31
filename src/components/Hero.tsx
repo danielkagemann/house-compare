@@ -5,7 +5,7 @@ interface HeroProps {
 }
 
 export const Hero = ({ children }: HeroProps) => (
-   <div className="max-w-5xl w-full flex flex-col lg:flex-row items-center gap-12">
+   <div className="flex flex-col lg:flex-row items-center gap-12">
 
       {/* Left side */}
       <div className="space-y-6 lg:min-w-sm">

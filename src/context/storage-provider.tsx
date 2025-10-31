@@ -2,11 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Location } from "@/model/Listing";
 import { toast } from "sonner";
 import { FilterOptions } from "@/model/filter";
-import { User } from "@/model/user";
 
 interface StorageContextType {
-   // importJson: (data: string) => void;
-   // exportAsJson: (filename?: string) => void;
    location: Location | null;
    selected: string[];
    selectionToggle: (id: string) => void;

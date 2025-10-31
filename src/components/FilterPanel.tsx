@@ -5,6 +5,7 @@ import { Drawer, DrawerContent } from "./ui/drawer";
 import { useStorage } from "@/context/storage-provider";
 import { Input } from "./ui/input";
 import { Switch } from "./ui/switch";
+import { Tooltip } from "./ui/Tooltip";
 
 export const FilterPanel = () => {
 
@@ -16,7 +17,9 @@ export const FilterPanel = () => {
 
    return (
       <>
-         <Button variant="outline" onClick={() => setOpen(true)}><Sparkles size={18} /></Button>
+         <Tooltip text="Filtereinstellungen">
+            <Button variant="outline" onClick={() => setOpen(true)}><Sparkles size={18} /></Button>
+         </Tooltip>
 
          <Drawer open={open} onOpenChange={setOpen} direction="top">
             <DrawerContent>

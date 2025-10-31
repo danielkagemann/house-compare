@@ -2,7 +2,7 @@
 
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { StorageProvider } from "@/context/storage-provider";
+import { StorageProvider, useStorage } from "@/context/storage-provider";
 import { Footer } from "@/components/Footer";
 
 export default function RootLayout({
@@ -10,6 +10,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="de">
       <head>
@@ -21,13 +22,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <main className="min-h-screen">
-          <StorageProvider>
+        <StorageProvider>
+          <main className="min-h-screen">
             {children}
-          </StorageProvider>
-        </main>
-        <Footer />
-        <Toaster position="top-center" expand={true} richColors />
+          </main>
+          <Footer />
+          <Toaster position="top-center" expand={true} richColors />
+        </StorageProvider>
       </body>
     </html>
   );

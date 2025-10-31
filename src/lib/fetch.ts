@@ -44,10 +44,7 @@ async function propertySet(listing: Listing, token: string): Promise<boolean> {
     },
     body: JSON.stringify(listing),
   });
-  if (!res.ok) {
-    return false;
-  }
-  return true;
+  return res.ok;
 }
 
 /**
@@ -102,10 +99,22 @@ async function propertyDelete(uuid: string, token: string): Promise<boolean> {
       Authorization: `Authentication ${token}`,
     },
   });
-  if (!res.ok) {
-    return false;
-  }
-  return true;
+  return res.ok;
+}
+
+/**
+ * check if given token is valid
+ * @param token
+ * @returns
+ */
+async function isAuthenticated(token: string): Promise<boolean> {
+  const res = await fetch(`/api/auth/validate-token`, {
+    method: "GET",
+    headers: {
+      Authorization: `Authentication ${token}`,
+    },
+  });
+  return res.status === 204;
 }
 
 export const Endpoints = {
@@ -115,4 +124,5 @@ export const Endpoints = {
   propertyDelete,
   imageProxy,
   locationLookup,
+  isAuthenticated,
 };
