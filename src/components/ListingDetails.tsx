@@ -72,7 +72,6 @@ export const ListingDetails = () => {
   * @param attr 
   * @returns 
   */
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
    const onUpdateListing = (attr: string) => (value: any) => {
       setListing((prev) => ({ ...prev, [attr]: value }));
    };

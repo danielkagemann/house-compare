@@ -54,9 +54,6 @@ export function parseHtml(
 
   const uuid = new Date().getTime().toString();
 
-  const priceNum = parseFloat(price.replace(/[^\d]/g, ""));
-  const sqmNum = parseFloat(sqm.replace(/[^\d]/g, ""));
-
   return {
     uuid,
     title,

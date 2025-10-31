@@ -49,46 +49,46 @@ export const StorageProvider = ({ children }: { children: React.ReactNode }) => 
    * export json to file
    * @param filename
    */
-   const exportAsJson = (filename = "listings.json") => {
-      // const dataStr = JSON.stringify(listings, null, 2);
-      // const blob = new Blob([dataStr], { type: "application/json" });
-      // const url = URL.createObjectURL(blob);
-      // const link = document.createElement("a");
-      // link.href = url;
-      // link.download = filename;
-      // link.click();
-      // URL.revokeObjectURL(url);
-      // toast.success("Datei wurde heruntergeladen");
-      // TODO export
-   };
+   //const exportAsJson = (filename = "listings.json") => {
+   // const dataStr = JSON.stringify(listings, null, 2);
+   // const blob = new Blob([dataStr], { type: "application/json" });
+   // const url = URL.createObjectURL(blob);
+   // const link = document.createElement("a");
+   // link.href = url;
+   // link.download = filename;
+   // link.click();
+   // URL.revokeObjectURL(url);
+   // toast.success("Datei wurde heruntergeladen");
+   // TODO export
+   //};
 
    /**
     * import from file
     * @param data
     */
-   const importJson = (data: string) => {
-      // try {
-      //    const json = JSON.parse(data);
-      //    if (Array.isArray(json)) {
-      //       // validate minimal
-      //       const isValid = json.every((item) =>
-      //          LISTING_AVAILABLE_ATTRIBUTES.every((attr) => attr in item)
-      //       );
-      //       if (isValid) {
-      //          setListings(json);
-      //          localStorage.setItem(KEY.LISTINGS, JSON.stringify(json));
-      //          toast.success("Immobilien wurden importiert");
-      //       } else {
-      //          toast.error("Die Datei hat nicht die korrekten Attribute.");
-      //       }
-      //    } else {
-      //       toast.error("Die Datei ist nicht im korrekten Format.");
-      //    }
-      // } catch {
-      //    toast.error("Die Datei ist keine valide JSON Datei");
-      // }
-      // TODO import
-   };
+   //const importJson = (data: string) => {
+   // try {
+   //    const json = JSON.parse(data);
+   //    if (Array.isArray(json)) {
+   //       // validate minimal
+   //       const isValid = json.every((item) =>
+   //          LISTING_AVAILABLE_ATTRIBUTES.every((attr) => attr in item)
+   //       );
+   //       if (isValid) {
+   //          setListings(json);
+   //          localStorage.setItem(KEY.LISTINGS, JSON.stringify(json));
+   //          toast.success("Immobilien wurden importiert");
+   //       } else {
+   //          toast.error("Die Datei hat nicht die korrekten Attribute.");
+   //       }
+   //    } else {
+   //       toast.error("Die Datei ist nicht im korrekten Format.");
+   //    }
+   // } catch {
+   //    toast.error("Die Datei ist keine valide JSON Datei");
+   // }
+   // TODO import
+   //};
 
    const selectionToggle = (id: string) => {
       const isSelected = selected.includes(id.trim());

@@ -4,9 +4,9 @@ import { Listing } from "@/model/Listing";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { uuid: string } }
+  { params }: { params: Promise<{ uuid: string }> }
 ) {
-  const { uuid } = params;
+  const { uuid } = await params;
 
   const accessToken = req.headers.get("Authorization")?.split(" ")[1];
   const userId = getUserIdFromAccessToken(accessToken);
@@ -43,9 +43,9 @@ export async function GET(
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { uuid: string } }
+  { params }: { params: Promise<{ uuid: string }> }
 ) {
-  const { uuid } = params;
+  const { uuid } = await params;
   const accessToken = request.headers.get("Authorization")?.split(" ")[1];
   const userId = getUserIdFromAccessToken(accessToken);
   if (!userId) {

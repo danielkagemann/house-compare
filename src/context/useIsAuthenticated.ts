@@ -18,6 +18,7 @@ export const useIsAuthenticated = () => {
 
   useEffect(() => {
     checkAuthentication().then(setIsAuthenticated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [$save.token]);
 
   return isAuthenticated;

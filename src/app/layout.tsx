@@ -2,7 +2,7 @@
 
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { StorageProvider, useStorage } from "@/context/storage-provider";
+import { StorageProvider } from "@/context/storage-provider";
 import { Footer } from "@/components/Footer";
 
 export default function RootLayout({

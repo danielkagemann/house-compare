@@ -1,6 +1,5 @@
 import { type NextRequest } from "next/server";
-import db, { getUserIdFromAccessToken } from "@/lib/db";
-import { get } from "http";
+import { getUserIdFromAccessToken } from "@/lib/db";
 
 /**
  * api/validate-token

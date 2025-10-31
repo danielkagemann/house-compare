@@ -1,12 +1,11 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
-import { Layout } from "@/components/PageLayout";
+import { PageLayout } from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useStorage } from "@/context/storage-provider";
-import { User } from "@/model/user";
 import { Heart, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -98,6 +97,7 @@ export default function Home() {
           <form className="flex flex-col gap-2" onSubmit={onSignIn}>
             <div className="font-bold text-sm">Direkt loslegen...</div>
             <Input type="email" placeholder="Deine E-Mail Adresse" value={action.value} onChange={(e) => setAction({ type: "email", value: e.target.value })} />
+            {error && <div className="text-red-600 text-sm">{error}</div>}
             <Button type="submit">Anmelden</Button>
           </form>
         </Hero>
@@ -122,6 +122,7 @@ export default function Home() {
               <InputOTPSlot index={5} />
             </InputOTPGroup>
           </InputOTP>
+          {error && <div className="text-red-600 text-sm">{error}</div>}
           <Button type="submit">Bestätigen</Button>
         </form>
       </Hero>
@@ -151,14 +152,14 @@ export default function Home() {
 
   return (
     <>
-      <Layout className="min-h-screen items-center justify-center">
+      <PageLayout className="min-h-screen items-center justify-center">
         {renderAction()}
-      </Layout>
-      <Layout className="flex flex-row items-start gap-4">
+      </PageLayout>
+      <PageLayout className="flex flex-row items-start gap-4">
         {renderFeature("Sammle Deine Favoriten", <Heart size={16} />, "Suche atemberaubende Villen aus aller Welt und speichere diejenigen, die deine Fantasie beflügeln. Erstelle eine persönliche Sammlung, die deinen einzigartigen Geschmack widerspiegelt.")}
         {renderFeature("Speichere mit Deiner Email", <Send size={16} />, "Melde dich einfach mit deiner E-Mail-Adresse an, um eine Sammlung zu erstellen und von überall darauf zuzugreifen.")}
         {renderFeature("Teile Deine Sammlung", <Heart size={16} />, "Erstelle einen teilbaren Link, um deine Sammlung mit Familie und Freunden zu teilen.")}
-      </Layout>
+      </PageLayout>
     </>
   );
 }

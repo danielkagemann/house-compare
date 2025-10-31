@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { InputNext } from "./InputNext";
 import { Button } from "../ui/button";
@@ -41,6 +41,7 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
       <>
          <div className="flex gap-2 items-start">
             <img src={imageSrc}
+               alt="Vorschaubild"
                className="w-24 h-24 rounded-xl object-cover" />
             <div>Du kannst hier das Bild über eine URL oder aus der Zwischenablage hinzufügen. Es wird intern eine Kopie gespeichert.<br />
                <Button variant="outline" onClick={() => onChange('')}><Trash size={18} /></Button></div>
