@@ -54,7 +54,7 @@ jobs:
           fi
 
       # ✅ Deployment per FTP
-      - name: Deploy to Netcup via FTP
+      - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.HOST }}
@@ -69,5 +69,3 @@ jobs:
             **/.github*
             **/node_modules/**
             **/.next/**
-          timeout: 60000
-          log-level: minimal
