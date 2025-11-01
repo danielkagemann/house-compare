@@ -37,25 +37,17 @@ jobs:
     needs: build
 
     steps:
-      # Lade das Build-Artifact herunter
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: next-build
           path: build/
 
-      # Deployment via FTP
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Deploy via Web Deploy
+        uses: SamKirkland/web-deploy@v1
         with:
-          server: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          password: ${{ secrets.PASS }}
-          local-dir: build/
-          server-dir: /
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.github*
-            **/node_modules/**
-            **/.next/**
+          target-server: ${{ secrets.HOST }} # FTP Server
+          remote-user: ${{ secrets.USER }} # FTP Benutzer
+          private-ssh-key: ${{ secrets.PASS }} # FTP Passwort
+          source-path: build/
+          destination-path: /
