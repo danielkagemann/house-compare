@@ -17,6 +17,17 @@ async function propertyList(token: string): Promise<Listing[]> {
 }
 
 /**
+ * get shared list
+ * @param token
+ * @returns
+ */
+async function propertyShareList(share: string): Promise<Listing[]> {
+  const res = await fetch(`${BASE}/api/properties/shared/?from=${share}`);
+  const data = await res.json();
+  return data;
+}
+
+/**
  * get property details
  * @param uuid
  * @param token
@@ -159,8 +170,24 @@ async function authRemove(token: string): Promise<Response> {
   return response;
 }
 
+async function authShare(token: string): Promise<string | null> {
+  const response = await fetch(`${BASE}/api/auth/share/`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    return data.share;
+  }
+
+  return null;
+}
+
 export const Endpoints = {
   propertyList,
+  propertyShareList,
   propertyGet,
   propertySet,
   propertyDelete,
@@ -170,4 +197,5 @@ export const Endpoints = {
   authSignIn,
   authVerifyCode,
   authRemove,
+  authShare,
 };

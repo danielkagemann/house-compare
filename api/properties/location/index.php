@@ -31,8 +31,6 @@ function fromAddress(string $direction): array
         throw new Exception("Error fetching data from Nominatim");
     }
 
-    logMessage("Fetched data from Nominatim for address: $direction" . print_r($res, true));
-
     $data = $res['json'];
 
     if (!$data || count($data) === 0) {

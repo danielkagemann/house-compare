@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import { useStorage } from '@/context/storage-provider';
 import { useIsAuthenticated } from '@/context/useIsAuthenticated';
@@ -26,7 +28,7 @@ export const Footer = () => {
    }
 
    function renderConfirmDialog() {
-      if (!$auth) return null;
+      if (!$auth || isShareMode()) return null;
       return (
          <Dialog>
             <DialogTrigger asChild>
@@ -51,6 +53,10 @@ export const Footer = () => {
       );
    }
 
+   function isShareMode() {
+      return window.location.pathname === '/shared/';
+   }
+
    return (
       <footer className="w-full p-4 lg:p-12 mt-12 flex flex-col gap-1 text-sm text-gray-600 bg-gray-50">
          <div className="grid grid-cols-2 gap-1">
@@ -62,12 +68,12 @@ export const Footer = () => {
             </div>
             <div className="flex gap-1 text-xs items-end justify-end flex-col lg:flex-row lg:gap-3">
                <Link href="/" className="text-primary hover:underline">Start</Link>
-               {$auth &&
+               {$auth && !isShareMode() &&
                   <Link href="/properties" className="text-primary hover:underline">Immobilien</Link>}
-               {$auth &&
+               {$auth && !isShareMode() &&
                   <Link href="/properties/details" className="text-primary hover:underline">Immobilie hinzufügen</Link>}
                <Link href="/about" className="text-primary hover:underline">Über Villaya</Link>
-               {$auth &&
+               {$auth && !isShareMode() &&
                   <button className="text-primary hover:underline" onClick={onSignOff}>Abmelden</button>}
             </div>
          </div>

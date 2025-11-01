@@ -72,6 +72,16 @@ class Database {
         return $user ? $user : null;
     }
 
+    public function getShareLink(string $access): ?array {
+        $stmt = $this->pdo->prepare("SELECT share FROM USER WHERE access = :access LIMIT 1");
+        $stmt->bindParam(':access', $access, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ? $user : null;
+    }
+    
+
     public function createUser(string $email, string $access, string $sharelink): array {
         $stmt = $this->pdo->prepare("INSERT INTO USER (email, access, share) VALUES (:email, :access, :share)");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -121,6 +131,15 @@ class Database {
 
         return $user ? $user['email'] : null;
     }
+
+    public function getUserIdFromShareLink(string $shareLink): ?int {
+        $stmt = $this->pdo->prepare("SELECT id FROM USER WHERE share = :share LIMIT 1");
+        $stmt->bindParam(':share', $shareLink, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ? (int)$user['id'] : null;
+    }   
 
     public function getListingsByUserId(int $userId): array {
         $stmt = $this->pdo->prepare("SELECT * FROM LISTING WHERE userId = :userId");
