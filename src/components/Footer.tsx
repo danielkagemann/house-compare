@@ -8,6 +8,7 @@ export const Footer = () => {
 
    function onSignOff() {
       $save.tokenSet(null);
+      window.location.href = '/';
    }
 
    return (

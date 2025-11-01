@@ -1,6 +1,23 @@
 <?php
 
 require_once '../../util.php';
+require_once '../../logger.php';
+
+// CORS handling - only allow GET requests
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
 
 /**
  * helper routine to get coordinates
@@ -13,6 +30,8 @@ function fromAddress(string $direction): array
     if ($res['status'] !== 200) {
         throw new Exception("Error fetching data from Nominatim");
     }
+
+    logMessage("Fetched data from Nominatim for address: $direction" . print_r($res, true));
 
     $data = $res['json'];
 
@@ -103,6 +122,7 @@ try {
     echo json_encode(array_merge($coords, $addressData));
     exit;
 } catch (Exception $error) {
+    logMessage(msg: "Error fetching location data: " . $error->getMessage(), level: "error");
     http_response_code(406);
     echo json_encode(['error' => $error->getMessage() ?: 'Error fetching location data']);
     exit;

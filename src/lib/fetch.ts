@@ -1,13 +1,15 @@
 import { Listing, Location } from "@/model/Listing";
 
+const BASE = "https://villaya.de";
+
 /**
  * fetch all properties from the api
  * @returns
  */
 async function propertyList(token: string): Promise<Listing[]> {
-  const res = await fetch("/api/properties", {
+  const res = await fetch(`${BASE}/api/properties/`, {
     headers: {
-      Authorization: `Authentication ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   const data = await res.json();
@@ -21,9 +23,9 @@ async function propertyList(token: string): Promise<Listing[]> {
  * @returns
  */
 async function propertyGet(uuid: string, token: string): Promise<Listing> {
-  const res = await fetch(`/api/properties/${uuid}`, {
+  const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
     headers: {
-      Authorization: `Authentication ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   const data = await res.json();
@@ -36,14 +38,17 @@ async function propertyGet(uuid: string, token: string): Promise<Listing> {
  * @param token
  */
 async function propertySet(listing: Listing, token: string): Promise<boolean> {
-  const res = await fetch(`/api/properties/${listing.uuid}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Authentication ${token}`,
-    },
-    body: JSON.stringify(listing),
-  });
+  const res = await fetch(
+    `${BASE}/api/properties/details/?uuid=${listing.uuid}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(listing),
+    }
+  );
   return res.ok;
 }
 
@@ -53,22 +58,27 @@ async function propertySet(listing: Listing, token: string): Promise<boolean> {
  * @returns
  */
 async function imageProxy(url: string): Promise<string> {
-  const res = await fetch(
-    `/api/properties/image?url=${encodeURIComponent(url)}`
-  );
-  if (!res.ok) throw new Error("Image not found");
-  const blob = await res.blob();
-  const reader = new FileReader();
-  return new Promise((resolve, reject) => {
-    reader.onload = function (e) {
-      const base64Image = e.target?.result as string;
-      resolve(base64Image);
-    };
-    reader.onerror = function () {
-      reject(new Error("Failed to read image"));
-    };
-    reader.readAsDataURL(blob);
-  });
+  try {
+    const res = await fetch(
+      `${BASE}/api/properties/image/?url=${encodeURIComponent(url)}`
+    );
+    if (!res.ok) throw new Error("Image not found");
+    const blob = await res.blob();
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onload = function (e) {
+        const base64Image = e.target?.result as string;
+        resolve(base64Image);
+      };
+      reader.onerror = function () {
+        reject(new Error("Failed to read image"));
+      };
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error("Error in imageProxy:", error);
+    return "";
+  }
 }
 
 /**
@@ -77,26 +87,30 @@ async function imageProxy(url: string): Promise<string> {
  * @returns
  */
 async function locationLookup(query: string): Promise<Location | null> {
-  const result = await fetch(
-    `/api/properties/location?q=${encodeURIComponent(query)}`
-  );
-  if (!result.ok) {
+  try {
+    const result = await fetch(
+      `${BASE}/api/properties/location/?q=${encodeURIComponent(query)}`
+    );
+    if (!result.ok) {
+      return null;
+    }
+    return result.json();
+  } catch (error) {
+    console.error("Error in locationLookup:", error);
     return null;
   }
-  return result.json();
 }
-
 /**
- * delete a properti
+ * delete a property
  * @param uuid
  * @param token
  * @returns
  */
 async function propertyDelete(uuid: string, token: string): Promise<boolean> {
-  const res = await fetch(`/api/properties/${uuid}`, {
+  const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
     method: "DELETE",
     headers: {
-      Authorization: `Authentication ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   return res.ok;
@@ -108,13 +122,31 @@ async function propertyDelete(uuid: string, token: string): Promise<boolean> {
  * @returns
  */
 async function isAuthenticated(token: string): Promise<boolean> {
-  const res = await fetch(`/api/auth/validate-token`, {
+  const res = await fetch(`${BASE}/api/auth/validate-token/`, {
     method: "GET",
     headers: {
-      Authorization: `Authentication ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   return res.status === 204;
+}
+
+async function authSignIn(email: string): Promise<Response> {
+  const response = await fetch(`${BASE}/api/auth/signin/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  return response;
+}
+
+async function authVerifyCode(code: string): Promise<Response> {
+  const response = await fetch(`${BASE}/api/auth/verify-code/?code=${code}`, {
+    method: "GET",
+  });
+  return response;
 }
 
 export const Endpoints = {
@@ -125,4 +157,6 @@ export const Endpoints = {
   imageProxy,
   locationLookup,
   isAuthenticated,
+  authSignIn,
+  authVerifyCode,
 };

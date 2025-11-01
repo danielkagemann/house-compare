@@ -2,12 +2,6 @@
 require_once '../../db.php';
 require_once '../../logger.php';
 
-/**
- * api/signin
- * Handles user sign-in by email
- * Expects JSON: { "email": "user@example.com" }
- */
-
 // Set CORS headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
@@ -22,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+   logMessage(msg: "Method not allowed: " . $_SERVER['REQUEST_METHOD'], level: "warning");
     http_response_code(405); // Method Not Allowed
     echo json_encode(['error' => 'Method not allowed']);
     exit();

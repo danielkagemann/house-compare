@@ -32,40 +32,40 @@ jobs:
           name: next-build
           path: build/
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
 
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: next-build
-          path: build/
+  #   steps:
+  #     - name: Download build artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: next-build
+  #         path: build/
 
-      # Optional: API-Ordner hinzufügen (z. B. PHP-Backend)
-      - name: Checkout source for API
-        uses: actions/checkout@v4
+  #     # Optional: API-Ordner hinzufügen (z. B. PHP-Backend)
+  #     - name: Checkout source for API
+  #       uses: actions/checkout@v4
 
-      - name: Include API folder
-        run: |
-          if [ -d "api" ]; then
-            cp -r api build/
-          fi
+  #     - name: Include API folder
+  #       run: |
+  #         if [ -d "api" ]; then
+  #           cp -r api build/
+  #         fi
 
-      # ✅ Deployment per FTP
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          password: ${{ secrets.PASS }}
-          protocol: ftp
-          port: 21
-          local-dir: build/
-          server-dir: /
-          exclude: |
-            **/.git*
-            **/.github*
-            **/node_modules/**
-            **/.next/**
+  #     # ✅ Deployment per FTP
+  #     - name: Deploy via FTP
+  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+  #       with:
+  #         server: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USER }}
+  #         password: ${{ secrets.PASS }}
+  #         protocol: ftp
+  #         port: 21
+  #         local-dir: build/
+  #         server-dir: /
+  #         exclude: |
+  #           **/.git*
+  #           **/.github*
+  #           **/node_modules/**
+  #           **/.next/**

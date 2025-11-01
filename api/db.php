@@ -2,13 +2,13 @@
 require_once 'PHPMailer.php';
 require_once 'SMTP.php';
 require_once 'Exception.php';
-
+require_once 'logger.php';
 
 class Database {
     private $pdo;
 
     public function __construct($dbFile = 'villaya-data.db') {
-        $this->pdo = new PDO('sqlite:' . $dbFile);
+        $this->pdo = new PDO('sqlite:' . __DIR__ . '/' . $dbFile);
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $this->createTables();
@@ -21,8 +21,7 @@ class Database {
                 creationdate DATETIME DEFAULT CURRENT_TIMESTAMP,
                 email TEXT NOT NULL UNIQUE,
                 access TEXT NOT NULL,
-                editlink TEXT,
-                sharelink TEXT
+                share TEXT
             )"
         );
 
@@ -73,12 +72,11 @@ class Database {
         return $user ? $user : null;
     }
 
-    public function createUser(string $email, string $access, string $editlink, string $sharelink): array {
-        $stmt = $this->pdo->prepare("INSERT INTO USER (email, access, editlink, sharelink) VALUES (:email, :access, :editlink, :sharelink)");
+    public function createUser(string $email, string $access, string $sharelink): array {
+        $stmt = $this->pdo->prepare("INSERT INTO USER (email, access, share) VALUES (:email, :access, :share)");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':access', $access, PDO::PARAM_STR);
-        $stmt->bindParam(':editlink', $editlink, PDO::PARAM_STR);
-        $stmt->bindParam(':sharelink', $sharelink, PDO::PARAM_STR);
+        $stmt->bindParam(':share', $sharelink, PDO::PARAM_STR);
         $stmt->execute();
 
         $userId = $this->pdo->lastInsertId();
@@ -98,6 +96,138 @@ class Database {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $user ? $user : null;
+    }
+
+    public function getListingsByUserId(int $userId): array {
+        $stmt = $this->pdo->prepare("SELECT * FROM LISTING WHERE userId = :userId");
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Convert JSON strings back to arrays for location and features
+        foreach ($listings as &$listing) {
+            if (isset($listing['location']) && $listing['location']) {
+                $listing['location'] = json_decode($listing['location'], true);
+            }
+            if (isset($listing['features']) && $listing['features']) {
+                $listing['features'] = json_decode($listing['features'], true);
+            }
+        }
+
+        return $listings;
+    }
+
+    public function getListingByUuidAndUserId(string $uuid, int $userId): ?array {
+        $stmt = $this->pdo->prepare("SELECT * FROM LISTING WHERE uuid = :uuid AND userId = :userId LIMIT 1");
+        $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $listing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$listing) {
+            return null;
+        }
+
+        // Convert JSON strings back to arrays for location and features
+        if (isset($listing['location']) && $listing['location']) {
+            $listing['location'] = json_decode($listing['location'], true);
+        }
+        if (isset($listing['features']) && $listing['features']) {
+            $listing['features'] = json_decode($listing['features'], true);
+        }
+
+        return $listing;
+    }
+
+    public function upsertListing(array $listing): array {
+        // Check if listing exists
+        $stmt = $this->pdo->prepare("SELECT uuid FROM LISTING WHERE uuid = :uuid LIMIT 1");
+        $stmt->bindParam(':uuid', $listing['uuid'], PDO::PARAM_STR);
+        $stmt->execute();
+        $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Convert arrays to JSON strings for storage
+        $locationJson = isset($listing['location']) ? json_encode($listing['location']) : null;
+        $featuresJson = isset($listing['features']) ? json_encode($listing['features']) : null;
+
+        if ($existing) {
+            // Update existing listing
+            $stmt = $this->pdo->prepare("
+                UPDATE LISTING SET 
+                title = :title, url = :url, price = :price, sqm = :sqm, rooms = :rooms, 
+                location = :location, image = :image, description = :description, 
+                contact = :contact, year = :year, features = :features, notes = :notes
+                WHERE uuid = :uuid
+            ");
+            $stmt->execute([
+                ':title' => $listing['title'] ?? null,
+                ':url' => $listing['url'] ?? null,
+                ':price' => $listing['price'] ?? null,
+                ':sqm' => $listing['sqm'] ?? null,
+                ':rooms' => $listing['rooms'] ?? null,
+                ':location' => $locationJson,
+                ':image' => $listing['image'] ?? null,
+                ':description' => $listing['description'] ?? null,
+                ':contact' => $listing['contact'] ?? null,
+                ':year' => $listing['year'] ?? null,
+                ':features' => $featuresJson,
+                ':notes' => $listing['notes'] ?? null,
+                ':uuid' => $listing['uuid']
+            ]);
+        } else {
+            // Insert new listing
+            $stmt = $this->pdo->prepare("
+                INSERT INTO LISTING 
+                (uuid, title, url, price, sqm, rooms, location, image, description, contact, year, features, notes, userId) 
+                VALUES (:uuid, :title, :url, :price, :sqm, :rooms, :location, :image, :description, :contact, :year, :features, :notes, :userId)
+            ");
+            $stmt->execute([
+                ':uuid' => $listing['uuid'],
+                ':title' => $listing['title'] ?? null,
+                ':url' => $listing['url'] ?? null,
+                ':price' => $listing['price'] ?? null,
+                ':sqm' => $listing['sqm'] ?? null,
+                ':rooms' => $listing['rooms'] ?? null,
+                ':location' => $locationJson,
+                ':image' => $listing['image'] ?? null,
+                ':description' => $listing['description'] ?? null,
+                ':contact' => $listing['contact'] ?? null,
+                ':year' => $listing['year'] ?? null,
+                ':features' => $featuresJson,
+                ':notes' => $listing['notes'] ?? null,
+                ':userId' => $listing['userId']
+            ]);
+        }
+
+        // Return the updated/created listing
+        return $this->getListingByUuid($listing['uuid']);
+    }
+
+    public function getListingByUuid(string $uuid): ?array {
+        $stmt = $this->pdo->prepare("SELECT * FROM LISTING WHERE uuid = :uuid LIMIT 1");
+        $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+        $stmt->execute();
+        $listing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$listing) {
+            return null;
+        }
+
+        // Convert JSON strings back to arrays for location and features
+        if (isset($listing['location']) && $listing['location']) {
+            $listing['location'] = json_decode($listing['location'], true);
+        }
+        if (isset($listing['features']) && $listing['features']) {
+            $listing['features'] = json_decode($listing['features'], true);
+        }
+
+        return $listing;
+    }
+
+    public function deleteListing(string $uuid): bool {
+        $stmt = $this->pdo->prepare("DELETE FROM LISTING WHERE uuid = :uuid");
+        $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+        return $stmt->execute();
     }
 }
 
@@ -121,6 +251,7 @@ function sendEMail(string $email, string $message): bool {
         $mail->addReplyTo($email);
         
         // Content
+        $mail->CharSet = 'UTF-8';
         $mail->isHTML(false);
         $mail->Subject = 'Neue Nachricht';
         $mail->Body    = $message;

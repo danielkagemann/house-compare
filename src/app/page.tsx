@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useStorage } from "@/context/storage-provider";
+import { Endpoints } from "@/lib/fetch";
 import { Heart, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -40,13 +41,7 @@ export default function Home() {
   async function onSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const response = await fetch("/api/auth/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: action.value }),
-    });
+    const response = await Endpoints.authSignIn(action.value);
 
     if (!response.ok) {
       const err = await response.json();
@@ -73,10 +68,7 @@ export default function Home() {
   async function onConfirmCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const response = await fetch(`/api/auth/verify-code?code=${action.value}`, {
-      method: "GET",
-    });
-
+    const response = await Endpoints.authVerifyCode(action.value);
     if (!response.ok) {
       const err = await response.json();
       setError(err.message ?? "Fehler beim Bestätigen des Codes");

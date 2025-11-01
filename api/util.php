@@ -42,7 +42,7 @@ function fetch(string $url, string $method = 'GET', ?array $options = []): array
 
     // try to decode json
     $json = null;
-    if ($responseBody && str_starts_with(trim($responseBody), '{')) {
+    if ($responseBody) {
         $json = json_decode($responseBody, true);
     }
 

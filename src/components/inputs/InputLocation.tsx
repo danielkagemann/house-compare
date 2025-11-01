@@ -8,6 +8,7 @@ import { Location } from "@/model/Listing";
 import { useState } from "react";
 import { flushSync } from "react-dom";
 import { Spinner } from "../ui/spinner";
+import { Endpoints } from "@/lib/fetch";
 
 interface Props {
    value: Location;
@@ -22,13 +23,12 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
       flushSync(() => {
          setWorking(true);
       });
-      const result = await fetch(`/api/location?q=${encodeURIComponent(value.display)}`);
-      if (result.ok) {
-         const data = await result.json();
-         onChange({ ...value, ...data });
+      const result = await Endpoints.locationLookup(value.display);
+      if (result) {
+         onChange({ ...value, ...result });
       }
       setWorking(false);
-   };
+   }
 
    return (
       <>
