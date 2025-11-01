@@ -24,7 +24,12 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
                const reader = new FileReader();
                reader.onload = function (e) {
                   const base64Image = e.target?.result as string;
-                  onChange(base64Image);
+                  resizeBase64Image(base64Image).then((resizedImage) => {
+                     console.log('original link', base64Image.length, 'converted link', resizedImage.length);
+                     onChange(resizedImage);
+                  }).catch(() => {
+                     onChange(base64Image);
+                  });
                };
                reader.readAsDataURL(file);
             }
@@ -32,9 +37,41 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
       }
    }
 
+   async function resizeBase64Image(base64: string, width: number = 800): Promise<string> {
+      return new Promise((resolve, reject) => {
+         const img = new Image();
+         img.src = base64;
+         img.onload = () => {
+            // If original image is smaller than target width, return original
+            if (img.width <= width) {
+               resolve(base64);
+               return;
+            }
+
+            const canvas = document.createElement('canvas');
+            const scale = width / img.width;
+            canvas.width = width;
+            canvas.height = img.height * scale;
+
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return reject(new Error('Canvas context not available'));
+
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', 0.9));
+         };
+         img.onerror = reject;
+      });
+   }
+
    async function onCheckLink() {
-      const resposnse = await Endpoints.imageProxy(link);
-      onChange(resposnse);
+      const response = await Endpoints.imageProxy(link);
+      try {
+         const converted = await resizeBase64Image(response);
+         console.log('original link', response.length, 'converted link', converted.length);
+         onChange(converted);
+      } catch (error) {
+         onChange(response);
+      }
    }
 
    return (
