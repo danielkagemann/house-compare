@@ -85,9 +85,13 @@ export const ListingDetails = () => {
       setCurrent(next);
    };
 
+   const isParsableUrl = () => {
+      return listing.url.includes('idealista') || listing.url.includes('thinkspain');
+   }
+
    // locals
    const order: InputOrder[] = [
-      { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url')} onNext={() => listing.url.includes('idealista') ? onNext('sourcecode')() : onNext('title')()} /> },
+      { title: 'Link zur Webseite', attr: 'url', children: <InputLink value={listing.url} onChange={onUpdateListing('url')} onNext={() => isParsableUrl() ? onNext('sourcecode')() : onNext('title')()} /> },
       { title: 'Quelltext', attr: 'sourcecode', children: <InputSourceCode onChange={(v) => { setListing({ ...v, url: listing.url }); setCurrent('title') }} /> },
       { title: 'Titel', attr: 'title', children: <InputText value={listing.title} onChange={onUpdateListing('title')} onNext={onNext('location')} /> },
       { title: 'Standort', attr: 'location', children: <InputLocation value={listing.location} onChange={onUpdateListing('location')} onNext={onNext('image')} /> },

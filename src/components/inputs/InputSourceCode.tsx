@@ -22,7 +22,9 @@ export const InputSourceCode = ({ onChange }: Props) => {
          setWorking(true);
       });
 
-      const parsed = parseHtml(data);
+      const website = data.includes("thinkspain") ? "thinkspain" : "idealista";
+
+      const parsed = parseHtml(data, website);
       setError('');
       if (parsed) {
 

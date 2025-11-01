@@ -1,15 +1,13 @@
 import { Listing } from "@/model/Listing";
 
-export function parseHtml(
-  html: string
-): Omit<Listing, "userId" | "url"> | null {
-  if (!html) {
-    return null;
-  }
+type OmitListing = Omit<Listing, "userId" | "url">;
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-
+/**
+ * parsing idealista
+ * @param doc
+ * @returns
+ */
+function parseIdealista(doc: Document): OmitListing | null {
   const title =
     doc.querySelector(".main-info__title-main")?.textContent?.trim() || "";
   const location =
@@ -69,4 +67,80 @@ export function parseHtml(
     notes: "",
     creationdate: Date.now().toString(),
   };
+}
+
+/**
+ * parse data from thinkSpain
+ * @param doc
+ * @returns
+ */
+function parseThinkSpain(doc: Document): OmitListing | null {
+  const title =
+    doc.querySelector(".description h1.h1")?.textContent?.trim() || "";
+
+  const detailList = Array.from(doc.querySelectorAll(".detail-list li"));
+
+  const price = detailList.at(0)?.textContent?.replace(/€/g, "")?.trim() || "";
+  const sqm = detailList.at(1)?.textContent?.replace(/m2/g, "")?.trim() || "";
+  const rooms = detailList.at(2)?.textContent?.trim() || "";
+
+  const location =
+    doc.querySelector(".locationProximity")?.textContent?.trim() || "";
+
+  const description =
+    doc.querySelector(".property-description")?.textContent?.trim() || "";
+
+  const image =
+    doc.querySelector(".glide__slide-inner img")?.getAttribute("src") || "";
+  const contact = "thinkspain";
+
+  const features: string[] = [];
+
+  Array.from(doc.querySelectorAll(".tags__item")).forEach((li) => {
+    const value = li.textContent?.trim() || "";
+    features.push(value);
+  });
+
+  const year =
+    doc.querySelector(".yearbuilt- .bold")?.textContent?.trim() || "";
+
+  const uuid = new Date().getTime().toString();
+
+  return {
+    uuid,
+    title,
+    location: { lat: 0, lon: 0, country: "", code: "", display: location },
+    price: parseFloat(price.replace(/[^\d]/g, "")).toString(),
+    sqm: parseFloat(sqm.replace(/[^\d]/g, "")).toString(),
+    rooms: parseFloat(rooms.replace(/[^\d]/g, "")).toString(),
+    image,
+    description,
+    contact,
+    features,
+    year,
+    notes: "",
+    creationdate: Date.now().toString(),
+  };
+}
+
+export type Website = "idealista" | "thinkspain";
+
+export function parseHtml(
+  html: string,
+  website: Website = "idealista"
+): OmitListing | null {
+  if (!html) {
+    return null;
+  }
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  if (website === "idealista") {
+    return parseIdealista(doc);
+  } else if (website === "thinkspain") {
+    return parseThinkSpain(doc);
+  }
+
+  return null;
 }
