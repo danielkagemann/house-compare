@@ -69,7 +69,7 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
          const converted = await resizeBase64Image(response);
          console.log('original link', response.length, 'converted link', converted.length);
          onChange(converted);
-      } catch (error) {
+      } catch {
          onChange(response);
       }
    }

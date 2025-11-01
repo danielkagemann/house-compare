@@ -9,7 +9,7 @@ import { Plus, Share } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { CompareButton } from './CompareButton';
 import { Tooltip } from './ui/Tooltip';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Endpoints } from '@/lib/fetch';
 import { useStorage } from '@/context/storage-provider';
 import { toast } from 'sonner';

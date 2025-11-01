@@ -9,7 +9,6 @@ import { motion } from "motion/react";
 import Flag from 'react-world-flags';
 import { Endpoints } from "@/lib/fetch";
 import { toast } from "sonner";
-import { div } from "motion/react-client";
 
 interface HouseCardProps {
    data: Listing;
