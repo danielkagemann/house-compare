@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "backend": "cp -r ../api ./build/api",
+    "backend": "cp -r ./api ./build/api",
     "start": "next start",
     "lint": "eslint"
   },
