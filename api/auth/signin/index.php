@@ -53,11 +53,13 @@ try {
             $email,
             generateLinkToken(6),
             generateLinkToken(),
-            generateLinkToken()
         );
         
         // Send email with token
-        $success = sendEMail($email, "Dein Bestätigungs-Code lautet: " . $newUser['access']);
+        $success = sendEMail($email, 
+        "Bestätige Deine EMail-Adresse",
+        "Bestätige Deine EMail-Adresse mit folgendem Code: "
+        . $newUser['access']);
         
         if (!$success) {
             throw new Exception("Email konnte nicht verschickt werden");

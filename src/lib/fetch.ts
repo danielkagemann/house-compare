@@ -149,6 +149,16 @@ async function authVerifyCode(code: string): Promise<Response> {
   return response;
 }
 
+async function authRemove(token: string): Promise<Response> {
+  const response = await fetch(`${BASE}/api/auth/remove/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+}
+
 export const Endpoints = {
   propertyList,
   propertyGet,
@@ -159,4 +169,5 @@ export const Endpoints = {
   isAuthenticated,
   authSignIn,
   authVerifyCode,
+  authRemove,
 };

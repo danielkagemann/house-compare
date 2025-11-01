@@ -89,6 +89,21 @@ class Database {
         return $user;
     }
 
+    public function removeUser(int $userId): bool {
+        $stmt = $this->pdo->prepare("DELETE FROM USER WHERE id = :id");
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            // Also remove all listings for this user
+            $stmt = $this->pdo->prepare("DELETE FROM LISTING WHERE userId = :userId");
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return true;
+        }
+        
+        return false;
+    }   
+
     public function getUserByAccessCode(string $accessCode): ?array {
         $stmt = $this->pdo->prepare("SELECT access FROM USER WHERE access = :access LIMIT 1");
         $stmt->bindParam(':access', $accessCode, PDO::PARAM_STR);
@@ -96,6 +111,15 @@ class Database {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $user ? $user : null;
+    }
+
+    public function getUserEmailById(int $userId): ?string {
+        $stmt = $this->pdo->prepare("SELECT email FROM USER WHERE id = :id LIMIT 1");
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ? $user['email'] : null;
     }
 
     public function getListingsByUserId(int $userId): array {
@@ -232,7 +256,7 @@ class Database {
 }
 
 // Email sending function
-function sendEMail(string $email, string $message): bool {
+function sendEMail(string $email, string $title, string $body): bool {
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
     
     try {
@@ -249,17 +273,29 @@ function sendEMail(string $email, string $message): bool {
         $mail->setFrom('info@villaya.de', 'Villaya');
         $mail->addAddress($email);
         $mail->addReplyTo($email);
+
+        // Read email template
+        $templatePath = __DIR__ . '/email-template.html';
+        if (file_exists($templatePath)) {
+            $message = file_get_contents($templatePath);
+            // Replace placeholders in template
+            $message = str_replace('__TITLE__', $title, $message);
+            $message = str_replace('__BODY__', $body, $message);
+        } else {
+            // Fallback to simple HTML if template doesn't exist
+            $message = "<html><body><h2>{$title}</h2><p>{$body}</p></body></html>";
+        }
         
         // Content
         $mail->CharSet = 'UTF-8';
-        $mail->isHTML(false);
-        $mail->Subject = 'Neue Nachricht';
+        $mail->isHTML(true);
+        $mail->Subject = 'Neue Nachricht von Villaya';
         $mail->Body    = $message;
         
         $mail->send();
         return true;
     } catch (Exception $e) {
-        error_log("Email could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        logMessage("Email could not be sent. Mailer Error: {$mail->ErrorInfo}", "error");
         return false;
     }
 }
