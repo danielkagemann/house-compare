@@ -63,7 +63,7 @@ jobs:
           protocol: ftp
           port: 21
           local-dir: build/
-          server-dir: /httpdocs/
+          server-dir: /
           exclude: |
             **/.git*
             **/.github*
