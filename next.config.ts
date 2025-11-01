@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  trailingSlash: true,
   rules: [
     {
       exclude: [path.resolve(__dirname, "api")],
