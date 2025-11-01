@@ -25,7 +25,7 @@ jobs:
       - name: Build with Next.js
         run: npm run build
 
-      # Baue ein Artifact, das den Build enthält
+      # Artifact speichern (Build-Ordner)
       - name: Upload build output as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -43,11 +43,31 @@ jobs:
           name: next-build
           path: build/
 
-      - name: Deploy via Web Deploy
-        uses: SamKirkland/web-deploy@v1
+      # Optional: API-Ordner hinzufügen (z. B. PHP-Backend)
+      - name: Checkout source for API
+        uses: actions/checkout@v4
+
+      - name: Include API folder
+        run: |
+          if [ -d "api" ]; then
+            cp -r api build/
+          fi
+
+      # ✅ Deployment per FTP
+      - name: Deploy to Netcup via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          target-server: ${{ secrets.HOST }} # FTP Server
-          remote-user: ${{ secrets.USER }} # FTP Benutzer
-          private-ssh-key: ${{ secrets.PASS }} # FTP Passwort
-          source-path: build/
-          destination-path: /
+          server: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASS }}
+          protocol: ftp
+          port: 21
+          local-dir: build/
+          server-dir: /httpdocs/
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/**
+            **/.next/**
+          timeout: 60000
+          log-level: minimal
