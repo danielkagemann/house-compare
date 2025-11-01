@@ -1,5 +1,6 @@
 <?php
 require_once '../../db.php';
+require_once '../../logger.php';
 
 /**
  * api/signin
@@ -33,7 +34,7 @@ try {
     
     if (json_last_error() !== JSON_ERROR_NONE) {
         http_response_code(400);
-        echo json_encode(['error' => 'Invalid JSON']);
+        echo json_encode(['error' => 'Ungültige Parameter']);
         exit();
     }
     
@@ -44,7 +45,9 @@ try {
         echo json_encode(['error' => 'Keine EMail angegeben.']);
         exit();
     }
-    
+
+    logMessage(msg: "Sign-in attempt for email: $email");
+
     // Search in database for email
     global $db;
     $user = $db->getUserByEmail($email);
@@ -62,8 +65,7 @@ try {
         $success = sendEMail($email, "Dein Bestätigungs-Code lautet: " . $newUser['access']);
         
         if (!$success) {
-            error_log("Failed to send email to: " . $email);
-            // Still return success to avoid revealing email sending issues to client
+            throw new Exception("Email konnte nicht verschickt werden");
         }
         
         http_response_code(204); // No Content
@@ -75,8 +77,7 @@ try {
     echo json_encode(['token' => $user['access']]);
     
 } catch (Exception $e) {
-    error_log("Signin error: " . $e->getMessage());
+    logMessage(msg: $e->getMessage(), level: "error");
     http_response_code(500);
     echo json_encode(['error' => 'Internal server error']);
 }
-?>

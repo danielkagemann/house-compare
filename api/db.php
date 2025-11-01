@@ -108,7 +108,7 @@ function sendEMail(string $email, string $message): bool {
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host       = 'mxe9ce.netcup.net';
+        $mail->Host       = 'w0083a6c.kasserver.com';
         $mail->SMTPAuth   = true;
         $mail->Username   = 'info@villaya.de';
         $mail->Password   = '30092008!Villaya';
