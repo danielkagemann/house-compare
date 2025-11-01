@@ -24,11 +24,11 @@ export const Hero = ({ children }: HeroProps) => (
       </div>
 
       {/* Right side */}
-      <div className="lg:px-0 px-4">
+      <div className="lg:px-0 px-4 justify-center flex">
          <img
             src="/assets/images/main-bg.jpg"
             alt="Beach villas"
-            className="w-full rounded-2xl object-cover"
+            className="w-1/2 lg:w-full rounded-2xl object-cover"
          />
       </div>
    </div>

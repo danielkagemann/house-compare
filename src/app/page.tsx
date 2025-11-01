@@ -1,6 +1,7 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
+import { Loading } from "@/components/Loading";
 import { PageLayout } from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ import { Endpoints } from "@/lib/fetch";
 import { Heart, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { flushSync } from "react-dom";
 
 type UserAction = {
   type: "email" | "code";
@@ -20,6 +22,7 @@ export default function Home() {
   // state
   const [action, setAction] = useState<UserAction>({ type: "email", value: "" });
   const [error, setError] = useState<string | null>(null);
+  const [working, setWorking] = useState<boolean>(false);
 
   // hooks
   const $router = useRouter();
@@ -40,24 +43,28 @@ export default function Home() {
    */
   async function onSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    flushSync(() => setWorking(true));
 
     const response = await Endpoints.authSignIn(action.value);
 
     if (!response.ok) {
       const err = await response.json();
       setError(err.message ?? "Fehler beim Anmelden");
+      setWorking(false);
       return;
     } else {
       // depending on status we do something else
       if (response.status === 204) {
         // email sent, ask for code
         setAction({ type: "code", value: "" });
+        setWorking(false);
         return;
       }
 
       const data = await response.json();
       validAndContinue(data);
       setAction({ type: "code", value: "" });
+      setWorking(false);
     }
   }
 
@@ -68,14 +75,18 @@ export default function Home() {
   async function onConfirmCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    flushSync(() => setWorking(true));
+
     const response = await Endpoints.authVerifyCode(action.value);
     if (!response.ok) {
       const err = await response.json();
       setError(err.message ?? "Fehler beim Bestätigen des Codes");
+      setWorking(false);
       return;
     }
     const data = await response.json();
     validAndContinue(data);
+    setWorking(false);
   }
 
   /**
@@ -140,6 +151,10 @@ export default function Home() {
         <p className="text-gray-600 text-sm">{text}</p>
       </div>
     );
+  }
+
+  if (working) {
+    return <Loading />;
   }
 
   return (

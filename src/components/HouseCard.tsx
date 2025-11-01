@@ -1,6 +1,6 @@
 import { distanceBetweenCoordinates, getSquareMeterPrice, Listing } from "@/model/Listing"
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { BedDouble, Calendar, Car, Heart, PencilLine, MapPin, Ruler, Trash } from "lucide-react";
+import { BedDouble, Calendar, Car, Heart, MapPin, Ruler, Trash, Eye } from "lucide-react";
 import { ListingPreview } from "./ListingPreview";
 import { Sheet, SheetContent } from "./ui/sheet";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import { motion } from "motion/react";
 import Flag from 'react-world-flags';
 import { Endpoints } from "@/lib/fetch";
 import { toast } from "sonner";
+import { div } from "motion/react-client";
 
 interface HouseCardProps {
    data: Listing;
@@ -36,7 +37,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
 
    return (
       <>
-         <Card className={`w-full rounded-2xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip relative ${isMarked ? 'grayscale' : ''}`}>
+         <Card className={`w-full rounded-xl shadow-md hover:shadow-xl transition-all py-0 overflow-clip relative ${isMarked ? 'grayscale' : ''}`}>
             {isMarked && (
                <div
                   className="absolute inset-0 z-10 pointer-events-none"
@@ -52,7 +53,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                <img
                   src={data.image}
                   alt={data.title}
-                  className="w-full h-48 object-cover rounded-t-2xl hover:scale-110 transition-all"
+                  className="w-full h-48 object-cover rounded-t-xl hover:scale-110 transition-all"
                />
 
                <motion.button
@@ -74,7 +75,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   whileTap={{ y: -5 }}
                   transition={{ duration: 0.2 }}
                >
-                  <PencilLine size={14} className="text-white" />
+                  <Eye size={14} className="text-white" />
                </motion.button>
                <motion.button
                   type="button"
@@ -98,14 +99,14 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   <div className="text-sm text-gray-500 flex items-center gap-1">
                      <MapPin size={14} /> <span className="truncate">{data.location.display}</span> <Flag code={data.location.code} width={16} />
                   </div>
-                  {distance && (<p className="text-sm text-gray-500 flex items-center gap-1">
+                  {distance && (<div className="text-sm text-gray-500 flex items-center gap-1">
                      <Car size={14} /> {distance.toFixed(1)} km entfernt
-                  </p>)}
+                  </div>)}
 
-                  <p className="text-xl font-semibold text-primary mt-2">
+                  <div className="text-xl font-semibold text-primary mt-2">
                      € {parseFloat(data.price).toLocaleString()}
-                  </p>
-                  <p className="text-sm text-gray-500 -mt-1">{getSquareMeterPrice(data.price, data.sqm)}</p>
+                  </div>
+                  <div className="text-sm text-gray-500 -mt-1">{getSquareMeterPrice(data.price, data.sqm)}</div>
                </div>
                {!$save.filter.compactView && (
                   <div className="flex gap-1 justify-between text-sm px-2">
@@ -122,10 +123,10 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                )}
             </CardHeader>
             {!$save.filter.compactView && (
-               <CardContent className="p-2">
-                  <p className="text-sm text-gray-700 mt-1 leading-snug">
+               <CardContent className="p-2 pt-0">
+                  <div className="text-sm text-gray-700 mt-1 leading-snug">
                      {data.description.slice(0, 100)}{data.description.length > 100 ? '...' : ''}
-                  </p>
+                  </div>
                </CardContent>
             )}
          </Card >

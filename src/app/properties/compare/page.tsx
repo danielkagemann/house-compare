@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import { ListingComparison } from "@/components/ListingComparison";
+import { Loading } from "@/components/Loading";
 
 export default function Home() {
   return (
-    <Suspense fallback={<div className="w-screen h-screen flex justify-center items-center">Daten werden geladen...</div>}>
+    <Suspense fallback={<Loading />}>
       <ListingComparison />
     </Suspense>
   );

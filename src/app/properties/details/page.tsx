@@ -1,9 +1,10 @@
 import { ListingDetails } from "@/components/ListingDetails";
+import { Loading } from "@/components/Loading";
 import { Suspense } from "react";
 
 export default function AddPage() {
    return (
-      <Suspense fallback={<div className="w-screen h-screen flex justify-center items-center">Daten werden geladen...</div>}>
+      <Suspense fallback={<Loading />}>
          <ListingDetails />
       </Suspense>
    );
