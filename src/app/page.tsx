@@ -130,7 +130,7 @@ export default function Home() {
    */
   function renderFeature(label: string, icon: React.ReactNode, text: string) {
     return (
-      <div className="flex flex-col gap-2 w-1/3">
+      <div className="flex flex-col gap-2 w-full lg:w-1/3">
         <div className="flex gap-1 items-center">
           <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">
             {icon}
@@ -147,7 +147,7 @@ export default function Home() {
       <PageLayout className="min-h-screen items-center justify-center">
         {renderAction()}
       </PageLayout>
-      <PageLayout className="flex flex-row items-start gap-4">
+      <PageLayout className="flex lg:flex-row flex-col items-start gap-4 lg:px-0 px-4">
         {renderFeature("Sammle Deine Favoriten", <Heart size={16} />, "Suche atemberaubende Villen aus aller Welt und speichere diejenigen, die deine Fantasie beflügeln. Erstelle eine persönliche Sammlung, die deinen einzigartigen Geschmack widerspiegelt.")}
         {renderFeature("Speichere mit Deiner Email", <Send size={16} />, "Melde dich einfach mit deiner E-Mail-Adresse an, um eine Sammlung zu erstellen und von überall darauf zuzugreifen.")}
         {renderFeature("Teile Deine Sammlung", <Heart size={16} />, "Erstelle einen teilbaren Link, um deine Sammlung mit Familie und Freunden zu teilen.")}

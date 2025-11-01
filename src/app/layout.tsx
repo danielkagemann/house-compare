@@ -1,9 +1,9 @@
 "use client";
 
 import { Toaster } from "@/components/ui/sonner";
-import "./globals.css";
 import { StorageProvider } from "@/context/storage-provider";
 import { Footer } from "@/components/Footer";
+import "./globals.css";
 
 export default function RootLayout({
   children,

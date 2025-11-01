@@ -120,7 +120,7 @@ export const ListingDetails = () => {
          <Header />
          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/*user input*/}
-            <div>
+            <div className="px-4 md:px-0">
                <h2 className="font-bold text-lg">{isEditing ? 'Immobilie bearbeiten' : 'Neue Immobilie hinzufügen'}</h2>
 
                <Accordion

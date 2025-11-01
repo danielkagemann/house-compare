@@ -31,7 +31,7 @@ export const Footer = () => {
                <p>Dies ist ein privates Projekt von <a href="https://danielkagemann.name">Daniel Kagemann</a></p>
                <Link href="https://paypal.me/DanielKagemann" className="text-primary hover:underline text-xs">Unterstützen via paypal</Link>
             </div>
-            <div className="flex gap-3 text-xs items-end justify-end">
+            <div className="flex gap-1 text-xs items-end justify-end flex-col lg:flex-row lg:gap-3">
                <Link href="/" className="text-primary hover:underline">Start</Link>
                {$auth &&
                   <Link href="/properties" className="text-primary hover:underline">Immobilien</Link>}

@@ -24,7 +24,7 @@ export const Hero = ({ children }: HeroProps) => (
       </div>
 
       {/* Right side */}
-      <div>
+      <div className="lg:px-0 px-4">
          <img
             src="/assets/images/main-bg.jpg"
             alt="Beach villas"
