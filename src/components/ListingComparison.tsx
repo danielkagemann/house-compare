@@ -2,7 +2,7 @@
 
 import { useStorage } from "@/context/storage-provider";
 import { getSquareMeterPrice, Listing } from "@/model/Listing";
-import { BedDouble, Calendar, Layout, MapPin, Ruler, User } from "lucide-react";
+import { BedDouble, Calendar, MapPin, Ruler, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ReadMore } from "./ui/Readmore";
 import { FeatureList, Features } from "./Features";

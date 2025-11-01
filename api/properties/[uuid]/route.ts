@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import db, { getUserIdFromAccessToken } from "@/lib/db";
+import db, { getUserIdFromAccessToken } from "../../db";
 import { Listing } from "@/model/Listing";
 
 export async function GET(
