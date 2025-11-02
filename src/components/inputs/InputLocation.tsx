@@ -9,6 +9,11 @@ import { useState } from "react";
 import { flushSync } from "react-dom";
 import { Spinner } from "../ui/spinner";
 import { Endpoints } from "@/lib/fetch";
+import dynamic from "next/dynamic";
+
+const Map = dynamic(() => import("../Map"), {
+   ssr: false,
+});
 
 interface Props {
    value: Location;
@@ -30,6 +35,10 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
       setWorking(false);
    }
 
+   function hasCoords() {
+      return value.lat !== undefined && value.lon !== undefined && value.lat !== 0 && value.lon !== 0;
+   }
+
    return (
       <>
          <p>Bitte gib den Standort der Immobilie an. Gib die ungefähre Adresse ein oder Koordinaten in der Form Latitude,Longitude.</p>
@@ -38,8 +47,10 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
             {working ? <Spinner /> : <Button variant="outline" onClick={onFindAddr}><MapPin size={16} /></Button>}
          </div>
 
-         <p className="text-sm">{value.lat && value.lon ? `${value.lat}, ${value.lon} in ${value.country}` : "Keine gültige Adresse."}</p>
+         <p className="text-sm">{hasCoords() ? `${value.lat}, ${value.lon} in ${value.country}` : "Keine gültige Adresse."}</p>
          {!working && <InputNext onClick={onNext} />}
+
+         {hasCoords() && <Map location={{ lat: value.lat!, lon: value.lon! }} className="h-30" />}
       </>
    );
 };

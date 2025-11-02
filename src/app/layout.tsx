@@ -3,6 +3,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { StorageProvider } from "@/context/storage-provider";
 import { Footer } from "@/components/Footer";
+import 'leaflet/dist/leaflet.css';
 import "./globals.css";
 
 export default function RootLayout({

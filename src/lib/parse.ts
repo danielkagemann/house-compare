@@ -84,8 +84,19 @@ function parseThinkSpain(doc: Document): OmitListing | null {
   const sqm = detailList.at(1)?.textContent?.replace(/m2/g, "")?.trim() || "";
   const rooms = detailList.at(2)?.textContent?.trim() || "";
 
-  const location =
+  let location =
     doc.querySelector(".locationProximity")?.textContent?.trim() || "";
+
+  // location can be detected better
+  const mapElement = doc.querySelector("#map");
+
+  if (mapElement) {
+    const lat = mapElement.getAttribute("data-lat");
+    const lng = mapElement.getAttribute("data-lng");
+    if (lat && lng) {
+      location = `(${lat},${lng})`;
+    }
+  }
 
   const description =
     doc.querySelector(".property-description")?.textContent?.trim() || "";
