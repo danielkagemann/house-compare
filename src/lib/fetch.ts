@@ -49,11 +49,17 @@ export const useGetPropertyList = (onlySelected: boolean = false) => {
  * @param token
  * @returns
  */
-async function propertyShareList(share: string): Promise<Listing[]> {
-  const res = await fetch(`${BASE}/api/properties/shared/?from=${share}`);
-  const data = await res.json();
-  return data;
-}
+export const useGetSharedPropertyList = (share: string | null) => {
+  return useQuery({
+    queryKey: ["shared-properties", share],
+    queryFn: async () => {
+      const res = await fetch(`${BASE}/api/properties/shared/?from=${share}`);
+      const data = await res.json();
+      return data;
+    },
+    enabled: !!share,
+  });
+};
 
 /**
  * get property details
@@ -61,15 +67,23 @@ async function propertyShareList(share: string): Promise<Listing[]> {
  * @param token
  * @returns
  */
-async function propertyGet(uuid: string, token: string): Promise<Listing> {
-  const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+export const useGetPropertyDetails = (uuid: string | null) => {
+  const $storage = useStorage();
+
+  return useQuery({
+    queryKey: ["property", uuid, $storage.token],
+    queryFn: async () => {
+      const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
+        headers: {
+          Authorization: `Bearer ${$storage.token}`,
+        },
+      });
+      const data = await res.json();
+      return data;
     },
+    enabled: !!uuid && !!$storage.token,
   });
-  const data = await res.json();
-  return data;
-}
+};
 
 /**
  * save or update property
@@ -214,8 +228,6 @@ async function authShare(token: string): Promise<string | null> {
 }
 
 export const Endpoints = {
-  propertyShareList,
-  propertyGet,
   propertySet,
   propertyDelete,
   imageProxy,

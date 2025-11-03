@@ -19,7 +19,7 @@ import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
 import { useStorage } from "@/context/storage-provider";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Endpoints } from "@/lib/fetch";
+import { Endpoints, useGetPropertyDetails } from "@/lib/fetch";
 import { Header } from "./Header";
 import { toast } from "sonner";
 import { PageLayout } from "./PageLayout";
@@ -56,16 +56,26 @@ export const ListingDetails = () => {
       features: []
    });
 
-   useEffect(() => {
-      const uuid = $url.get('id');
+   const { data } = useGetPropertyDetails($url.get('id'));
 
-      if (uuid && $save.token) {
-         Endpoints.propertyGet(uuid, $save.token || '').then((data) => {
-            setListing({ ...data });
-            setIsEditing(true);
-         });
+   useEffect(() => {
+      if (data) {
+         setIsEditing(true);
+         setListing({ ...data });
       }
-   }, [$url, $save.token]);
+   }, [data])
+
+   // useEffect(() => {
+   //    const uuid = $url.get('id');
+
+
+   //    if (uuid && $save.token) {
+   //       Endpoints.propertyGet(uuid, $save.token || '').then((data) => {
+   //          setListing({ ...data });
+   //          setIsEditing(true);
+   //       });
+   //    }
+   // }, [$url, $save.token]);
 
    /**
   * updating value for given attribute

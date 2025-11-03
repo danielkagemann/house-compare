@@ -1,13 +1,11 @@
 "use client";
 
-import { useStorage } from "@/context/storage-provider";
 import { getSquareMeterPrice, Listing } from "@/model/Listing";
 import { BedDouble, Calendar, MapPin, Ruler, User } from "lucide-react";
-import { useEffect, useState } from "react";
 import { ReadMore } from "./ui/Readmore";
 import { FeatureList, Features } from "./Features";
 import Flag from 'react-world-flags'
-import { Endpoints, useGetPropertyList } from "@/lib/fetch";
+import { useGetPropertyList } from "@/lib/fetch";
 import { PageLayout } from "./PageLayout";
 import { Header } from "./Header";
 import { Loading } from "./Loading";
