@@ -31,8 +31,8 @@ export const Footer = () => {
       if (!$auth || isShareMode()) return null;
       return (
          <Dialog>
-            <DialogTrigger asChild>
-               <button className="text-primary hover:underline text-xs" onClick={onRemoveAccount}>Konto entfernen</button>
+            <DialogTrigger>
+               <div className="text-primary hover:underline text-xs">Konto entfernen</div>
             </DialogTrigger>
             <DialogContent>
                <DialogHeader>

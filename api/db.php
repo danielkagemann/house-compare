@@ -7,42 +7,59 @@ require_once 'logger.php';
 class Database {
     private $pdo;
 
-    public function __construct($dbFile = 'villaya-data.db') {
-        $this->pdo = new PDO('sqlite:' . __DIR__ . '/' . $dbFile);
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $this->createTables();
+    public function __construct() {
+        $host = 'localhost';
+        $dbname = 'd0453ab1';
+        $username = 'd0453ab1';
+        $password = '30092008!Villaya';
+        
+        try {
+            $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
+            $this->pdo = new PDO($dsn, $username, $password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            
+            $this->createTables();
+        } catch (PDOException $e) {
+            logMessage("Database connection failed: " . $e->getMessage(), "error");
+            throw $e;
+        }
     }
 
     private function createTables() {
         $this->pdo->exec(
             "CREATE TABLE IF NOT EXISTS USER (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                creationdate DATETIME DEFAULT CURRENT_TIMESTAMP,
-                email TEXT NOT NULL UNIQUE,
-                access TEXT NOT NULL,
-                share TEXT
-            )"
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                creationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                access VARCHAR(20) NOT NULL,
+                share VARCHAR(255) NULL,
+                INDEX idx_access (access),
+                INDEX idx_share (share)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
         );
 
         $this->pdo->exec(
             "CREATE TABLE IF NOT EXISTS LISTING (
-                uuid TEXT NOT NULL UNIQUE,
-                userId INTEGER NOT NULL,
-                creationdate DATETIME DEFAULT CURRENT_TIMESTAMP,
-                title TEXT,
-                url TEXT,
-                price TEXT,
-                sqm TEXT,
-                rooms TEXT,
-                location TEXT,
-                image TEXT,
-                description TEXT,
-                contact TEXT,
-                year TEXT,
-                features TEXT,
-                notes TEXT
-            )"
+                uuid VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
+                userId INT NOT NULL,
+                creationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                title VARCHAR(500) NULL,
+                url TEXT NULL,
+                price VARCHAR(100) NULL,
+                sqm VARCHAR(100) NULL,
+                rooms VARCHAR(100) NULL,
+                location JSON NULL,
+                image LONGTEXT NULL,
+                description TEXT NULL,
+                contact TEXT NULL,
+                year VARCHAR(50) NULL,
+                features JSON NULL,
+                notes TEXT NULL,
+                FOREIGN KEY (userId) REFERENCES USER(id) ON DELETE CASCADE,
+                INDEX idx_userId (userId),
+                INDEX idx_creationdate (creationdate)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
         );
     }
 
@@ -102,16 +119,7 @@ class Database {
     public function removeUser(int $userId): bool {
         $stmt = $this->pdo->prepare("DELETE FROM USER WHERE id = :id");
         $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
-        if ($stmt->execute()) {
-            // Also remove all listings for this user
-            $stmt = $this->pdo->prepare("DELETE FROM LISTING WHERE userId = :userId");
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            return true;
-        }
-        
-        return false;
+        return $stmt->execute();
     }   
 
     public function getUserByAccessCode(string $accessCode): ?array {
@@ -147,7 +155,7 @@ class Database {
         $stmt->execute();
         $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Convert JSON strings back to arrays for location and features
+        // Convert JSON columns back to arrays for location and features
         foreach ($listings as &$listing) {
             if (isset($listing['location']) && $listing['location']) {
                 $listing['location'] = json_decode($listing['location'], true);
@@ -171,7 +179,7 @@ class Database {
             return null;
         }
 
-        // Convert JSON strings back to arrays for location and features
+        // Convert JSON columns back to arrays for location and features
         if (isset($listing['location']) && $listing['location']) {
             $listing['location'] = json_decode($listing['location'], true);
         }
@@ -189,9 +197,9 @@ class Database {
         $stmt->execute();
         $existing = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Convert arrays to JSON strings for storage
-        $locationJson = isset($listing['location']) ? json_encode($listing['location']) : null;
-        $featuresJson = isset($listing['features']) ? json_encode($listing['features']) : null;
+        // Convert arrays to JSON for MariaDB storage
+        $locationJson = isset($listing['location']) ? json_encode($listing['location'], JSON_UNESCAPED_UNICODE) : null;
+        $featuresJson = isset($listing['features']) ? json_encode($listing['features'], JSON_UNESCAPED_UNICODE) : null;
 
         if ($existing) {
             // Update existing listing
@@ -256,7 +264,7 @@ class Database {
             return null;
         }
 
-        // Convert JSON strings back to arrays for location and features
+        // Convert JSON columns back to arrays for location and features
         if (isset($listing['location']) && $listing['location']) {
             $listing['location'] = json_decode($listing['location'], true);
         }
@@ -329,4 +337,10 @@ function generateLinkToken(int $len = 30): string {
     return $token;
 }
 
-$db = new Database();
+try {
+    $db = new Database();
+} catch (PDOException $e) {
+    logMessage("Failed to initialize database: " . $e->getMessage(), "error");
+    // Fallback or error handling can be added here
+    throw $e;
+}
