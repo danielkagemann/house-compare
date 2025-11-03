@@ -4,7 +4,28 @@ import { Toaster } from "@/components/ui/sonner";
 import { StorageProvider } from "@/context/storage-provider";
 import { Footer } from "@/components/Footer";
 import 'leaflet/dist/leaflet.css';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+      retry: (failureCount, error) => {
+        // Don't retry on 4xx errors (client errors)
+        if (error instanceof Error && 'status' in error) {
+          const status = (error as any).status;
+          if (status >= 400 && status < 500) return false;
+        }
+        return failureCount < 3;
+      },
+    },
+    mutations: {
+      retry: false, // Don't retry mutations by default
+    },
+  },
+})
 
 export default function RootLayout({
   children,
@@ -35,13 +56,15 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <StorageProvider>
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <Footer />
-          <Toaster position="top-center" expand={true} richColors />
-        </StorageProvider>
+        <QueryClientProvider client={queryClient}>
+          <StorageProvider>
+            <main className="min-h-screen">
+              {children}
+            </main>
+            <Footer />
+            <Toaster position="top-center" expand={true} richColors />
+          </StorageProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );

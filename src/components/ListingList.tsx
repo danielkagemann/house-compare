@@ -5,26 +5,21 @@ import { HouseCard } from "./HouseCard";
 import { PageLayout } from "./PageLayout";
 import { Header } from "./Header";
 import { NoListings } from "./NoListings";
-import { useEffect, useState } from "react";
 import { useStorage } from "@/context/storage-provider";
-import { Endpoints } from "@/lib/fetch";
+import { useGetPropertyList } from "@/lib/fetch";
 import { Listing } from "@/model/Listing";
+import { Loading } from "./Loading";
 
 export const ListingList = () => {
    // hook
    const $storage = useStorage();
 
-   // state
-   const [listings, setListings] = useState<Listing[]>([]);
+   // queries
+   const { data: listings, isLoading } = useGetPropertyList();
 
-   useEffect(() => {
-      if ($storage.token && $storage.token.length > 0) {
-         Endpoints.propertyList($storage.token).then((data) => {
-            setListings(data);
-         });
-      }
-
-   }, [$storage.token]);
+   if (isLoading) {
+      return <Loading />
+   }
 
    // render empty data
    if (listings.length === 0) {
@@ -42,7 +37,7 @@ export const ListingList = () => {
    }
 
    const getFilteredListings = (): Listing[] => {
-      return $storage.filter.removeFromList ? listings.filter(item => !isFilteredOut(item)) : listings;
+      return $storage.filter.removeFromList ? listings.filter((item: Listing) => !isFilteredOut(item)) : listings;
    };
 
    const list = getFilteredListings();

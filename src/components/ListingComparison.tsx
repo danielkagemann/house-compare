@@ -7,42 +7,24 @@ import { useEffect, useState } from "react";
 import { ReadMore } from "./ui/Readmore";
 import { FeatureList, Features } from "./Features";
 import Flag from 'react-world-flags'
-import { Endpoints } from "@/lib/fetch";
+import { Endpoints, useGetPropertyList } from "@/lib/fetch";
 import { PageLayout } from "./PageLayout";
 import { Header } from "./Header";
+import { Loading } from "./Loading";
 
 export const ListingComparison = () => {
-   // hooks
-   const $storage = useStorage();
 
-   // state
-   const [items, setItems] = useState<Listing[]>([]);
-
-   useEffect(() => {
-
-      if ($storage.token && $storage.token.length > 0) {
-         Endpoints.propertyList($storage.token).then((data) => {
-            const ls = [];
-            for (const uuid of $storage.selected) {
-               const item = data.find(l => l.uuid.trim() === uuid.trim());
-               if (item) {
-                  ls.push(item);
-               }
-            }
-            setItems(ls);
-         });
-      }
-   }, [$storage.selected, $storage.token]);
-
+   // query selected items
+   const { data, isLoading } = useGetPropertyList(true);
 
    function getFeatures(index: number): FeatureList[] {
       // get other features translated to only string array and remove this one
-      const tmp = [...items];
+      const tmp = [...data];
       tmp.splice(index, 1);
 
       const flatList = tmp.map((item) => item?.features ?? []).flat();
 
-      const currentItem = items[index];
+      const currentItem = data[index];
 
       // get the features NOT in otherFeatures
       const highlight = (currentItem?.features ?? []).filter((feature: string) => !flatList.includes(feature));
@@ -52,7 +34,6 @@ export const ListingComparison = () => {
          highlight: highlight.includes(val)
       }))
    }
-
 
    function renderCell(item: Listing, attr: string, index: number) {
       return (
@@ -76,9 +57,13 @@ export const ListingComparison = () => {
    function renderRow(attr: string) {
       return (
          <tr>
-            {items.map((item, index) => renderCell(item, attr, index))}
+            {data.map((item: Listing, index: number) => renderCell(item, attr, index))}
          </tr>
       );
+   }
+
+   if (isLoading) {
+      return <Loading />;
    }
 
    return (

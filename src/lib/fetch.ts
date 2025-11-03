@@ -1,4 +1,6 @@
+import { useStorage } from "@/context/storage-provider";
 import { Listing, Location } from "@/model/Listing";
+import { useQuery } from "@tanstack/react-query";
 
 const BASE = "https://villaya.de";
 
@@ -6,15 +8,41 @@ const BASE = "https://villaya.de";
  * fetch all properties from the api
  * @returns
  */
-async function propertyList(token: string): Promise<Listing[]> {
-  const res = await fetch(`${BASE}/api/properties/`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+
+export const useGetPropertyList = (onlySelected: boolean = false) => {
+  const $storage = useStorage();
+
+  return useQuery({
+    queryKey: ["properties", $storage.token, onlySelected, $storage.selected],
+    queryFn: async () => {
+      if (!$storage.token) {
+        return [];
+      }
+      const res = await fetch(`${BASE}/api/properties/`, {
+        headers: {
+          Authorization: `Bearer ${$storage.token}`,
+        },
+      });
+      if (!res.ok) {
+        return [];
+      }
+      const data = await res.json();
+
+      if (onlySelected) {
+        const ls: Listing[] = [];
+        console.log("only selected", $storage.selected);
+        for (const uuid of $storage.selected) {
+          const item = data.find((l: Listing) => l.uuid.trim() === uuid.trim());
+          if (item) {
+            ls.push(item);
+          }
+        }
+        return ls;
+      }
+      return data;
     },
   });
-  const data = await res.json();
-  return data;
-}
+};
 
 /**
  * get shared list
@@ -186,7 +214,6 @@ async function authShare(token: string): Promise<string | null> {
 }
 
 export const Endpoints = {
-  propertyList,
   propertyShareList,
   propertyGet,
   propertySet,
