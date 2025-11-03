@@ -90,6 +90,7 @@ export const useGetPropertyDetails = (uuid: string | null) => {
  * @param listing
  * @param token
  */
+// TODO convert
 async function propertySet(listing: Listing, token: string): Promise<boolean> {
   const res = await fetch(
     `${BASE}/api/properties/details/?uuid=${listing.uuid}`,
@@ -106,7 +107,7 @@ async function propertySet(listing: Listing, token: string): Promise<boolean> {
 }
 
 /**
- * get image from backend and return as base64 string
+ * get image from backend and return as base64 string. will stay as simple fetch
  * @param url
  * @returns
  */
@@ -135,7 +136,7 @@ async function imageProxy(url: string): Promise<string> {
 }
 
 /**
- * get location with logic if from address or from coordinates
+ * get location with logic if from address or from coordinates. will stay as simple fetch
  * @param query
  * @returns
  */
@@ -149,7 +150,6 @@ async function locationLookup(query: string): Promise<Location | null> {
     }
     return result.json();
   } catch (error) {
-    console.error("Error in locationLookup:", error);
     return null;
   }
 }
@@ -159,6 +159,7 @@ async function locationLookup(query: string): Promise<Location | null> {
  * @param token
  * @returns
  */
+// TODO convert
 async function propertyDelete(uuid: string, token: string): Promise<boolean> {
   const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
     method: "DELETE",
@@ -174,16 +175,27 @@ async function propertyDelete(uuid: string, token: string): Promise<boolean> {
  * @param token
  * @returns
  */
-async function isAuthenticated(token: string): Promise<boolean> {
-  const res = await fetch(`${BASE}/api/auth/validate-token/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
+export const useValidateToken = () => {
+  const $storage = useStorage();
+  return useQuery({
+    queryKey: ["is-authenticated", $storage.token],
+    queryFn: async () => {
+      if (!$storage.token) {
+        return false;
+      }
+      const res = await fetch(`${BASE}/api/auth/validate-token/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${$storage.token}`,
+        },
+      });
+      return res.status === 204;
     },
+    enabled: !!$storage.token,
   });
-  return res.status === 204;
-}
+};
 
+// TODO convert
 async function authSignIn(email: string): Promise<Response> {
   const response = await fetch(`${BASE}/api/auth/signin/`, {
     method: "POST",
@@ -195,6 +207,7 @@ async function authSignIn(email: string): Promise<Response> {
   return response;
 }
 
+// TODO convert
 async function authVerifyCode(code: string): Promise<Response> {
   const response = await fetch(`${BASE}/api/auth/verify-code/?code=${code}`, {
     method: "GET",
@@ -202,6 +215,7 @@ async function authVerifyCode(code: string): Promise<Response> {
   return response;
 }
 
+// TODO convert
 async function authRemove(token: string): Promise<Response> {
   const response = await fetch(`${BASE}/api/auth/remove/`, {
     method: "DELETE",
@@ -212,6 +226,7 @@ async function authRemove(token: string): Promise<Response> {
   return response;
 }
 
+// TODO convert
 async function authShare(token: string): Promise<string | null> {
   const response = await fetch(`${BASE}/api/auth/share/`, {
     method: "GET",
@@ -232,7 +247,6 @@ export const Endpoints = {
   propertyDelete,
   imageProxy,
   locationLookup,
-  isAuthenticated,
   authSignIn,
   authVerifyCode,
   authRemove,

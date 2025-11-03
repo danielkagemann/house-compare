@@ -2,15 +2,14 @@
 
 import Link from 'next/link';
 import { useStorage } from '@/context/storage-provider';
-import { useIsAuthenticated } from '@/context/useIsAuthenticated';
-import { Endpoints } from '@/lib/fetch';
+import { Endpoints, useValidateToken } from '@/lib/fetch';
 import { toast } from 'sonner';
 import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogTitle, DialogDescription, DialogFooter, DialogClose } from './ui/dialog';
 import { Button } from './ui/button';
 
 export const Footer = () => {
    const $save = useStorage();
-   const $auth = useIsAuthenticated();
+   const $auth = useValidateToken();
 
    function onSignOff() {
       $save.tokenSet(null);
