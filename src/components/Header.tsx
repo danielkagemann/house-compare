@@ -9,30 +9,18 @@ import { Plus, Share } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { CompareButton } from './CompareButton';
 import { Tooltip } from './ui/Tooltip';
-import { useEffect, useState } from 'react';
-import { Endpoints } from '@/lib/fetch';
-import { useStorage } from '@/context/storage-provider';
+import { useGetShareLink } from '@/lib/fetch';
 import { toast } from 'sonner';
 
 export const Header = () => {
-   // state
-   const [link, setLink] = useState<string>("");
-
    // hooks
    const $router = useRouter();
-   const $save = useStorage();
 
-   useEffect(() => {
-      Endpoints.authShare($save.token || '').then((data) => {
-         if (data) {
-            setLink(data);
-         }
-      });
-   }, [$save.token]);
+   const $link = useGetShareLink();
 
    function onCopy() {
-      if (link.length > 0) {
-         const fullLink = `https://villaya.de/shared/?from=${link}`;
+      if ($link) {
+         const fullLink = `https://villaya.de/shared/?from=${$link}`;
          navigator.clipboard.writeText(fullLink);
          toast.success("Link in die Zwischenablage kopiert!");
       }
@@ -47,7 +35,7 @@ export const Header = () => {
             <Tooltip text="Immobilie hinzufügen">
                <Button variant="outline" onClick={() => $router.push("/properties/details")}><Plus size={18} /></Button>
             </Tooltip>
-            {link.length > 0 &&
+            {$link &&
                <Tooltip text="Mit Freunden teilen">
                   <Button variant="outline" onClick={onCopy}><Share size={18} /></Button>
                </Tooltip>

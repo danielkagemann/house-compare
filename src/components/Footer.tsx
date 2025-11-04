@@ -2,14 +2,17 @@
 
 import Link from 'next/link';
 import { useStorage } from '@/context/storage-provider';
-import { Endpoints, useValidateToken } from '@/lib/fetch';
-import { toast } from 'sonner';
+import { useDeleteAccount, useValidateToken } from '@/lib/fetch';
 import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogTitle, DialogDescription, DialogFooter, DialogClose } from './ui/dialog';
 import { Button } from './ui/button';
 
 export const Footer = () => {
+   // hooks
    const $save = useStorage();
    const $auth = useValidateToken();
+
+   // queries
+   const $remove = useDeleteAccount();
 
    function onSignOff() {
       $save.tokenSet(null);
@@ -20,13 +23,8 @@ export const Footer = () => {
    }
 
    async function onRemoveAccount() {
-      const res = await Endpoints.authRemove($save.token ?? '');
-      if (res.ok) {
-         toast.success('Konto erfolgreich entfernt');
-         onSignOff();
-      } else {
-         toast.error('Fehler beim Entfernen des Kontos');
-      }
+      await $remove.mutateAsync();
+      onSignOff();
    }
 
    function renderConfirmDialog() {

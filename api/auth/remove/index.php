@@ -4,7 +4,7 @@ require_once '../../logger.php';
 
 // Set CORS headers
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Methods: DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
 
@@ -39,18 +39,20 @@ if (!$userId) {
 }
 
 try {
+    $email = $db->getUserEmailById($userId);
+
     $result = $db->removeUser($userId);
     
     if ($result) {
         // send goodbye email
-        sendEMail($db->getUserEmailById($userId),
+        sendEMail($email,
         "Schade, dass Du gehst",
         "Dein Konto wurde erfolgreich gelöscht. Alle damit verbundenen Daten wurden ebenfalls entfernt. Du kannst jederzeit zurückkommen und ein neues Konto anlegen.");
 
         http_response_code(200);
         echo json_encode(['success' => 'User removed successfully']);
     } else {
-        sendEMail($db->getUserEmailById($userId),
+        sendEMail($email,
         "Kontolöschung fehlgeschlagen",
         "Dein Konto konnte nicht gelöscht werden. Bitte versuche es später erneut.");
 
@@ -58,7 +60,7 @@ try {
         echo json_encode(['error' => 'Failed to remove user']);
     }
 } catch (Exception $e) {
-    error_log("Error removing user: " . $e->getMessage());
+    logMessage("Error removing user: " . $e->getMessage(), 'error');
     http_response_code(500);
     echo json_encode(['error' => 'Internal server error']);
 }

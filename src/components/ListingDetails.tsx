@@ -19,9 +19,8 @@ import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
 import { useStorage } from "@/context/storage-provider";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Endpoints, useGetPropertyDetails } from "@/lib/fetch";
+import { useGetPropertyDetails, useSetProperty } from "@/lib/fetch";
 import { Header } from "./Header";
-import { toast } from "sonner";
 import { PageLayout } from "./PageLayout";
 
 type InputOrder = {
@@ -56,7 +55,9 @@ export const ListingDetails = () => {
       features: []
    });
 
+   // queries
    const { data } = useGetPropertyDetails($url.get('id'));
+   const $saveProperty = useSetProperty();
 
    useEffect(() => {
       if (data) {
@@ -64,18 +65,6 @@ export const ListingDetails = () => {
          setListing({ ...data });
       }
    }, [data])
-
-   // useEffect(() => {
-   //    const uuid = $url.get('id');
-
-
-   //    if (uuid && $save.token) {
-   //       Endpoints.propertyGet(uuid, $save.token || '').then((data) => {
-   //          setListing({ ...data });
-   //          setIsEditing(true);
-   //       });
-   //    }
-   // }, [$url, $save.token]);
 
    /**
   * updating value for given attribute
@@ -120,10 +109,9 @@ export const ListingDetails = () => {
     * save or update listing
     */
    async function onSave() {
-      const res = await Endpoints.propertySet(listing as Listing, $save.token || '');
+      const res = await $saveProperty.mutateAsync(listing as Listing);
 
       if (!res) {
-         toast.error('Fehler beim Speichern der Immobilie.');
          return;
       }
       $router.push('/properties');

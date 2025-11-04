@@ -90,21 +90,34 @@ export const useGetPropertyDetails = (uuid: string | null) => {
  * @param listing
  * @param token
  */
-// TODO convert
-async function propertySet(listing: Listing, token: string): Promise<boolean> {
-  const res = await fetch(
-    `${BASE}/api/properties/details/?uuid=${listing.uuid}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(listing),
-    }
-  );
-  return res.ok;
-}
+export const useSetProperty = () => {
+  const $storage = useStorage();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (listing: Listing) => {
+      const res = await fetch(
+        `${BASE}/api/properties/details/?uuid=${listing.uuid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${$storage.token}`,
+          },
+          body: JSON.stringify(listing),
+        }
+      );
+      return res.ok;
+    },
+    onSuccess: () => {
+      toast.success("Immobilie gespeichert");
+      queryClient.invalidateQueries({ queryKey: ["properties"], exact: false });
+    },
+    onError: () => {
+      toast.error("Fehler beim Speichern der Immobilie");
+    },
+  });
+};
 
 /**
  * get image from backend and return as base64 string. will stay as simple fetch
@@ -244,38 +257,66 @@ export const useConfirmCode = () => {
   });
 };
 
-// TODO convert
-async function authRemove(token: string): Promise<Response> {
-  const response = await fetch(`${BASE}/api/auth/remove/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
+/**
+ * remove account
+ * @returns
+ */
+export const useDeleteAccount = () => {
+  const $storage = useStorage();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`${BASE}/api/auth/remove/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${$storage.token}`,
+        },
+      });
+      return res.ok;
+    },
+    onSuccess: () => {
+      toast.success("Account gelöscht");
+      $storage.tokenSet(null);
+      queryClient.clear();
+    },
+    onError: () => {
+      toast.error("Fehler beim Löschen des Accounts");
     },
   });
-  return response;
-}
+};
 
-// TODO convert
-async function authShare(token: string): Promise<string | null> {
-  const response = await fetch(`${BASE}/api/auth/share/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
+/**
+ * get link to share
+ * @returns
+ */
+export const useGetShareLink = () => {
+  const $storage = useStorage();
+  return useQuery({
+    queryKey: ["share-link", $storage.token],
+    queryFn: async () => {
+      if (!$storage.token) {
+        return null;
+      }
+      const response = await fetch(`${BASE}/api/auth/share/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${$storage.token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data.share;
+      }
+
+      return null;
     },
+    enabled: !!$storage.token,
   });
-  if (response.ok) {
-    const data = await response.json();
-    return data.share;
-  }
-
-  return null;
-}
+};
 
 export const Endpoints = {
-  propertySet,
   imageProxy,
   locationLookup,
   authSignIn,
-  authRemove,
-  authShare,
 };
