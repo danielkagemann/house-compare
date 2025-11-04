@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useStorage } from "@/context/storage-provider";
-import { Endpoints } from "@/lib/fetch";
+import { Endpoints, useConfirmCode } from "@/lib/fetch";
 import { Heart, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -27,6 +27,9 @@ export default function Home() {
   // hooks
   const $router = useRouter();
   const $save = useStorage();
+
+  // queries
+  const $confirmMutation = useConfirmCode();
 
   /**
    * validate data and continue
@@ -68,25 +71,26 @@ export default function Home() {
     }
   }
 
+  if ($confirmMutation.isSuccess && !working) {
+    flushSync(() => setWorking(false));
+    const data = $confirmMutation.data;
+    validAndContinue(data.token);
+  }
+
+  if ($confirmMutation.isError) {
+    flushSync(() => setWorking(false));
+    const err = $confirmMutation.error as any;
+    setError(err.message ?? "Fehler beim Bestätigen des Codes");
+  }
+
   /**
    * try to confirm code
    * @returns 
    */
   async function onConfirmCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     flushSync(() => setWorking(true));
-
-    const response = await Endpoints.authVerifyCode(action.value);
-    if (!response.ok) {
-      const err = await response.json();
-      setError(err.message ?? "Fehler beim Bestätigen des Codes");
-      setWorking(false);
-      return;
-    }
-    const data = await response.json();
-    validAndContinue(data);
-    setWorking(false);
+    $confirmMutation.mutate(action.value);
   }
 
   /**

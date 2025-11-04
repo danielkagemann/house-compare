@@ -19,17 +19,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Only allow GET requests
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+// Only allow POST requests
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405); // Method Not Allowed
     echo json_encode(['error' => 'Method not allowed']);
     exit();
 }
 
 try {
-    // Get code from query parameters
-    $code = $_GET['code'] ?? null;
+    // Read JSON input
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
     
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Ungültige Parameter']);
+        exit();
+    }
+    
+    $code = $data['code'] ?? null;
+
     if (!$code) {
         http_response_code(400);
         echo json_encode(['error' => 'Kein Bestätigungscode angegeben.']);

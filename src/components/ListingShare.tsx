@@ -8,13 +8,19 @@ import { Hero } from "./Hero";
 import Image from "next/image";
 import { HouseListItem } from "./HouseListItem";
 import { Loading } from "./Loading";
+import { useEffect, useState } from "react";
 
 export const ListingShare = () => {
-   // hooks
+   // state
+   const [from, setFrom] = useState<string | null>(null);
    const $url = useSearchParams();
 
-   // queries 
-   const { data: listing, isLoading } = useGetSharedPropertyList($url.get('from') || '');
+   // queries
+   const { data: listing, isLoading } = useGetSharedPropertyList(from);
+
+   useEffect(() => {
+      setFrom($url.get('from'));
+   }, [$url]);
 
    if (isLoading) {
       return (<Loading />);

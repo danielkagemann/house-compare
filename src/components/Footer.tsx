@@ -13,7 +13,10 @@ export const Footer = () => {
 
    function onSignOff() {
       $save.tokenSet(null);
-      window.location.href = '/';
+
+      if (typeof window !== 'undefined') {
+         window.location.href = '/';
+      }
    }
 
    async function onRemoveAccount() {
@@ -53,7 +56,10 @@ export const Footer = () => {
    }
 
    function isShareMode() {
-      return window.location.pathname === '/shared/';
+      if (typeof window !== 'undefined') {
+         return window.location.pathname === '/shared/';
+      }
+      return false;
    }
 
    return (

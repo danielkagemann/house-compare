@@ -1,6 +1,6 @@
 import { useStorage } from "@/context/storage-provider";
 import { Listing, Location } from "@/model/Listing";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const BASE = "https://villaya.de";
 
@@ -149,7 +149,7 @@ async function locationLookup(query: string): Promise<Location | null> {
       return null;
     }
     return result.json();
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -207,13 +207,25 @@ async function authSignIn(email: string): Promise<Response> {
   return response;
 }
 
-// TODO convert
-async function authVerifyCode(code: string): Promise<Response> {
-  const response = await fetch(`${BASE}/api/auth/verify-code/?code=${code}`, {
-    method: "GET",
+/**
+ * verify code
+ * @returns
+ */
+export const useConfirmCode = () => {
+  return useMutation({
+    mutationFn: async (code: string) => {
+      const res = await fetch(`${BASE}/api/auth/verify-code/`, {
+        method: "POST",
+        body: JSON.stringify({ code }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.message ?? "Fehler beim Bestätigen des Codes");
+      }
+      return json;
+    },
   });
-  return response;
-}
+};
 
 // TODO convert
 async function authRemove(token: string): Promise<Response> {
@@ -248,7 +260,6 @@ export const Endpoints = {
   imageProxy,
   locationLookup,
   authSignIn,
-  authVerifyCode,
   authRemove,
   authShare,
 };
