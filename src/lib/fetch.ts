@@ -1,6 +1,7 @@
 import { useStorage } from "@/context/storage-provider";
 import { Listing, Location } from "@/model/Listing";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const BASE = "https://villaya.de";
 
@@ -8,7 +9,6 @@ const BASE = "https://villaya.de";
  * fetch all properties from the api
  * @returns
  */
-
 export const useGetPropertyList = (onlySelected: boolean = false) => {
   const $storage = useStorage();
 
@@ -159,16 +159,33 @@ async function locationLookup(query: string): Promise<Location | null> {
  * @param token
  * @returns
  */
-// TODO convert
-async function propertyDelete(uuid: string, token: string): Promise<boolean> {
-  const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
+export const useDeleteProperty = () => {
+  const $storage = useStorage();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (uuid: string) => {
+      const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${$storage.token}`,
+        },
+      });
+      return res.ok;
+    },
+    onSuccess: () => {
+      toast.success("Immobilie gelöscht");
+      // Invalidate all property list queries (both with onlySelected true and false)
+      queryClient.invalidateQueries({
+        queryKey: ["properties"],
+        exact: false,
+      });
+    },
+    onError: () => {
+      toast.error("Fehler beim Löschen der Immobilie");
     },
   });
-  return res.ok;
-}
+};
 
 /**
  * check if given token is valid
@@ -256,7 +273,6 @@ async function authShare(token: string): Promise<string | null> {
 
 export const Endpoints = {
   propertySet,
-  propertyDelete,
   imageProxy,
   locationLookup,
   authSignIn,
