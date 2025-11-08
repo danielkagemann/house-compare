@@ -17,7 +17,6 @@ import { InputLocation } from "@/components/inputs/InputLocation";
 import { InputImage } from "@/components/inputs/InputImage";
 import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
-import { useStorage } from "@/context/storage-provider";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useGetPropertyDetails, useSetProperty } from "@/lib/fetch";
 import { Header } from "./Header";
@@ -31,7 +30,6 @@ type InputOrder = {
 
 export const ListingDetails = () => {
    // hooks
-   const $save = useStorage();
    const $router = useRouter();
    const $url = useSearchParams();
 

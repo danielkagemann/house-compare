@@ -22,11 +22,11 @@ export const ListingShare = () => {
       setFrom($url.get('from'));
    }, [$url]);
 
-   if (isLoading) {
+   if (isLoading || !listing) {
       return (<Loading />);
    }
 
-   if (listing.length === 0) {
+   if (listing?.length === 0) {
       return (<PageLayout className="pt-12">
          <Hero>
             <div className="text-red-700 font-bold">
