@@ -19,8 +19,8 @@ export const Header = () => {
    const $link = useGetShareLink();
 
    function onCopy() {
-      if ($link) {
-         const fullLink = `https://villaya.de/shared/?from=${$link}`;
+      if ($link && $link.data) {
+         const fullLink = `https://villaya.de/shared/?from=${$link.data}`;
          navigator.clipboard.writeText(fullLink);
          toast.success("Link in die Zwischenablage kopiert!");
       }

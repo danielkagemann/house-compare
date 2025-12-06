@@ -19,6 +19,7 @@ type Props = {
 export default function Map({ location, className }: Props) {
    // state
    const [coords, setCoords] = useState<LatLngTuple>([location.lat, location.lon]);
+
    useEffect(() => {
       setCoords([location.lat, location.lon]);
    }, [location]);
