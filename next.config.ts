@@ -8,11 +8,6 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
-  rules: [
-    {
-      exclude: [path.resolve(__dirname, "api")],
-    },
-  ],
 };
 
 export default nextConfig;

@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 export const ListingShare = () => {
    // state
    const [from, setFrom] = useState<string | null>(null);
+   const [hidden, setHidden] = useState<string[]>([]);
    const $url = useSearchParams();
 
    // queries
@@ -20,6 +21,7 @@ export const ListingShare = () => {
 
    useEffect(() => {
       setFrom($url.get('from'));
+      setHidden($url.get('hide')?.split(',') || []);
    }, [$url]);
 
    if (isLoading || !listing) {
@@ -38,7 +40,7 @@ export const ListingShare = () => {
    return (<PageLayout>
       <div className="flex flex-col gap-2">
          <Image src="/assets/images/main-logo.png" width={42} height={42} alt="logo" /> <div className="text-2xl font-bold">Villaya</div>
-         {listing.map((item: Listing) => (<HouseListItem key={item.uuid} item={item} />))}
+         {listing.filter((item: Listing, index: number) => !hidden.includes(index.toString())).map((item: Listing) => (<HouseListItem key={item.uuid} item={item} />))}
       </div>
    </PageLayout>);
 }

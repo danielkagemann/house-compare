@@ -27,10 +27,10 @@ export const ListingList = () => {
    }
 
    const isFilteredOut = (data: Listing): boolean => {
-      if ($storage.filter.maxPrice > 0 && parseFloat(data.price) > $storage.filter.maxPrice) {
+      if ($storage.filter.maxPrice > 0 && Number.parseFloat(data.price) > $storage.filter.maxPrice) {
          return true;
       }
-      if ($storage.filter.minArea > 0 && Number(data.sqm) < $storage.filter.minArea) {
+      if ($storage.filter.minArea > 0 && Number.parseFloat(data.sqm) < $storage.filter.minArea) {
          return true;
       }
       return false;
