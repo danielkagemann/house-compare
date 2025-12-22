@@ -33,7 +33,7 @@ export const LocationInput = () => {
       const hasLocation = fromLocation.length > 0;
       return (
          <Tooltip text={hasLocation ? fromLocation : "Startpunkt für Entfernungsangaben festlegen"}>
-            <Button variant="outline"
+            <Button variant="secondary"
                onClick={() => setEnterLocation(true)}><MapPinHouse size={14} />
                {hasLocation ? fromLocation.substring(0, 15) : 'Startpunkt'}
             </Button>
@@ -58,7 +58,6 @@ export const LocationInput = () => {
       } else {
          $storage.locationSet(result);
          setFromLocation(result.display);
-         console.log(result);
          setEnterLocation(false);
       }
       setWorking(false);
@@ -73,12 +72,15 @@ export const LocationInput = () => {
          }} />
       {working ? <Spinner /> : (<>
          <Button variant="default"
-            className="bg-primary text-white disabled:text-gray-700 disabled:bg-gray-300"
             disabled={fromLocation.length === 0}
             onClick={onLocationCheck}>
             <Search size={14} />
          </Button>
-         <Button variant="outline" onClick={() => setEnterLocation(false)}><CircleX size={14} /></Button>
+         <Button variant="secondary" onClick={() => {
+            setEnterLocation(false);
+            setFromLocation('');
+            $storage.locationSet(null);
+         }}><CircleX size={14} /></Button>
       </>)}
    </div >;
 };

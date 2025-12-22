@@ -1,6 +1,5 @@
 import { distanceBetweenCoordinates, getSquareMeterPrice, Listing } from "@/model/Listing"
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { BedDouble, Calendar, Car, Heart, MapPin, Ruler, Trash, Eye } from "lucide-react";
 import { ListingPreview } from "./ListingPreview";
 import { Sheet, SheetContent } from "./ui/sheet";
 import { useState } from "react";
@@ -8,6 +7,11 @@ import { useStorage } from "@/context/storage-provider";
 import { motion } from "motion/react";
 import Flag from 'react-world-flags';
 import { useDeleteProperty } from "@/lib/fetch";
+import { Trash } from "./animate-ui/icons/trash";
+import { List } from "./animate-ui/icons/list";
+import { Heart } from "./animate-ui/icons/heart";
+import { MapPin } from "./animate-ui/icons/map-pin";
+import { BedDouble, Calendar, Car, Ruler } from "lucide-react";
 
 interface HouseCardProps {
    data: Listing;
@@ -53,6 +57,13 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   className="w-full h-48 object-cover rounded-t-xl hover:scale-110 transition-all"
                />
 
+               {!!data.score && (
+                  <div className="absolute top-38 right-2 text-sm text-white bg-red-800/90 rounded-full p-1 flex justify-center items-center w-8 h-8">
+                     {data.score}
+                  </div>
+               )}
+
+
                <motion.button
                   type="button"
                   className="absolute top-2 left-2 bg-black bg-opacity-75 rounded-full p-2"
@@ -61,7 +72,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   whileTap={{ rotate: 360 }}
                   transition={{ duration: 0.3 }}
                >
-                  <Trash size={14} className="text-white" />
+                  <Trash animateOnHover size={14} className="text-white" />
                </motion.button>
 
                <motion.button
@@ -72,7 +83,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   whileTap={{ y: -5 }}
                   transition={{ duration: 0.2 }}
                >
-                  <Eye size={14} className="text-white" />
+                  <List animateOnHover size={14} className="text-white" />
                </motion.button>
                <motion.button
                   type="button"
@@ -87,21 +98,21 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                      scale: { repeat: 1, duration: 0.5 }
                   }}
                >
-                  <Heart size={14} className="text-white" />
+                  <Heart animateOnHover size={14} className="text-white" />
                </motion.button>
 
                <div className="p-2 min-w-0">
                   <div className="text-gray-700 text-xs truncate">{data.contact}</div>
                   <h2 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap w-full">{data.title}</h2>
                   <div className="text-sm text-gray-500 flex items-center gap-1">
-                     <MapPin size={14} /> <span className="truncate">{data.location.display}</span> <Flag code={data.location.code} width={16} />
+                     <MapPin animateOnHover size={14} /> <span className="truncate">{data.location.display}</span> <Flag code={data.location.code} width={16} />
                   </div>
                   {distance && (<div className="text-sm text-gray-500 flex items-center gap-1">
                      <Car size={14} /> {distance.toFixed(1)} km entfernt
                   </div>)}
 
                   <div className="text-xl font-semibold text-primary mt-2">
-                     € {parseFloat(data.price).toLocaleString()}
+                     € {Number.parseFloat(data.price || '0').toLocaleString()}
                   </div>
                   <div className="text-sm text-gray-500 -mt-1">{getSquareMeterPrice(data.price, data.sqm)}</div>
                </div>

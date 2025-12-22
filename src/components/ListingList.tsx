@@ -7,15 +7,28 @@ import { Header } from "./Header";
 import { NoListings } from "./NoListings";
 import { useStorage } from "@/context/storage-provider";
 import { useGetPropertyList } from "@/lib/fetch";
-import { Listing } from "@/model/Listing";
+import { calculateScores, Listing } from "@/model/Listing";
 import { Loading } from "./Loading";
+import { useMemo } from "react";
+import { Star } from "./animate-ui/icons/star";
+
+const factors = {
+   price: 0.25,
+   sqm: 0.3,
+   year: 0.2,
+   rooms: 0.25,
+};
 
 export const ListingList = () => {
    // hook
    const $storage = useStorage();
 
    // queries
-   const { data: listings, isLoading } = useGetPropertyList();
+   const { data: properties, isLoading } = useGetPropertyList();
+
+   // derived state
+   const listings = useMemo(() => calculateScores(properties || [], factors), [properties]);
+   console.log(listings);
 
    if (isLoading) {
       return <Loading />
@@ -45,6 +58,10 @@ export const ListingList = () => {
    return (
       <PageLayout>
          <Header />
+         <div className="bg-gray-50 rounded-lg p-4 mx-4 mb-2 text-xs/tight">
+            <Star animateOnView loop size={16} loopDelay={2000} className="inline-block mr-1" animation="fill" />
+            Für jede Immobilie wird automatisch ein Score basierend auf Preis ({factors.price}), Größe ({factors.sqm}), Baujahr ({factors.year}) und Zimmeranzahl ({factors.rooms}) berechnet. Je höher der Score, desto besser die Immobilie im Vergleich zu den anderen.
+         </div>
          <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {
                list.length === 0 && (
@@ -53,6 +70,7 @@ export const ListingList = () => {
                   </div>
                )
             }
+
             {
                list.map((item, index) => (
                   <motion.div

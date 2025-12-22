@@ -67,8 +67,9 @@ You can define a starting point and the (air) distance is calculated to give you
 
 ## dependencies used
 
-- nextjs for client and server
+- nextjs for client ~~and server~~
 - tailwind css
 - ~~cheerio (server api parses the HTML here)~~ replaced with DOM parsing to be deployable on GH pages
-- lucide-react for nice symbols
+- lucide icons for nice symbols
+- animated-ui for microanimations
 - motion for microanimations

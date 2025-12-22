@@ -1,4 +1,3 @@
-import { Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Drawer, DrawerContent } from "./ui/drawer";
@@ -6,6 +5,7 @@ import { useStorage } from "@/context/storage-provider";
 import { Input } from "./ui/input";
 import { Switch } from "./ui/switch";
 import { Tooltip } from "./ui/Tooltip";
+import { Sparkles } from "./animate-ui/icons/sparkles";
 
 export const FilterPanel = () => {
 
@@ -18,7 +18,7 @@ export const FilterPanel = () => {
    return (
       <>
          <Tooltip text="Filtereinstellungen">
-            <Button variant="outline" onClick={() => setOpen(true)}><Sparkles size={18} /></Button>
+            <Button variant="secondary" onClick={() => setOpen(true)}><Sparkles animateOnHover size={18} /></Button>
          </Tooltip>
 
          <Drawer open={open} onOpenChange={setOpen} direction="top">

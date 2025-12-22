@@ -5,12 +5,14 @@ import { LocationInput } from './LocationInput';
 import Link from 'next/link';
 import { FilterPanel } from './FilterPanel';
 import { Button } from './ui/button';
-import { Plus, Share } from 'lucide-react';
+
 import { useRouter } from 'next/navigation';
 import { CompareButton } from './CompareButton';
 import { Tooltip } from './ui/Tooltip';
 import { useGetShareLink } from '@/lib/fetch';
 import { toast } from 'sonner';
+import { Plus } from './animate-ui/icons/plus';
+import { Send } from './animate-ui/icons/send';
 
 export const Header = () => {
    // hooks
@@ -33,11 +35,15 @@ export const Header = () => {
          </Link>
          <div className="flex gap-2 items-center">
             <Tooltip text="Immobilie hinzufügen">
-               <Button variant="outline" onClick={() => $router.push("/properties/details")}><Plus size={18} /></Button>
+               <Button variant="secondary" onClick={() => $router.push("/properties/details")}>
+                  <Plus animateOnHover size={18} />
+               </Button>
             </Tooltip>
             {$link &&
                <Tooltip text="Mit Freunden teilen">
-                  <Button variant="outline" onClick={onCopy}><Share size={18} /></Button>
+                  <Button variant="secondary" onClick={onCopy}>
+                     <Send animateOnHover size={18} />
+                  </Button>
                </Tooltip>
             }
             <FilterPanel />

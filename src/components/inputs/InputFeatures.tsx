@@ -1,9 +1,9 @@
-import { Trash } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { InputNext } from "./InputNext";
+import { Trash } from "../animate-ui/icons/trash";
 
 interface Props {
    value: string[],
@@ -22,7 +22,7 @@ export const InputFeatures = ({ value, onChange, onNext }: Props) => {
             <Button variant="ghost" onClick={() => {
                const newValues = value.filter((_, i) => i !== index);
                onChange(newValues);
-            }}><Trash size={14} className="text-red-700" /></Button>
+            }}><Trash animateOnTap size={14} className="text-red-700" /></Button>
             <Input type="text" value={item} onChange={(e) => {
                const ls = [...value];
                ls[index] = e.target.value;

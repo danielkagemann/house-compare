@@ -44,7 +44,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
             {hasEdit &&
                (
                   <Button variant="outline" size="sm">
-                     <Link target="_blank" rel="noopener noreferrer" href={`/properties/details/?id=${data.uuid}`}>Bearbeiten</Link>
+                     <Link href={`/properties/details/?id=${data.uuid}`}>Bearbeiten</Link>
                   </Button>
                )}
             {data.url &&

@@ -6,6 +6,13 @@ import { useDeleteAccount, useValidateToken } from '@/lib/fetch';
 import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogTitle, DialogDescription, DialogFooter, DialogClose } from './ui/dialog';
 import { Button } from './ui/button';
 
+function isShareMode() {
+   if (globalThis.window !== undefined) {
+      return globalThis.window.location.pathname === '/shared/';
+   }
+   return false;
+}
+
 export const Footer = () => {
    // hooks
    const $save = useStorage();
@@ -17,8 +24,8 @@ export const Footer = () => {
    function onSignOff() {
       $save.tokenSet(null);
 
-      if (typeof window !== 'undefined') {
-         window.location.href = '/';
+      if (globalThis.window !== undefined) {
+         globalThis.window.location.href = '/';
       }
    }
 
@@ -51,13 +58,6 @@ export const Footer = () => {
             </DialogContent>
          </Dialog>
       );
-   }
-
-   function isShareMode() {
-      if (typeof window !== 'undefined') {
-         return window.location.pathname === '/shared/';
-      }
-      return false;
    }
 
    return (

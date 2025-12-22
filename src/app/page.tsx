@@ -1,5 +1,8 @@
 "use client";
 
+import { Heart } from "@/components/animate-ui/icons/heart";
+import { Layers } from "@/components/animate-ui/icons/layers";
+import { Send } from "@/components/animate-ui/icons/send";
 import { Hero } from "@/components/Hero";
 import { Loading } from "@/components/Loading";
 import { PageLayout } from "@/components/PageLayout";
@@ -8,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useStorage } from "@/context/storage-provider";
 import { Endpoints, useConfirmCode } from "@/lib/fetch";
-import { Heart, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { flushSync } from "react-dom";
@@ -167,9 +169,9 @@ export default function Home() {
         {renderAction()}
       </PageLayout>
       <PageLayout className="flex lg:flex-row flex-col items-start gap-4 lg:px-0 px-4">
-        {renderFeature("Sammle Deine Favoriten", <Heart size={16} />, "Suche atemberaubende Villen aus aller Welt und speichere diejenigen, die deine Fantasie beflügeln. Erstelle eine persönliche Sammlung, die deinen einzigartigen Geschmack widerspiegelt.")}
-        {renderFeature("Speichere mit Deiner Email", <Send size={16} />, "Melde dich einfach mit deiner E-Mail-Adresse an, um eine Sammlung zu erstellen und von überall darauf zuzugreifen.")}
-        {renderFeature("Teile Deine Sammlung", <Heart size={16} />, "Erstelle einen teilbaren Link, um deine Sammlung mit Familie und Freunden zu teilen.")}
+        {renderFeature("Sammle Deine Favoriten", <Heart animateOnView loop loopDelay={1000} size={16} />, "Suche atemberaubende Villen aus aller Welt und speichere diejenigen, die deine Fantasie beflügeln. Erstelle eine persönliche Sammlung, die deinen einzigartigen Geschmack widerspiegelt.")}
+        {renderFeature("Speichere mit Deiner Email", <Layers animateOnView loop loopDelay={1000} size={16} />, "Melde dich einfach mit deiner E-Mail-Adresse an, um eine Sammlung zu erstellen und von überall darauf zuzugreifen.")}
+        {renderFeature("Teile Deine Sammlung", <Send animateOnView loop loopDelay={1000} size={16} />, "Erstelle einen teilbaren Link, um deine Sammlung mit Familie und Freunden zu teilen.")}
       </PageLayout>
     </>
   );
