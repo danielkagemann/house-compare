@@ -18,7 +18,7 @@ export const HouseListItem = ({ item }: HouseListItemProps) => {
       return title;
    }
 
-   return (<div className="shadow-md rounded-md p-4">
+   return (<div className="md:shadow-md md:rounded-md md:p-4">
       <div className="flex gap-2 flex-col lg:flex-row">
          <img
             src={item.image}
@@ -43,7 +43,7 @@ export const HouseListItem = ({ item }: HouseListItemProps) => {
                </div>
             </div>
             <div className="text-xl font-semibold text-primary mt-2">
-               € {parseFloat(item.price).toLocaleString()}
+               € {Number.parseFloat(item.price).toLocaleString()}
             </div>
             <div className="text-sm text-gray-600"><ReadMore text={item.description} /></div>
          </div>

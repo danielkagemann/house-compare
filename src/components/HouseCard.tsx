@@ -51,11 +51,13 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
             )}
 
             <CardHeader className="p-0 relative">
-               <img
-                  src={data.image}
-                  alt={data.title}
-                  className="w-full h-48 object-cover rounded-t-xl hover:scale-110 transition-all"
-               />
+               <div className="w-full h-48 overflow-y-clip">
+                  <img
+                     src={data.image}
+                     alt={data.title}
+                     className="w-full h-full object-cover rounded-t-xl hover:scale-120 transition-all duration-500"
+                  />
+               </div>
 
                {!!data.score && (
                   <div className="absolute top-38 right-2 text-sm text-white bg-red-800/90 rounded-full p-1 flex justify-center items-center w-8 h-8">
