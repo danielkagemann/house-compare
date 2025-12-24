@@ -1,4 +1,4 @@
-import { useStorage } from "@/context/storage-provider";
+import { useStorage } from "@/store/storage";
 import { Listing, Location } from "@/model/Listing";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -30,7 +30,6 @@ export const useGetPropertyList = (onlySelected: boolean = false) => {
 
       if (onlySelected) {
         const ls: Listing[] = [];
-        console.log("only selected", $storage.selected);
         for (const uuid of $storage.selected) {
           const item = data.find((l: Listing) => l.uuid.trim() === uuid.trim());
           if (item) {
@@ -210,7 +209,7 @@ export const useValidateToken = () => {
   return useQuery({
     queryKey: ["is-authenticated", $storage.token],
     queryFn: async () => {
-      if (!$storage.token) {
+      if ($storage.token === null) {
         return false;
       }
       const res = await fetch(`${BASE}/api/auth/validate-token/`, {
@@ -221,7 +220,6 @@ export const useValidateToken = () => {
       });
       return res.status === 204;
     },
-    enabled: !!$storage.token,
   });
 };
 

@@ -25,7 +25,6 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
                reader.onload = function (e) {
                   const base64Image = e.target?.result as string;
                   resizeBase64Image(base64Image).then((resizedImage) => {
-                     console.log('original link', base64Image.length, 'converted link', resizedImage.length);
                      onChange(resizedImage);
                   }).catch(() => {
                      onChange(base64Image);
@@ -67,7 +66,6 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
       const response = await Endpoints.imageProxy(link);
       try {
          const converted = await resizeBase64Image(response);
-         console.log('original link', response.length, 'converted link', converted.length);
          onChange(converted);
       } catch {
          onChange(response);

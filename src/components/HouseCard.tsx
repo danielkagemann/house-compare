@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { ListingPreview } from "./ListingPreview";
 import { Sheet, SheetContent } from "./ui/sheet";
 import { useState } from "react";
-import { useStorage } from "@/context/storage-provider";
+import { useStorage } from "@/store/storage";
 import { motion } from "motion/react";
 import Flag from 'react-world-flags';
 import { useDeleteProperty } from "@/lib/fetch";

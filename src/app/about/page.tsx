@@ -6,15 +6,11 @@ export default function AboutPage() {
       <PageLayout className="min-h-screen items-center justify-center">
          <Hero>
             <div className="text-sm/relaxed text-gray-700">
-               Du kannst Immobilien manuell oder direkt aus dem idealista <br />
-               Quelltext hinzufügen. Die Anwendung ermöglicht dir den Export <br />
-               und Import deiner Daten, wobei alle Informationen lokal in<br />
-               deinem Browser gespeichert werden. Du kannst eine Favoritenliste <br />
-               erstellen und bis zu 3 Immobilien miteinander vergleichen.<br />
-               Zusätzlich kannst du einen Startpunkt festlegen, um die <br />
-               Entfernung (Luftlinie) zu den Objekten zu berechnen. <br />
-               Die Anwendung verfügt über ein responsives Design für <br />
-               mobile und Desktop-Geräte und erkennt automatisch verschiedene Länder.
+               Villaya ist ein privates Projekt von <a href="https://danielkagemann.name">Daniel Kagemann</a>.<br /><br />
+               Die Idee zu Villaya entstand aus der persönlichen Notwendigkeit heraus, Immobilienangebote effizient zu vergleichen und zu verwalten. Viele Plattformen bieten zwar umfangreiche Suchfunktionen, doch fehlte oft die Möglichkeit, Favoriten einfach zu speichern und später wieder aufzurufen.<br /><br />
+               Mit Villaya möchte ich eine Lösung bieten, die es Nutzern ermöglicht, ihre bevorzugten Immobilienangebote zentral zu speichern und jederzeit darauf zugreifen zu können. Dabei lege ich großen Wert auf Datenschutz und Benutzerfreundlichkeit.<br /><br />
+
+               Ich freue mich über Feedback und Anregungen, um Villaya kontinuierlich zu verbessern und an die Bedürfnisse der Nutzer anzupassen.
             </div>
          </Hero>
       </PageLayout>

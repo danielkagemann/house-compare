@@ -1,7 +1,6 @@
 "use client";
 
 import { Toaster } from "@/components/ui/sonner";
-import { StorageProvider } from "@/context/storage-provider";
 import { Footer } from "@/components/Footer";
 import 'leaflet/dist/leaflet.css';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -57,13 +56,11 @@ export default function RootLayout({
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          <StorageProvider>
-            <main className="min-h-screen">
-              {children}
-            </main>
-            <Footer />
-            <Toaster position="top-center" expand={true} richColors />
-          </StorageProvider>
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+          <Toaster position="top-center" expand={true} richColors />
         </QueryClientProvider>
       </body>
     </html>

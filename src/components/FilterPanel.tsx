@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Drawer, DrawerContent } from "./ui/drawer";
-import { useStorage } from "@/context/storage-provider";
+import { useStorage } from "@/store/storage";
 import { Input } from "./ui/input";
 import { Switch } from "./ui/switch";
 import { Tooltip } from "./ui/Tooltip";

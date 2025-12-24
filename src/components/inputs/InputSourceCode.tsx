@@ -28,15 +28,11 @@ export const InputSourceCode = ({ onChange }: Props) => {
       setError('');
       if (parsed) {
 
-         console.log('check image...');
-
          // we need to adjust the image and the location
          if (parsed.image) {
             const base64 = await Endpoints.imageProxy(parsed.image);
             parsed.image = base64;
          }
-
-         console.log('check location...');
 
          if (parsed.location.display.length > 0) {
             const loc = await Endpoints.locationLookup(parsed.location.display);
@@ -44,15 +40,10 @@ export const InputSourceCode = ({ onChange }: Props) => {
                parsed.location = loc;
             }
          }
-
-         console.log('doene');
-
          onChange({ ...parsed as Listing });
       } else {
          setError('Informationen der Immobilie konnte nicht ermittelt werden.');
       }
-
-      console.log('finally');
       setWorking(false);
    }
 

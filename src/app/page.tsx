@@ -9,7 +9,7 @@ import { PageLayout } from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { useStorage } from "@/context/storage-provider";
+import { useStorage } from "@/store/storage";
 import { Endpoints, useConfirmCode } from "@/lib/fetch";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

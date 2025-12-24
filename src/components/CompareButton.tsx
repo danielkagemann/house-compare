@@ -1,4 +1,4 @@
-import { useStorage } from "@/context/storage-provider";
+import { useStorage } from "@/store/storage";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";

@@ -2,7 +2,7 @@ import { CircleX, MapPinHouse, Search } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { useStorage } from "@/context/storage-provider";
+import { useStorage } from "@/store/storage";
 import { Input } from "./ui/input";
 import { flushSync } from "react-dom";
 import { Spinner } from "./ui/spinner";

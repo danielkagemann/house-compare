@@ -5,7 +5,7 @@ import { HouseCard } from "./HouseCard";
 import { PageLayout } from "./PageLayout";
 import { Header } from "./Header";
 import { NoListings } from "./NoListings";
-import { useStorage } from "@/context/storage-provider";
+import { useStorage } from "@/store/storage";
 import { useGetPropertyList } from "@/lib/fetch";
 import { calculateScores, Listing } from "@/model/Listing";
 import { Loading } from "./Loading";
@@ -28,8 +28,7 @@ export const ListingList = () => {
 
    // derived state
    const listings = useMemo(() => calculateScores(properties || [], factors), [properties]);
-   console.log(listings);
-
+   
    if (isLoading) {
       return <Loading />
    }

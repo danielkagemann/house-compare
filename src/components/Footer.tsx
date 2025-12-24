@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { useStorage } from '@/context/storage-provider';
+import { useStorage } from '@/store/storage';
 import { useDeleteAccount, useValidateToken } from '@/lib/fetch';
 import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogTitle, DialogDescription, DialogFooter, DialogClose } from './ui/dialog';
 import { Button } from './ui/button';
@@ -16,7 +16,7 @@ function isShareMode() {
 export const Footer = () => {
    // hooks
    const $save = useStorage();
-   const $auth = useValidateToken();
+   const $auth = useValidateToken()?.data;
 
    // queries
    const $remove = useDeleteAccount();
