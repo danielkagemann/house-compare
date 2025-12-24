@@ -4,12 +4,13 @@ import { Button } from "../ui/button";
 import { MapPin } from "lucide-react";
 import { Input } from "../ui/input";
 import { InputNext } from "./InputNext";
-import { Location } from "@/model/Listing";
+import { distanceBetweenCoordinates, Location } from "@/model/Listing";
 import { useState } from "react";
 import { flushSync } from "react-dom";
 import { Spinner } from "../ui/spinner";
 import { Endpoints } from "@/lib/fetch";
 import dynamic from "next/dynamic";
+import { ListOfAmenities } from "../list-of-amenities";
 
 const Map = dynamic(() => import("../Map"), {
    ssr: false,
@@ -24,12 +25,18 @@ interface Props {
 export const InputLocation = ({ value, onChange, onNext }: Props) => {
    // state
    const [working, setWorking] = useState(false);
+
    const onFindAddr = async () => {
       flushSync(() => {
          setWorking(true);
       });
       const result = await Endpoints.locationLookup(value.display);
       if (result) {
+
+         const poiResult = await Endpoints.locationPOI(result.lat!, result.lon!);
+         if (poiResult) {
+            result.poi = poiResult;
+         }
          onChange({ ...value, ...result });
       }
       setWorking(false);
@@ -37,6 +44,10 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
 
    function hasCoords() {
       return value.lat !== undefined && value.lon !== undefined && value.lat !== 0 && value.lon !== 0;
+   }
+
+   function hasPOI() {
+      return value.poi !== undefined && value.poi.length > 0;
    }
 
    return (
@@ -51,6 +62,8 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
          {!working && <InputNext onClick={onNext} />}
 
          {hasCoords() && <Map location={{ lat: value.lat!, lon: value.lon! }} className="h-30" />}
+
+         {hasPOI() && (<ListOfAmenities item={value} />)}
       </>
    );
 };

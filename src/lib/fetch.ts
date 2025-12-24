@@ -1,5 +1,5 @@
 import { useStorage } from "@/store/storage";
-import { Listing, Location } from "@/model/Listing";
+import { Listing, Location, POI } from "@/model/Listing";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -165,6 +165,26 @@ async function locationLookup(query: string): Promise<Location | null> {
     return null;
   }
 }
+
+/**
+ * get poi for given coordinates
+ * @param query
+ * @returns
+ */
+async function locationPOI(lat: number, lon: number): Promise<POI[] | null> {
+  try {
+    const result = await fetch(
+      `${BASE}/api/properties/poi/?lat=${lat}&lon=${lon}`
+    );
+    if (!result.ok) {
+      return null;
+    }
+    return result.json();
+  } catch {
+    return null;
+  }
+}
+
 /**
  * delete a property
  * @param uuid
@@ -316,5 +336,6 @@ export const useGetShareLink = () => {
 export const Endpoints = {
   imageProxy,
   locationLookup,
+  locationPOI,
   authSignIn,
 };

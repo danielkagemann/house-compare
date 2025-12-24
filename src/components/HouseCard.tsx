@@ -141,7 +141,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
             )}
          </Card >
          <Sheet open={show} onOpenChange={setShow}>
-            <SheetContent side="right" className="min-w-[95%] md:min-w-[40%] overflow-y-auto">
+            <SheetContent side="right" className="min-w-[95%] md:min-w-[50%] overflow-y-auto">
                <ListingPreview data={data} hasEdit />
             </SheetContent>
          </Sheet>

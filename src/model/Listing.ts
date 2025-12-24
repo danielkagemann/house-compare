@@ -3,10 +3,17 @@ export type Coordinates = {
   lon: number;
 };
 
+export type POI = {
+  name: string;
+  type: string;
+  coordinates: Coordinates;  
+}
+
 export type Location = Coordinates & {
   country: string;
   code: string;
   display: string;
+  poi?: POI[];
 };
 
 export type Listing = {
