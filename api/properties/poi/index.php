@@ -131,7 +131,7 @@ function overpassCached(string $typeKey, string $typeValue, int $amount, int $tt
             ]
         ];
     }, $data["elements"] ?? []);
-    
+
     // atomic write
     $tmp = $file . '.' . bin2hex(random_bytes(4)) . '.tmp';
     file_put_contents($tmp, json_encode($data, JSON_UNESCAPED_UNICODE));
@@ -141,8 +141,10 @@ function overpassCached(string $typeKey, string $typeValue, int $amount, int $tt
 }
 
 $market = overpassCached('amenity', 'supermarket', 5);
+$super = overpassCached('shop', 'supermarket', 5);
 $restaurant = overpassCached('amenity', 'restaurant',5);
-$beach = overpassCached('natural', 'beach', 2);
+$beach = overpassCached('natural', 'beach', 3);
+$resort = overpassCached('leisure', 'beach_resort', 3);
 
-$result = array_merge($market, $restaurant, $beach);
+$result = array_merge($super, $market, $restaurant, $beach, $resort);
 echo json_encode($result, JSON_UNESCAPED_UNICODE);

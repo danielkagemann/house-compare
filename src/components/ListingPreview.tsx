@@ -4,6 +4,7 @@ import { BedDouble, Calendar, ChevronDown, MapPin, Ruler } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { ListOfAmenities } from "./list-of-amenities";
 
 const Map = dynamic(() => import("./Map"), {
    ssr: false,
@@ -103,6 +104,8 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
                </div>)
          }
          {data.description.length > 0 && <div className="text-sm text-gray-700"><ReadMore text={data.description} /></div>}
+
+         <ListOfAmenities item={data.location} />
 
          {
             data.notes.length > 0 && (
