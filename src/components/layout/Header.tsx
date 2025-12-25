@@ -1,19 +1,19 @@
 "use client";
 
 import Image from 'next/image';
-import { LocationInput } from './LocationInput';
+import { LocationInput } from '../LocationInput';
 import Link from 'next/link';
-import { FilterPanel } from './FilterPanel';
-import { Button } from './ui/button';
+import { FilterPanel } from '../FilterPanel';
+import { Button } from '../ui/button';
 
 import { useRouter } from 'next/navigation';
-import { CompareButton } from './CompareButton';
-import { Tooltip } from './ui/Tooltip';
+import { CompareButton } from '../CompareButton';
+import { Tooltip } from '../ui/Tooltip';
 import { useGetShareLink } from '@/lib/fetch';
 import { toast } from 'sonner';
-import { Plus } from './animate-ui/icons/plus';
-import { Send } from './animate-ui/icons/send';
-import { List } from './animate-ui/icons/list';
+import { Plus } from '../animate-ui/icons/plus';
+import { Send } from '../animate-ui/icons/send';
+import { List } from '../animate-ui/icons/list';
 import { Earth } from 'lucide-react';
 
 export const Header = () => {

@@ -11,7 +11,6 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 - add translation of description possibility
 - show map on compare
 - filter by countries (if more than one)
-- big map with all favorites
 
 ## finding a domain name
 

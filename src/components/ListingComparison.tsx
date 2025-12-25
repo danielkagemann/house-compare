@@ -7,7 +7,7 @@ import { FeatureList, Features } from "./Features";
 import Flag from 'react-world-flags'
 import { useGetPropertyList } from "@/lib/fetch";
 import { PageLayout } from "./PageLayout";
-import { Header } from "./Header";
+import { Header } from "./layout/Header";
 import { Loading } from "./Loading";
 
 export const ListingComparison = () => {

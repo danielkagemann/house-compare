@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useStorage } from '@/store/storage';
 import { useDeleteAccount, useValidateToken } from '@/lib/fetch';
-import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogTitle, DialogDescription, DialogFooter, DialogClose } from './ui/dialog';
-import { Button } from './ui/button';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Button } from '../ui/button';
 
 function isShareMode() {
    if (globalThis.window !== undefined) {

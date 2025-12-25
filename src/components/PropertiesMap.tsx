@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Coordinates } from '@/model/Listing';
 import { PageLayout } from './PageLayout';
-import { Header } from './Header';
+import { Header } from './layout/Header';
 
 L.Icon.Default.mergeOptions({
    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',

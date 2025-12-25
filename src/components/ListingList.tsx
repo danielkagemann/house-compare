@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import { HouseCard } from "./HouseCard";
 import { PageLayout } from "./PageLayout";
-import { Header } from "./Header";
+import { Header } from "./layout/Header";
 import { NoListings } from "./NoListings";
 import { useStorage } from "@/store/storage";
 import { useGetPropertyList } from "@/lib/fetch";

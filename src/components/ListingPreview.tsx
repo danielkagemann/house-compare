@@ -1,3 +1,5 @@
+"use client";
+
 import { Listing } from "@/model/Listing"
 import { ReadMore } from "./ui/Readmore";
 import { BedDouble, Calendar, ChevronDown, MapPin, Ruler } from "lucide-react";
@@ -5,6 +7,8 @@ import dynamic from "next/dynamic";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { ListOfAmenities } from "./list-of-amenities";
+import { motion } from "motion/react";
+import { useState } from "react";
 
 const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
@@ -16,6 +20,9 @@ interface Props {
 };
 
 export const ListingPreview = ({ data, hasEdit = false }: Props) => {
+   // state
+   const [expand, setExpand] = useState<boolean>(false);
+
    const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/main-bg.jpg`;
 
    function calculateAllFilled() {
@@ -44,12 +51,12 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
          <div className="flex justify-end gap-1 mb-3">
             {hasEdit &&
                (
-                  <Button variant="outline" size="sm">
+                  <Button variant="secondary" size="sm">
                      <Link href={`/properties/details/?id=${data.uuid}`}>Bearbeiten</Link>
                   </Button>
                )}
             {data.url &&
-               <Button variant="outline" size="sm">
+               <Button variant="secondary" size="sm">
                   <Link href={data.url} target="_blank" rel="noopener noreferrer">Original</Link>
                </Button>
             }
@@ -62,10 +69,26 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
             </div>
          </div>
 
-         <img
-            src={imageSrc}
-            alt={data.title}
-            className="w-full h-48 object-cover rounded-xl"
+         <motion.div
+            onClick={() => setExpand(p => !p)}
+            aria-label={data.title}
+            className={`w-full ${expand ? 'h-120' : 'h-60'} rounded-xl mb-2 bg-cover bg-no-repeat cursor-pointer`}
+            style={{
+               backgroundImage: `url(${imageSrc})`,
+               backgroundPosition: "50% 0%",
+            }}
+            animate={{
+               backgroundPosition: [
+                  "50% 0%",   // top
+                  "50% 100%", // bottom
+                  "50% 0%",   // back to top
+               ],
+            }}
+            transition={{
+               duration: 14,
+               repeat: Infinity,
+               ease: "easeInOut",
+            }}
          />
          {data.contact.length > 0 && <div className="text-xs text-gray-700 truncate w-min-0">{data.contact}</div>}
          {data.title.length > 0 && <h2 className="font-bold text-lg">{data.title}</h2>}

@@ -1,7 +1,7 @@
 "use client";
 
 import { Toaster } from "@/components/ui/sonner";
-import { Footer } from "@/components/Footer";
+import { Footer } from "@/components/layout/Footer";
 import 'leaflet/dist/leaflet.css';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";

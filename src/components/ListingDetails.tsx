@@ -19,7 +19,7 @@ import { InputSize } from "@/components/inputs/InputSize";
 import { InputFeatures } from "@/components/inputs/InputFeatures";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useGetPropertyDetails, useSetProperty } from "@/lib/fetch";
-import { Header } from "./Header";
+import { Header } from "./layout/Header";
 import { PageLayout } from "./PageLayout";
 
 type InputOrder = {
