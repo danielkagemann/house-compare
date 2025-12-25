@@ -28,7 +28,7 @@ export const ListingList = () => {
 
    // derived state
    const listings = useMemo(() => calculateScores(properties || [], factors), [properties]);
-   
+
    if (isLoading) {
       return <Loading />
    }

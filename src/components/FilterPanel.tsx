@@ -45,7 +45,7 @@ export const FilterPanel = () => {
                      <div className="flex flex-col gap-1">
                         <strong>Einstellungen zu den Merkmalen</strong>
                         <div className="flex gap-1 items-center">
-                           <div className="text-gray-700 w-30">Max. Preis (€):</div>
+                           <div className="text-gray-700 w-30">Max. Preis (EUR):</div>
                            <Input type="number" value={$save.filter.maxPrice} className="w-32" onChange={(e) => $save.filterUpdate({ ...$save.filter, maxPrice: Number(e.target.value) })} />
                         </div>
                         <div className="flex gap-1 items-center">

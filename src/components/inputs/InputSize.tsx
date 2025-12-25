@@ -17,7 +17,7 @@ export const InputSize = ({ price, value, onChange, onNext }: Props) => {
       <>
          <p>Gib hier die Wohnfläche oder Nutzfläche in m² an. Der Quadratmeterpreis wird automatisch berechnet.</p>
          <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
-         {quote !== '---' && <p>Der Preis pro Quadratmeter beträgt {quote} €.</p>}
+         {quote !== '---' && <p>Der Preis pro Quadratmeter beträgt {quote} EUR.</p>}
          <InputNext onClick={onNext} />
       </>
    );

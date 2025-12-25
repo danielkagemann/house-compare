@@ -6,8 +6,8 @@ export type Coordinates = {
 export type POI = {
   name: string;
   type: string;
-  coordinates: Coordinates;  
-}
+  coordinates: Coordinates;
+};
 
 export type Location = Coordinates & {
   country: string;
@@ -55,7 +55,7 @@ export function getSquareMeterPrice(price: string, sqm: string): string {
   const sqmNum = Number.parseFloat(sqm.replace(/\./g, "").replace(",", "."));
   if (!Number.isNaN(priceNum) && !Number.isNaN(sqmNum) && sqmNum > 0) {
     const pricePerSqm = Math.round(priceNum / sqmNum);
-    return `€ ${pricePerSqm.toLocaleString()}`;
+    return `EUR ${pricePerSqm.toLocaleString()}`;
   }
   return "--";
 }
@@ -150,4 +150,18 @@ export function calculateScores(
       score: Number.isNaN(score) ? 0 : Number((score * 100).toFixed(0)),
     };
   });
+}
+
+export function amenityTitle(type: string) {
+  switch (type) {
+    case "supermarket":
+      return "Supermärkte";
+    case "restaurant":
+      return "Restaurants";
+    case "beach":
+    case "beach_resort":
+      return "Strände";
+    default:
+      return type;
+  }
 }

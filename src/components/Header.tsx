@@ -13,11 +13,12 @@ import { useGetShareLink } from '@/lib/fetch';
 import { toast } from 'sonner';
 import { Plus } from './animate-ui/icons/plus';
 import { Send } from './animate-ui/icons/send';
+import { List } from './animate-ui/icons/list';
+import { Earth } from 'lucide-react';
 
 export const Header = () => {
    // hooks
    const $router = useRouter();
-
    const $link = useGetShareLink();
 
    function onCopy() {
@@ -33,7 +34,17 @@ export const Header = () => {
          <Link href="/" className="flex gap-2 items-center">
             <Image src="/assets/images/main-logo.png" width={42} height={42} alt="logo" /> <div className="text-2xl font-bold">Villaya</div>
          </Link>
-         <div className="flex gap-2 items-center">
+         <div className="flex gap-1 md:gap-2 items-center">
+            <Tooltip text="Immobilien">
+               <Button variant="secondary" onClick={() => $router.push("/properties")}>
+                  <List animateOnHover size={18} />
+               </Button>
+            </Tooltip>
+            <Tooltip text="Kartendarstellung">
+               <Button variant="secondary" onClick={() => $router.push("/properties/map")}>
+                  <Earth size={18} />
+               </Button>
+            </Tooltip>
             <Tooltip text="Immobilie hinzufügen">
                <Button variant="secondary" onClick={() => $router.push("/properties/details")}>
                   <Plus animateOnHover size={18} />

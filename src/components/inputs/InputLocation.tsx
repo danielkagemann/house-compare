@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { MapPin } from "lucide-react";
 import { Input } from "../ui/input";
 import { InputNext } from "./InputNext";
-import { distanceBetweenCoordinates, Location } from "@/model/Listing";
+import { Location } from "@/model/Listing";
 import { useState } from "react";
 import { flushSync } from "react-dom";
 import { Spinner } from "../ui/spinner";
@@ -13,7 +13,7 @@ import dynamic from "next/dynamic";
 import { ListOfAmenities } from "../list-of-amenities";
 import { Skeleton } from "../ui/skeleton";
 
-const Map = dynamic(() => import("../Map"), {
+const SmallMap = dynamic(() => import("../SmallMap"), {
    ssr: false,
 });
 
@@ -60,7 +60,7 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
       }
 
       return (
-         <Map location={{ lat: value.lat!, lon: value.lon! }} className="h-30" />
+         <SmallMap location={{ lat: value.lat!, lon: value.lon! }} className="h-30" />
       );
    }
 

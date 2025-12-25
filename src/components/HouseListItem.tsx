@@ -43,7 +43,7 @@ export const HouseListItem = ({ item }: HouseListItemProps) => {
                </div>
             </div>
             <div className="text-xl font-semibold text-primary mt-2">
-               € {Number.parseFloat(item.price).toLocaleString()}
+               EUR {Number.parseFloat(item.price).toLocaleString()}
             </div>
             <div className="text-sm text-gray-600"><ReadMore text={item.description} /></div>
          </div>

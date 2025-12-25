@@ -12,6 +12,7 @@ import { List } from "./animate-ui/icons/list";
 import { Heart } from "./animate-ui/icons/heart";
 import { MapPin } from "./animate-ui/icons/map-pin";
 import { BedDouble, Calendar, Car, Ruler } from "lucide-react";
+import { HouseAmenities } from "./house-amenities";
 
 interface HouseCardProps {
    data: Listing;
@@ -114,7 +115,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   </div>)}
 
                   <div className="text-xl font-semibold text-primary mt-2">
-                     € {Number.parseFloat(data.price || '0').toLocaleString()}
+                     EUR {Number.parseFloat(data.price || '0').toLocaleString()}
                   </div>
                   <div className="text-sm text-gray-500 -mt-1">{getSquareMeterPrice(data.price, data.sqm)}</div>
                </div>
@@ -137,6 +138,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   <div className="text-sm text-gray-700 mt-1 leading-snug">
                      {data.description.slice(0, 100)}{data.description.length > 100 ? '...' : ''}
                   </div>
+                  <HouseAmenities item={data.location} />
                </CardContent>
             )}
          </Card >

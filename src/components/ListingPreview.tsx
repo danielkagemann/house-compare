@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { ListOfAmenities } from "./list-of-amenities";
 
-const Map = dynamic(() => import("./Map"), {
+const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
 });
 
@@ -76,10 +76,10 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
                   <div className="flex items-center gap-1"><MapPin size={14} /> {data.location.display}</div>
                   <div className="transition-transform duration-200 [details:not([open])_&]:rotate-180"><ChevronDown size={14} /></div>
                </summary>
-               <Map location={{ lat: data.location.lat!, lon: data.location.lon! }} className="h-40" />
+               <SmallMap location={{ lat: data.location.lat!, lon: data.location.lon! }} className="h-40" />
             </details>
          }
-         {data.price.length > 0 && <p className="text-primary font-bold text-xl">{`€ ${parseFloat(data.price).toLocaleString()}` || '--'}</p>}
+         {data.price.length > 0 && <p className="text-primary font-bold text-xl">{`EUR ${parseFloat(data.price).toLocaleString()}` || '--'}</p>}
 
          <div className="flex gap-1 justify-between text-sm px-2">
             {data.sqm.length > 0 && (

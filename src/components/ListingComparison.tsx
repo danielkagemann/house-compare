@@ -38,7 +38,7 @@ export const ListingComparison = () => {
          <td key={`comparison-cell-${item.uuid}`} className="border-b border-gray-200 p-2 align-top w-full md:w-1/3">
             {attr === 'image' && <img src={item.image} alt={`Listing ${item.uuid}`} className="w-full h-52 object-cover rounded-xl" />}
             {attr === 'title' && <strong>{item.title}</strong>}
-            {attr === 'price' && <div className="text-primary font-bold text-lg">€ {item.price}</div>}
+            {attr === 'price' && <div className="text-primary font-bold text-lg">EUR {item.price}</div>}
             {attr === 'location' && <div className="flex gap-1 items-center text-gray-700"><MapPin size={14} /> {item.location.display}</div>}
             {attr === 'country' && <div className="flex gap-1 items-center text-gray-700"><Flag code={item.location.code} width={16} /> {item.location.country}</div>}
             {attr === 'year' && <div className="flex gap-1 items-center text-gray-700"><Calendar size={14} /> {item.year}</div>}

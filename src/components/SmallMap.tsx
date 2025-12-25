@@ -16,7 +16,7 @@ type Props = {
    className?: string;
 }
 
-export default function Map({ location, className }: Props) {
+export default function SmallMap({ location, className }: Props) {
    // state
    const [coords, setCoords] = useState<LatLngTuple>([location.lat, location.lon]);
 
