@@ -58,7 +58,7 @@ export const Hero = ({ children }: HeroProps) => {
                   <img
                      src="/assets/images/main-bg.jpg"
                      alt="Beach villas"
-                     className="w-1/2 lg:w-full object-cover"
+                     className="lg:w-full object-cover"
                   />
                </motion.div>
             </div>
