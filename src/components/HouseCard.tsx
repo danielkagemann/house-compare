@@ -13,6 +13,9 @@ import { Heart } from "./animate-ui/icons/heart";
 import { MapPin } from "./animate-ui/icons/map-pin";
 import { BedDouble, Calendar, Car, Ruler } from "lucide-react";
 import { HouseAmenities } from "./house-amenities";
+import { useRouter } from "next/navigation";
+import { Link2 } from "./animate-ui/icons/link-2";
+import Link from "next/link";
 
 interface HouseCardProps {
    data: Listing;
@@ -78,6 +81,16 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                   <Trash animateOnHover size={14} className="text-white" />
                </motion.button>
 
+               <motion.div
+                  className={`absolute top-2 right-18 bg-black bg-opacity-75 rounded-full p-2`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ y: -5 }}
+                  transition={{ duration: 0.2 }}>
+
+                  <Link href={data.url} target="_blank" rel="noopener noreferrer">
+                     <Link2 animateOnHover size={14} className="text-white" /></Link>
+               </motion.div>
+
                <motion.button
                   type="button"
                   className={`absolute top-2 right-10 bg-black bg-opacity-75 rounded-full p-2`}
@@ -88,6 +101,7 @@ export const HouseCard = ({ data, isSelected, onSelect, isMarked = false }: Hous
                >
                   <List animateOnHover size={14} className="text-white" />
                </motion.button>
+
                <motion.button
                   type="button"
                   className={`absolute top-2 right-2 ${isSelected ? 'bg-red-700' : 'bg-black'} bg-opacity-75 rounded-full p-2`}
