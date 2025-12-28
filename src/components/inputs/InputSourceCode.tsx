@@ -37,6 +37,12 @@ export const InputSourceCode = ({ onChange }: Props) => {
          if (parsed.location.display.length > 0) {
             const loc = await Endpoints.locationLookup(parsed.location.display);
             if (loc) {
+
+               const poiResult = await Endpoints.locationPOI(loc.lat, loc.lon);
+               if (poiResult) {
+                  loc.poi = poiResult;
+               }
+
                parsed.location = loc;
             }
          }

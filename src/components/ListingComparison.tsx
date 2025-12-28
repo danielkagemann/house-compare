@@ -9,6 +9,11 @@ import { useGetPropertyList } from "@/lib/fetch";
 import { PageLayout } from "./PageLayout";
 import { Header } from "./layout/Header";
 import { Loading } from "./Loading";
+import { useMemo } from "react";
+import { RenderIf } from "./renderif";
+
+
+type BestOption = Record<string, { value: number, index: number }>;
 
 export const ListingComparison = () => {
 
@@ -33,22 +38,114 @@ export const ListingComparison = () => {
       }))
    }
 
+   const bestOption = useMemo((): BestOption => {
+      // iterate over all data elements and summarize the best options
+      const summary: BestOption = {};
+
+      if (!data) {
+         return summary;
+      }
+
+      // find the index with the best value for each attribute
+      data.forEach((item: Listing, index: number) => {
+         // price
+         const price = Number.parseFloat(item.price);
+         if (!summary['price'] || price < summary['price'].value) {
+            summary['price'] = { value: price, index };
+         }
+
+         // sqmPrice
+         const sqmPrice: number = getSquareMeterPrice(item.price, item.sqm, true) as number;
+         if (!summary['sqmPrice'] || sqmPrice < summary['sqmPrice'].value) {
+            summary['sqmPrice'] = { value: sqmPrice, index };
+         }
+
+         // rooms
+         const rooms = Number.parseFloat(item.rooms);
+         if (!summary['rooms'] || rooms > summary['rooms'].value) {
+            summary['rooms'] = { value: rooms, index };
+         }
+
+         // year
+         const year = Number.parseFloat(item.year);
+         if (!summary['year'] || year > summary['year'].value) {
+            summary['year'] = { value: year, index };
+         }
+
+         // sqm
+         const sqm = Number.parseFloat(item.sqm);
+         if (!summary['sqm'] || sqm > summary['sqm'].value) {
+            summary['sqm'] = { value: sqm, index };
+         }
+      });
+
+      return summary;
+   }, [data]);
+
+   function getTopOptionIndex() {
+      const indices = Object.values(bestOption).map(item => item.index);
+
+      const top: number[] = new Array(data?.length ?? 0).fill(0);
+      indices.forEach((idx) => {
+         top[idx] = top[idx] + 1;
+      });
+      return top.indexOf(Math.max(...top));
+   }
+
    function renderCell(item: Listing, attr: string, index: number) {
       return (
          <td key={`comparison-cell-${item.uuid}`} className="border-b border-gray-200 p-2 align-top w-full md:w-1/3">
-            {attr === 'image' && <img src={item.image} alt={`Listing ${item.uuid}`} className="w-full h-52 object-cover rounded-xl" />}
-            {attr === 'title' && <strong>{item.title}</strong>}
-            {attr === 'price' && <div className="text-primary font-bold text-lg">EUR {item.price}</div>}
-            {attr === 'location' && <div className="flex gap-1 items-center text-gray-700"><MapPin size={14} /> {item.location.display}</div>}
-            {attr === 'country' && <div className="flex gap-1 items-center text-gray-700"><Flag code={item.location.code} width={16} /> {item.location.country}</div>}
-            {attr === 'year' && <div className="flex gap-1 items-center text-gray-700"><Calendar size={14} /> {item.year}</div>}
-            {attr === 'rooms' && <div className="flex gap-1 items-center text-gray-700"><BedDouble size={14} /> {item.rooms}</div>}
-            {attr === 'sqm' && <div className="flex gap-1 items-center text-gray-700"><Ruler size={14} /> {item.sqm} m²</div>}
-            {attr === 'sqmPrice' && getSquareMeterPrice(item.price, item.sqm)}
-            {attr === 'description' && <ReadMore text={item.description} />}
-            {attr === 'features' && <Features features={getFeatures(index)} />}
-            {attr === 'contact' && <div className="flex gap-1 items-center text-gray-700"><User size={14} /> {item.contact}</div>}
-         </td>
+            <RenderIf condition={attr === 'image'}>
+               <div className="relative w-full h-52">
+                  <img src={item.image} alt={`Listing ${item.uuid}`} className="w-full h-full object-cover rounded-xl" />
+                  <RenderIf condition={getTopOptionIndex() === index}>
+                     <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm">Top</div>
+                  </RenderIf>
+               </div>
+            </RenderIf>
+
+            <RenderIf condition={attr === 'title'}>
+               <strong>{item.title}</strong>
+            </RenderIf>
+
+            <RenderIf condition={attr === 'price'}>
+               <div className={`text-lg font-bold ${bestOption['price']?.index === index ? 'text-green-700' : 'text-red-700'}`}>EUR {item.price}</div>
+            </RenderIf>
+
+            <RenderIf condition={attr === 'location'}>
+               <div className="flex gap-1 items-center text-gray-700"><MapPin size={14} /> {item.location.display}</div>
+            </RenderIf>
+
+            <RenderIf condition={attr === 'country'}>
+               <div className="flex gap-1 items-center text-gray-700"><Flag code={item.location.code} width={16} /> {item.location.country}</div>
+            </RenderIf>
+
+            <RenderIf condition={attr === 'year'}>
+               <div className={`flex gap-1 items-center text-gray-700 ${bestOption['year']?.index === index ? 'text-green-700' : 'text-red-700'}`}><Calendar size={14} /> {item.year}</div>
+            </RenderIf>
+
+            <RenderIf condition={attr === 'rooms'}>
+               <div className={`flex gap-1 items-center text-gray-700 ${bestOption['rooms']?.index === index ? 'text-green-700' : 'text-red-700'}`}><BedDouble size={14} /> {item.rooms}</div>
+            </RenderIf>
+
+            <RenderIf condition={attr === 'sqm'}>
+               <div className={`flex gap-1 items-center text-gray-700 ${bestOption['sqm']?.index === index ? 'text-green-700' : 'text-red-700'}`}><Ruler size={14} /> {item.sqm} m²</div>
+            </RenderIf>
+            <RenderIf condition={attr === 'sqmPrice'}>
+               <div className={`text-sm text-gray-700 ${bestOption['sqmPrice']?.index === index ? 'text-green-700' : 'text-red-700'}`}>
+                  pro qm: {getSquareMeterPrice(item.price, item.sqm)}
+               </div>
+            </RenderIf>
+            <RenderIf condition={attr === 'description'}>
+               <ReadMore text={item.description} />
+            </RenderIf>
+            <RenderIf condition={attr === 'features'}>
+               <Features features={getFeatures(index)} />
+            </RenderIf>
+            <RenderIf condition={attr === 'contact'}>
+               <div className="flex gap-1 items-center text-gray-700"><User size={14} /> {item.contact}</div>
+            </RenderIf>
+         </td >
       );
    }
 
@@ -68,6 +165,9 @@ export const ListingComparison = () => {
       <PageLayout>
          <Header />
          <h2 className="font-bold text-lg">Immobilienvergleich</h2>
+         <div className="text-gray-600 text-sm mb-4">
+            Vergleiche die ausgewählten Immobilien anhand der wichtigsten Attribute wie Preis, Größe, Baujahr und mehr. Die beste Option in jeder Kategorie wird hervorgehoben, um bei der Entscheidungsfindung zu helfen.
+         </div>
          <div className="overflow-x-auto block">
             <table className="border-collapse min-w-full">
                <tbody>

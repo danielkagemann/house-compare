@@ -48,16 +48,20 @@ export const LISTING_AVAILABLE_ATTRIBUTES = [
   "contact",
 ];
 
-export function getSquareMeterPrice(price: string, sqm: string): string {
+export function getSquareMeterPrice(
+  price: string,
+  sqm: string,
+  asNumber: boolean = false
+): string | number {
   const priceNum = Number.parseFloat(
     price.replace(/\./g, "").replace(",", ".")
   );
   const sqmNum = Number.parseFloat(sqm.replace(/\./g, "").replace(",", "."));
   if (!Number.isNaN(priceNum) && !Number.isNaN(sqmNum) && sqmNum > 0) {
     const pricePerSqm = Math.round(priceNum / sqmNum);
-    return `EUR ${pricePerSqm.toLocaleString()}`;
+    return asNumber ? pricePerSqm : `EUR ${pricePerSqm.toLocaleString()}`;
   }
-  return "--";
+  return asNumber ? 0 : "--";
 }
 
 export function distanceBetweenCoordinates(from: Coordinates, to: Coordinates) {

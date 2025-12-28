@@ -139,7 +139,7 @@ export const ListingDetails = () => {
                      ))
                   }
                </Accordion>
-               <div className="flex flex-col gap-1 text-sm border-t-1 border-gray-300 py-2">
+               <div className="flex flex-col gap-1 text-sm border-t border-gray-300 py-2">
                   <strong>Speichern</strong>
                   <p>Prüfe ob alle Eingaben korrekt sind. In der Vorschau siehst Du, zu wieviel Prozent alle Felder befüllt sind.</p>
                   <div className="flex justify-end">
