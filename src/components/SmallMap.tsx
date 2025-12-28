@@ -24,6 +24,13 @@ export default function SmallMap({ location, className }: Props) {
       setCoords([location.lat, location.lon]);
    }, [location]);
 
+   const cartoAttribution =
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
+      '&copy; <a href="https://carto.com/attributions">CARTO</a>';
+
+   const carto = (style: string) =>
+      `https://{s}.basemaps.cartocdn.com/${style}/{z}/{x}/{y}{r}.png`;
+
    return (
       <div className={`w-full h-40 rounded-xl overflow-hidden shadow-lg ${className}`}>
          <MapContainer center={coords}
@@ -31,9 +38,16 @@ export default function SmallMap({ location, className }: Props) {
             scrollWheelZoom={false}
             className="w-full h-full"
          >
+            {/* <TileLayer
+               url={carto("light_all")}
+               attribution={cartoAttribution}
+            /> */}
+
             <TileLayer
-               attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-               url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+               url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
+               minZoom={0}
+               maxZoom={20}
+               attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
 
             {coords &&

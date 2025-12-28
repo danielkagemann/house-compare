@@ -9,7 +9,7 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 ## ideas for future implementations
 
 -  map via toggle on main listing page instead of separate page
--  more colorful tilelayer
+-  ~~more colorful tilelayer~~
 -  comparison does not look good on mobile
 -  ~~details with indicator which field has empty data~~
 -  topscore with more checks (year should be removed)

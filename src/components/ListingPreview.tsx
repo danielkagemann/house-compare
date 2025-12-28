@@ -135,7 +135,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
          {
             data.notes.length > 0 && (
                <div className="mt-2 p-2 bg-yellow-400 border-l-4 border-yellow-500">
-                  <strong className="font-bold">Notizen</strong>
+                  <strong className="font-bold">Notizen (du kannst hier Markdown verwenden)</strong>
                   <span className="text-sm text-gray-700">
                      <Markdown remarkPlugins={[remarkGfm]}>{data.notes}</Markdown>
                   </span>
