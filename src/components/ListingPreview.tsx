@@ -9,6 +9,8 @@ import Link from "next/link";
 import { ListOfAmenities } from "./list-of-amenities";
 import { motion } from "motion/react";
 import { useState } from "react";
+import Markdown from 'react-markdown'
+import remarkGfm from "remark-gfm";
 
 const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
@@ -132,9 +134,11 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
 
          {
             data.notes.length > 0 && (
-               <div className="mt-2 p-2 bg-yellow-300 border-l-4 border-yellow-700">
-                  <strong className="font-bold">Notizen: &nbsp;</strong>
-                  <em className="text-sm text-gray-700">{data.notes}</em>
+               <div className="mt-2 p-2 bg-yellow-400 border-l-4 border-yellow-500">
+                  <strong className="font-bold">Notizen</strong>
+                  <span className="text-sm text-gray-700">
+                     <Markdown remarkPlugins={[remarkGfm]}>{data.notes}</Markdown>
+                  </span>
                </div>
             )
          }
