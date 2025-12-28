@@ -9,8 +9,6 @@ import { useStorage } from "@/store/storage";
 import { useGetPropertyList } from "@/lib/fetch";
 import { Listing } from "@/model/Listing";
 import { Loading } from "./Loading";
-import { Star } from "./animate-ui/icons/star";
-
 
 export const ListingList = () => {
    // hook
@@ -28,28 +26,12 @@ export const ListingList = () => {
       return <NoListings />;
    }
 
-   const isFilteredOut = (data: Listing): boolean => {
-      if ($storage.filter.maxPrice > 0 && Number.parseFloat(data.price) > $storage.filter.maxPrice) {
-         return true;
-      }
-      if ($storage.filter.minArea > 0 && Number.parseFloat(data.sqm) < $storage.filter.minArea) {
-         return true;
-      }
-      return false;
-   }
-
-   const getFilteredListings = (): Listing[] => {
-      return $storage.filter.removeFromList ? listings.filter((item: Listing) => !isFilteredOut(item)) : listings;
-   };
-
-   const list = getFilteredListings();
-
    return (
       <PageLayout>
          <Header />
          <div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {
-               list.length === 0 && (
+               listings.length === 0 && (
                   <div className="col-span-full">
                      <p className="text-gray-500">Keine Immobilien für diese Filterkriterien gefunden.</p>
                   </div>
@@ -57,7 +39,7 @@ export const ListingList = () => {
             }
 
             {
-               list.map((item, index) => (
+               listings.map((item: Listing, index: number) => (
                   <motion.div
                      key={item.uuid}
                      initial={{ opacity: 0, y: 20 }}
@@ -70,8 +52,7 @@ export const ListingList = () => {
                      <HouseCard
                         data={item}
                         isSelected={$storage.selectionContains(item.uuid)}
-                        onSelect={() => $storage.selectionToggle(item.uuid)}
-                        isMarked={isFilteredOut(item)} />
+                        onSelect={() => $storage.selectionToggle(item.uuid)} />
                   </motion.div>
                ))
             }

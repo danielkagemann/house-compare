@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { LocationInput } from '../LocationInput';
 import Link from 'next/link';
-import { FilterPanel } from '../FilterPanel';
 import { Button } from '../ui/button';
 
 import { useRouter } from 'next/navigation';
@@ -57,7 +56,6 @@ export const Header = () => {
                   </Button>
                </Tooltip>
             }
-            <FilterPanel />
             <CompareButton />
             <LocationInput />
          </div>
