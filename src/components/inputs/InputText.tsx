@@ -15,10 +15,10 @@ export const InputText = ({ description, value, onChange, onNext, type = 'text' 
       <>
          {description}
          {type === 'area' && (
-            <Textarea rows={3} value={value} onChange={(e) => onChange(e.target.value)} />
+            <Textarea rows={3} value={value} autoFocus onChange={(e) => onChange(e.target.value)} />
          )}
          {type === 'text' && (
-            <Input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
+            <Input type="text" value={value} autoFocus onChange={(e) => onChange(e.target.value)} />
          )}
          <InputNext onClick={onNext} />
       </>

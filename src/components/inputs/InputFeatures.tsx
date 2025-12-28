@@ -35,10 +35,10 @@ export const InputFeatures = ({ value, onChange, onNext }: Props) => {
    return (
       <>
          <p>Bitte gib die Ausstattungsmerkmale der Immobilie an. Nutzer hierzu das Eingabefeld (komma getrennt) oder die Liste darunter.</p>
-         <Textarea rows={3} placeholder="z.B. Balkon, Garten, Garage" value={flatList} onChange={(e) => setFlatList(e.target.value)} />
+         <Textarea autoFocus rows={3} placeholder="z.B. Balkon, Garten, Garage" value={flatList} onChange={(e) => setFlatList(e.target.value)} />
          <div className="flex justify-end">
             <Button variant="outline" disabled={flatList.trim().length === 0} onClick={() => {
-               const featuresFromList = flatList.split(',').map(f => f.trim()).filter(f => f.length > 0);
+               const featuresFromList = flatList.split(/[\n,]/).map(f => f.trim()).filter(f => f.length > 0);
                const newValues = [...value, ...featuresFromList];
                onChange(newValues);
                setFlatList('');

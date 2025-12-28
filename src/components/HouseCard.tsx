@@ -1,3 +1,5 @@
+"use client";
+
 import { distanceBetweenCoordinates, getSquareMeterPrice, Listing } from "@/model/Listing"
 import { ListingPreview } from "./ListingPreview";
 import { Sheet, SheetContent } from "./ui/sheet";
@@ -21,7 +23,7 @@ interface HouseCardProps {
 
 export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
    // state
-   const [show, setShow] = useState(false);
+   const [show, setShow] = useState<boolean>(false);
 
    // hooks
    const $save = useStorage();
@@ -29,8 +31,12 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
    // queries
    const $delete = useDeleteProperty();
 
+   // derived state for distance calculation
    const distance = $save.location && data.location ? distanceBetweenCoordinates($save.location, { lat: data.location.lat, lon: data.location.lon }) : null;
 
+   /**
+    * delete the property
+    */
    function onDelete() {
       $delete.mutateAsync(data.uuid);
    }
@@ -39,7 +45,7 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
       <>
          <div className="bg-white md:shadow-lg md:rounded-lg md:p-3">
             {/* image */}
-            <div className="w-full h-40 overflow-y-clip relative group">
+            <div className="w-full h-40 overflow-y-clip relative transition-all duration-300 mb-2 group">
                <img
                   src={data.image}
                   alt={data.title}

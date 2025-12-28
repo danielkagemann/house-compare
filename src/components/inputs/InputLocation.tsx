@@ -34,7 +34,7 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
       const result = await Endpoints.locationLookup(value.display);
       if (result) {
 
-         const poiResult = await Endpoints.locationPOI(result.lat!, result.lon!);
+         const poiResult = await Endpoints.locationPOI(result.lat, result.lon);
          if (poiResult) {
             result.poi = poiResult;
          }
@@ -60,7 +60,7 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
       }
 
       return (
-         <SmallMap location={{ lat: value.lat!, lon: value.lon! }} className="h-30" />
+         <SmallMap location={{ lat: value.lat, lon: value.lon }} className="h-30" />
       );
    }
 
@@ -82,15 +82,16 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
       <>
          <p>Bitte gib den Standort der Immobilie an. Gib die ungefähre Adresse ein oder Koordinaten in der Form Latitude,Longitude. Es wird ebenfalls versucht, Sehenswürdigkeiten in der Nähe zu finden.</p>
          <div className="flex gap-1 items-center">
-            <Input type="text" value={value.display} onChange={(e) => onChange({ ...value, display: e.target.value })} />
+            <Input type="text" autoFocus value={value.display} onChange={(e) => onChange({ ...value, display: e.target.value })} />
             {working ? <Spinner /> : <Button variant="outline" onClick={onFindAddr}><MapPin size={16} /></Button>}
          </div>
 
          <p className="text-sm">{hasCoords() ? `${value.lat}, ${value.lon} in ${value.country}` : "Keine gültige Adresse."}</p>
-         {!working && <InputNext onClick={onNext} />}
 
          {showMap()}
          {showAmenities()}
+
+         {!working && <InputNext onClick={onNext} />}
       </>
    );
 };

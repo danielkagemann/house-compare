@@ -59,6 +59,7 @@ export const InputSourceCode = ({ onChange }: Props) => {
          <Textarea
             className="h-16 resize-none overflow-auto"
             rows={3}
+            autoFocus
             placeholder="Füge hier den HTML Quellcode der Seite ein..."
             value={data}
             onChange={(e) => {

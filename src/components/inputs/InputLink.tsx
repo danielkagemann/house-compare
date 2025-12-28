@@ -18,7 +18,12 @@ export const InputLink = ({ value, onChange, onNext }: InputLinkProps) => {
       <>
          Hier kannst Du die URL der Immobilie eingeben.
          <div className="flex gap-1">
-            <Input type="text" placeholder="URL der Immobilie eingeben..." value={value} onChange={(e) => onChange(e.target.value)} />
+            <Input
+               autoFocus
+               type="text"
+               placeholder="URL der Immobilie eingeben..."
+               value={value}
+               onChange={(e) => onChange(e.target.value)} />
             <Button variant="outline" onClick={onOpen}><ExternalLink size={16} /></Button>
          </div>
          <InputNext onClick={onNext} />
