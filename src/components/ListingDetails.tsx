@@ -3,7 +3,7 @@
 import { ListingPreview } from "@/components/ListingPreview";
 import { Button } from "@/components/ui/button";
 import { Listing } from "@/model/Listing";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
    Accordion,
    AccordionContent,
@@ -21,6 +21,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useGetPropertyDetails, useSetProperty } from "@/lib/fetch";
 import { Header } from "./layout/Header";
 import { PageLayout } from "./PageLayout";
+import { Asterisk, Check } from "lucide-react";
 
 type InputOrder = {
    title: string;
@@ -115,6 +116,25 @@ export const ListingDetails = () => {
       $router.push('/properties');
    }
 
+   function renderMissingValue(attr: string): ReactNode {
+      if (['sourcecode', 'notes'].includes(attr)) {
+         return null;
+      }
+
+      const value = (listing as any)[attr];
+
+      const missing = <Asterisk size={10} className="inline-block ml-1 bg-red-800 text-white p-0.5 rounded-full" />;
+      const filled = <Check size={10} className="inline-block ml-1 bg-green-800 text-white p-0.5 rounded-full" />;
+
+      if (attr === 'location') {
+         return (value.lat === 0 && value.lon === 0) ? missing : filled;
+      }
+      if (attr === 'features') {
+         return (value.length === 0) ? missing : filled;
+      }
+      return (!value || value === '') ? missing : filled;
+   }
+
    return (
       <PageLayout>
          <Header />
@@ -122,7 +142,6 @@ export const ListingDetails = () => {
             {/*user input*/}
             <div className="px-4 md:px-0">
                <h2 className="font-bold text-lg">{isEditing ? 'Immobilie bearbeiten' : 'Neue Immobilie hinzufügen'}</h2>
-
                <Accordion
                   type="single"
                   collapsible
@@ -133,7 +152,12 @@ export const ListingDetails = () => {
                   {
                      order.map((item: InputOrder) => (
                         <AccordionItem value={item.attr} key={item.attr} className={item.attr === current ? 'bg-gray-100 rounded-md border-0' : 'transparent'}>
-                           <AccordionTrigger className={`p-2 ${item.attr === current ? 'font-bold text-primary' : 'font-normal'}`}>{item.title}</AccordionTrigger>
+                           <AccordionTrigger className={`p-2 ${item.attr === current ? 'font-bold text-primary' : 'font-normal'}`}>
+                              <div className="flex justify-start gap-1 items-center">
+                                 <div>{item.title}</div>
+                                 <div>{renderMissingValue(item.attr)}</div>
+                              </div>
+                           </AccordionTrigger>
                            <AccordionContent className="flex flex-col gap-1 text-balance px-4">{item.children}</AccordionContent>
                         </AccordionItem>
                      ))
@@ -143,9 +167,9 @@ export const ListingDetails = () => {
                   <strong>Speichern</strong>
                   <p>Prüfe ob alle Eingaben korrekt sind. In der Vorschau siehst Du, zu wieviel Prozent alle Felder befüllt sind.</p>
                   <div className="flex justify-end">
-                     <Button onClick={onSave}>{isEditing ? 'Aktualisieren' : 'Erstellen'}</Button>
+                     <Button onClick={onSave}
+                        disabled={listing.url === ''}>{isEditing ? 'Aktualisieren' : 'Erstellen'}</Button>
                   </div>
-
                </div>
             </div>
 

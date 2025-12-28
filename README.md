@@ -8,9 +8,14 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 ## ideas for future implementations
 
-- add translation of description possibility
-- show map on compare
-- filter by countries (if more than one)
+-  map via toggle on main listing page instead of separate page
+-  more colorful tilelayer
+-  comparison does not look good on mobile
+-  ~~details with indicator which field has empty data~~
+-  topscore with more checks (year should be removed)
+-  personal ranking as new field (db + details)
+-  add translation of description possibility
+-  show map on compare
 
 ## finding a domain name
 
@@ -34,15 +39,15 @@ Here are the top 3 results.
 
 ## features
 
-- add whats new screen/info screen
-- set real estate data manually or from idealista and thinkspain html
-- possibility to add coordinates instead of location
-- storage in browser
-- store your favorite collection
-- comparison of real estates by user selection (up to 3)
-- add starting point to calculate distance (air)
-- works on mobile and desktop
-- detect countries
+-  add whats new screen/info screen
+-  set real estate data manually or from idealista and thinkspain html
+-  possibility to add coordinates instead of location
+-  storage in browser
+-  store your favorite collection
+-  comparison of real estates by user selection (up to 3)
+-  add starting point to calculate distance (air)
+-  works on mobile and desktop
+-  detect countries
 
 ## Some insights
 
@@ -65,9 +70,9 @@ You can define a starting point and the (air) distance is calculated to give you
 
 ## dependencies used
 
-- nextjs for client ~~and server~~
-- tailwind css
-- ~~cheerio (server api parses the HTML here)~~ replaced with DOM parsing to be deployable on GH pages
-- lucide icons for nice symbols
-- animated-ui for microanimations
-- motion for microanimations
+-  nextjs for client ~~and server~~
+-  tailwind css
+-  ~~cheerio (server api parses the HTML here)~~ replaced with DOM parsing to be deployable on GH pages
+-  lucide icons for nice symbols
+-  animated-ui for microanimations
+-  motion for microanimations

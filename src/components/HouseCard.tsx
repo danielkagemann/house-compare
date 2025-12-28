@@ -128,7 +128,7 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
             </div>
 
             {/* details like rooms, sqm, build */}
-            <div className="flex gap-1 justify-between text-sm">
+            <div className="flex gap-1 justify-between text-sm pt-2">
                <div className="flex items-center gap-1">
                   <Ruler size={12} /> {data.sqm || '---'} m²
                </div>
