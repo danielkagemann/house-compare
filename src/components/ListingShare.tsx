@@ -8,12 +8,22 @@ import { Hero } from "./Hero";
 import Image from "next/image";
 import { HouseListItem } from "./HouseListItem";
 import { Loading } from "./Loading";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import { RenderIf } from "./renderif";
+import { FloatingAction, FloatingActionType } from "./layout/FloatingAction";
+import dynamic from "next/dynamic";
+
+const PropertiesMap = dynamic(() => import("./PropertiesMap"), {
+   ssr: false,
+});
 
 export const ListingShare = () => {
    // state
    const [from, setFrom] = useState<string | null>(null);
    const [hidden, setHidden] = useState<string[]>([]);
+   const [display, setDisplay] = useState<FloatingActionType>('list');
+
+   // hooks
    const $url = useSearchParams();
 
    // queries
@@ -23,6 +33,9 @@ export const ListingShare = () => {
       setFrom($url.get('from'));
       setHidden($url.get('hide')?.split(',') || []);
    }, [$url]);
+
+   // derived state
+   const visibleItems = useMemo(() => (listing ?? []).filter((item: Listing, index: number) => !hidden.includes(index.toString())), [listing, hidden]);
 
    if (isLoading || !listing) {
       return (<Loading />);
@@ -37,15 +50,28 @@ export const ListingShare = () => {
          </Hero>
       </PageLayout>);
    }
+
    return (<PageLayout>
       <div className="flex flex-col gap-2">
          <Image src="/assets/images/main-logo.png" width={42} height={42} alt="logo" /> <div className="text-2xl font-bold">Villaya</div>
-         {listing.filter((item: Listing, index: number) => !hidden.includes(index.toString())).map((item: Listing) => (
-            <Fragment key={item.uuid}>
-               <HouseListItem item={item} />
-               <div className="md:hidden pt-2 mb-4 border-b-8 border-gray-200 w-[calc(100%+2rem)] -mx-4" />
-            </Fragment>
-         ))}
+
+         <RenderIf condition={display === 'list'}>
+            {
+               visibleItems.map((item: Listing) => (
+                  <Fragment key={item.uuid}>
+                     <HouseListItem item={item} />
+                     <div className="md:hidden pt-2 mb-4 border-b-8 border-gray-200 w-[calc(100%+2rem)] -mx-4" />
+                  </Fragment>
+               ))
+            }
+         </RenderIf>
+
+         <RenderIf condition={display === 'map'}>
+            <div className="w-full h-[calc(100vh-10rem)]">
+               <PropertiesMap listings={visibleItems} />
+            </div>
+         </RenderIf>
+         <FloatingAction selected={display} onChange={setDisplay} />
       </div>
-   </PageLayout>);
+   </PageLayout >);
 }

@@ -13,7 +13,6 @@ import { toast } from 'sonner';
 import { Plus } from '../animate-ui/icons/plus';
 import { Send } from '../animate-ui/icons/send';
 import { List } from '../animate-ui/icons/list';
-import { Earth } from 'lucide-react';
 
 export const Header = () => {
    // hooks
@@ -37,11 +36,6 @@ export const Header = () => {
             <Tooltip text="Immobilien">
                <Button variant="secondary" onClick={() => $router.push("/properties")}>
                   <List animateOnHover size={18} />
-               </Button>
-            </Tooltip>
-            <Tooltip text="Kartendarstellung">
-               <Button variant="secondary" onClick={() => $router.push("/properties/map")}>
-                  <Earth size={18} />
                </Button>
             </Tooltip>
             <Tooltip text="Immobilie hinzufügen">

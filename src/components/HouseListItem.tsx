@@ -42,7 +42,7 @@ export const HouseListItem = ({ item }: HouseListItemProps) => {
                   <Calendar size={14} /> {item.year || '--'}
                </div>
             </div>
-            <div className="text-xl font-semibold text-primary mt-2">
+            <div className="text-xl font-semibold mt-2">
                EUR {Number.parseFloat(item.price).toLocaleString()}
             </div>
             <div className="text-sm text-gray-600"><ReadMore text={item.description} /></div>

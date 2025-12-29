@@ -3,9 +3,10 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L, { divIcon } from 'leaflet';
-import { Coordinates } from '@/model/Listing';
-import { PageLayout } from './PageLayout';
-import { Header } from './layout/Header';
+import { Listing } from '@/model/Listing';
+import { useMemo } from 'react';
+import { Link2 } from './animate-ui/icons/link-2';
+import Link from 'next/link';
 
 L.Icon.Default.mergeOptions({
    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
@@ -13,24 +14,17 @@ L.Icon.Default.mergeOptions({
    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-export interface MarkerItem {
-   coords: Coordinates;
-   name: string;
-   image: string;
-   price: number;
-};
-
 interface Props {
-   readonly listings: MarkerItem[];
+   readonly listings: Listing[];
 }
 
 export default function PropertiesMap({ listings }: Props) {
    /**
-    * create custo html marker
+    * create custom html marker
     * @param item 
     * @returns 
     */
-   function renderCustomMarker(item: MarkerItem) {
+   function renderCustomMarker(item: Listing) {
 
       const div = document.createElement('div');
       div.style.backgroundColor = "black";
@@ -48,40 +42,47 @@ export default function PropertiesMap({ listings }: Props) {
 
       return (
          <Marker
-            key={item.name}
-            position={[item.coords.lat, item.coords.lon]}
+            key={item.title}
+            position={[item.location.lat, item.location.lon]}
             icon={customMarkerIcon}>
             <Popup>
-               <div className="-m-1 flex gap-x-2">
-                  {item.image && <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded" />}
-                  <div className="flex flex-col text-xs">
-                     <strong>{item.name}</strong>
-                     <div className="text-primary">EUR {item.price}</div>
+               <div className="flex flex-col gap-2">
+                  {item.image && <img src={item.image} alt={item.title} className="w-full h-30 object-cover rounded-t-[12px]" />}
+                  <div className="p-2">
+                     <div className="font-semibold text-lg">EUR {item.price}</div>
+                     <div>{item.title}</div>
+                     <div className="flex justify-end mt-2">
+                        <Link href={item.url} target="_blank" rel="noopener noreferrer">
+                           <Link2 size={18} />
+                        </Link>
+                     </div>
                   </div>
                </div>
             </Popup>
          </Marker>);
    }
 
-   return (
-      <PageLayout>
-         <Header />
-         <div className="w-full h-screen">
-            <MapContainer center={[listings.length > 0 ? listings[0].coords.lat : 0, listings.length > 0 ? listings[0].coords.lon : 0]}
-               zoom={11}
-               scrollWheelZoom={false}
-               className="w-full h-full z-1"
-            >
-               <TileLayer
-                  url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
-                  minZoom={0}
-                  maxZoom={20}
-                  attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-               />
+   // derived state
+   const markerList = useMemo((): Listing[] => {
+      return listings?.filter((item: Listing) => item.location.lat !== undefined && item.location.lon !== undefined)
+         ?? [];
+   }, [listings]);
 
-               {listings.map(renderCustomMarker)}
-            </MapContainer>
-         </div>
-      </PageLayout>
+
+   return (
+      <div className="w-full h-[calc(100vh-8rem)]">
+         <MapContainer center={[markerList.length > 0 ? markerList[0].location.lat : 0, markerList.length > 0 ? markerList[0].location.lon : 0]}
+            zoom={11}
+            scrollWheelZoom={false}
+            className="w-full h-full z-1"
+         >
+            <TileLayer
+               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+
+            {listings.map(renderCustomMarker)}
+         </MapContainer>
+      </div>
    )
 }
