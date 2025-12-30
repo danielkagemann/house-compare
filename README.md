@@ -8,14 +8,14 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 ## ideas for future implementations
 
--  map via toggle on main listing page instead of separate page
+-  ~~map via toggle on main listing page instead of separate page~~
 -  ~~more colorful tilelayer~~
--  comparison does not look good on mobile
+-  ~~comparison does not look good on mobile~~ better but not perfect
 -  ~~details with indicator which field has empty data~~
 -  topscore with more checks (year should be removed)
 -  personal ranking as new field (db + details)
 -  add translation of description possibility
--  show map on compare
+-  ~~show map on compare~~
 
 ## finding a domain name
 

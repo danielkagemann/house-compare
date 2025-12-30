@@ -11,8 +11,10 @@ import { Header } from "./layout/Header";
 import { Loading } from "./Loading";
 import { useMemo } from "react";
 import { RenderIf } from "./renderif";
-
-
+import dynamic from "next/dynamic";
+const SmallMap = dynamic(() => import("./SmallMap"), {
+   ssr: false,
+});
 type BestOption = Record<string, { value: number, index: number }>;
 
 export const ListingComparison = () => {
@@ -96,7 +98,7 @@ export const ListingComparison = () => {
       return (
          <td key={`comparison-cell-${item.uuid}`} className="border-b border-gray-200 p-2 align-top w-full md:w-1/3">
             <RenderIf condition={attr === 'image'}>
-               <div className="relative w-full h-52">
+               <div className="relative w-full h-20 md:h-52">
                   <img src={item.image} alt={`Listing ${item.uuid}`} className="w-full h-full object-cover rounded-xl" />
                   <RenderIf condition={getTopOptionIndex() === index}>
                      <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm">Top</div>
@@ -109,11 +111,14 @@ export const ListingComparison = () => {
             </RenderIf>
 
             <RenderIf condition={attr === 'price'}>
-               <div className={`text-lg font-bold ${bestOption['price']?.index === index ? 'text-green-700' : 'text-red-700'}`}>EUR {item.price}</div>
+               <div className={`text-sm md:text-lg font-bold ${bestOption['price']?.index === index ? 'text-green-700' : 'text-red-700'}`}>EUR {item.price}</div>
             </RenderIf>
 
             <RenderIf condition={attr === 'location'}>
                <div className="flex gap-1 items-center text-gray-700"><MapPin size={14} /> {item.location.display}</div>
+               <RenderIf condition={item.location.lat !== undefined && item.location.lon !== undefined}>
+                  <SmallMap location={{ lat: item.location.lat, lon: item.location.lon }} className="hidden md:block h-40 mt-2 rounded-md" />
+               </RenderIf>
             </RenderIf>
 
             <RenderIf condition={attr === 'country'}>
@@ -132,7 +137,7 @@ export const ListingComparison = () => {
                <div className={`flex gap-1 items-center text-gray-700 ${bestOption['sqm']?.index === index ? 'text-green-700' : 'text-red-700'}`}><Ruler size={14} /> {item.sqm} m²</div>
             </RenderIf>
             <RenderIf condition={attr === 'sqmPrice'}>
-               <div className={`text-sm text-gray-700 ${bestOption['sqmPrice']?.index === index ? 'text-green-700' : 'text-red-700'}`}>
+               <div className={`text-gray-700 ${bestOption['sqmPrice']?.index === index ? 'text-green-700' : 'text-red-700'}`}>
                   pro qm: {getSquareMeterPrice(item.price, item.sqm)}
                </div>
             </RenderIf>
@@ -143,7 +148,7 @@ export const ListingComparison = () => {
                <Features features={getFeatures(index)} />
             </RenderIf>
             <RenderIf condition={attr === 'contact'}>
-               <div className="flex gap-1 items-center text-gray-700"><User size={14} /> {item.contact}</div>
+               <div className="flex gap-1 text-gray-700"><User size={14} /> {item.contact}</div>
             </RenderIf>
          </td >
       );
@@ -169,7 +174,7 @@ export const ListingComparison = () => {
             Vergleiche die ausgewählten Immobilien anhand der wichtigsten Attribute wie Preis, Größe, Baujahr und mehr. Die beste Option in jeder Kategorie wird hervorgehoben, um bei der Entscheidungsfindung zu helfen.
          </div>
          <div className="overflow-x-auto block">
-            <table className="border-collapse min-w-full">
+            <table className="border-collapse min-w-full text-xs md:text-base">
                <tbody>
                   {renderRow('image')}
                   {renderRow('price')}
