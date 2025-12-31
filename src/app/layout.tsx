@@ -37,7 +37,6 @@ interface ProviderProps {
 
 function Providers({ children }: ProviderProps) {
   const locale = useSearchParams().get('locale') || 'de';
-
   const messages = locale === 'de' ? de : en;
 
   return (
