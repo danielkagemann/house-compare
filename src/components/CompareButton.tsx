@@ -4,13 +4,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Tooltip } from "./ui/Tooltip";
 import { CheckCheck } from "./animate-ui/icons/check-check";
+import { useTranslations } from "next-intl";
 
 export const CompareButton = () => {
+   // hooks
+   const t = useTranslations("header");
    const $save = useStorage();
    const $router = useRouter();
 
    return (
-      <Tooltip text="Immobilien vergleichen">
+      <Tooltip text={t("compareImmo")}>
          <Button variant="secondary"
             disabled={$save.selected.length < 2}
             className="relative"

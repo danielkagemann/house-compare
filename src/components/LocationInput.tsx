@@ -9,9 +9,11 @@ import { Spinner } from "./ui/spinner";
 import { Tooltip } from "./ui/Tooltip";
 import { Endpoints, useGetPropertyList } from "@/lib/fetch";
 import { Loading } from "./Loading";
+import { useTranslations } from "next-intl";
 
 export const LocationInput = () => {
    // hooks
+   const t = useTranslations("header");
    const $storage = useStorage();
 
    // states
@@ -32,10 +34,10 @@ export const LocationInput = () => {
    if (!enterLocation) {
       const hasLocation = fromLocation.length > 0;
       return (
-         <Tooltip text={hasLocation ? fromLocation : "Startpunkt für Entfernungsangaben festlegen"}>
+         <Tooltip text={hasLocation ? fromLocation : t("startPointForDistance")}>
             <Button variant="secondary"
                onClick={() => setEnterLocation(true)}><MapPinHouse size={14} />
-               {hasLocation ? fromLocation.substring(0, 15) : 'Startpunkt'}
+               {hasLocation ? fromLocation.substring(0, 15) : t("startPoint")}
             </Button>
          </Tooltip>
       );
@@ -54,7 +56,7 @@ export const LocationInput = () => {
 
       if (!result) {
          $storage.locationSet(null);
-         toast.error("Fehler: Keine Koordinaten gefunden");
+         toast.error(t("errorNoCoordinatesFound"));
       } else {
          $storage.locationSet(result);
          setFromLocation(result.display);
@@ -65,7 +67,7 @@ export const LocationInput = () => {
 
    return <div className="flex gap-1 items-center">
       <Input type="text"
-         placeholder="Ort oder Adresse eingeben"
+         placeholder={t("enterLocation")}
          value={fromLocation}
          onChange={(e) => {
             setFromLocation(e.target.value);
@@ -80,7 +82,9 @@ export const LocationInput = () => {
             setEnterLocation(false);
             setFromLocation('');
             $storage.locationSet(null);
-         }}><CircleX size={14} /></Button>
+         }}>
+            <CircleX size={14} />
+         </Button>
       </>)}
    </div >;
 };

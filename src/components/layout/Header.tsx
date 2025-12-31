@@ -13,9 +13,11 @@ import { toast } from 'sonner';
 import { Plus } from '../animate-ui/icons/plus';
 import { Send } from '../animate-ui/icons/send';
 import { List } from '../animate-ui/icons/list';
+import { useTranslations } from 'next-intl';
 
 export const Header = () => {
    // hooks
+   const t = useTranslations("header");
    const $router = useRouter();
    const $link = useGetShareLink();
 
@@ -23,7 +25,7 @@ export const Header = () => {
       if ($link?.data) {
          const fullLink = `https://villaya.de/shared/?from=${$link.data}`;
          navigator.clipboard.writeText(fullLink);
-         toast.success("Link in die Zwischenablage kopiert!");
+         toast.success(t("linkCopied"));
       }
    }
 
@@ -33,18 +35,18 @@ export const Header = () => {
             <Image src="/assets/images/main-logo.webp" width={42} height={42} alt="logo" /> <div className="text-2xl font-bold">Villaya</div>
          </Link>
          <div className="flex gap-1 md:gap-2 items-center">
-            <Tooltip text="Immobilien">
+            <Tooltip text={t("immo")}>
                <Button variant="secondary" onClick={() => $router.push("/properties")}>
                   <List animateOnHover size={18} />
                </Button>
             </Tooltip>
-            <Tooltip text="Immobilie hinzufügen">
+            <Tooltip text={t("addImmo")}>
                <Button variant="secondary" onClick={() => $router.push("/properties/details")}>
                   <Plus animateOnHover size={18} />
                </Button>
             </Tooltip>
             {$link &&
-               <Tooltip text="Mit Freunden teilen">
+               <Tooltip text={t("shareList")}>
                   <Button variant="secondary" onClick={onCopy}>
                      <Send animateOnHover size={18} />
                   </Button>

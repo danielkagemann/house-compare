@@ -4,13 +4,17 @@ import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/layout/Footer";
 import 'leaflet/dist/leaflet.css';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NextIntlClientProvider } from "next-intl";
+import { useSearchParams } from "next/navigation";
+import de from "../messages/de.json";
+import en from "../messages/en.json";
 import "./globals.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+      staleTime: 1 * 60 * 1000, // 1 minute
+      gcTime: 1 * 60 * 1000, // 1 minute (formerly cacheTime)
       retry: (failureCount, error) => {
         // Don't retry on >= 4xx errors (client errors)
         if (error instanceof Error && 'status' in error) {
@@ -31,6 +35,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const locale = useSearchParams().get('locale') || 'de';
+  const messages = locale === 'de' ? de : en;
+
   return (
     <html lang="de">
       <head>
@@ -55,13 +63,15 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <QueryClientProvider client={queryClient}>
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <Footer />
-          <Toaster position="top-center" expand={true} richColors />
-        </QueryClientProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <QueryClientProvider client={queryClient}>
+            <main className="min-h-screen">
+              {children}
+            </main>
+            <Footer />
+            <Toaster position="top-center" expand={true} richColors />
+          </QueryClientProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

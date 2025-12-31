@@ -1,0 +1,27 @@
+{
+   "header": {
+      "linkCopied": "Link in die Zwischenablage kopiert!",
+      "immo": "Immobilien",
+      "addImmo": "Immobilie hinzufügen",
+      "shareList": "Liste teilen",
+      "compareImmo": "Immobilien vergleichen",
+      "startPointForDistance": "Startpunkt für Entfernungsangaben festlegen",
+      "startPoint": "Startpunkt",
+      "errorNoCoordinatesFound": "Fehler: Keine Koordinaten gefunden",
+      "enterLocation": "Ort oder Adresse eingeben"
+   },
+   "footer": {
+      "removeAccount": "Konto entfernen",
+      "areYouSure": "Bist Du sicher?",
+      "thisActionCannotBeUndone": "Diese Aktion kann nicht rückgängig gemacht werden. Dadurch wird Dein Konto dauerhaft gelöscht und die Daten von unseren Servern entfernt.",
+      "cancel": "Nein, nicht löschen",
+      "deleteAccount": "Konto löschen",
+      "privacyPolicy": "Datenschutzbestimmungen",
+      "imprint": "Impressum",
+      "contact": "Kontakt",
+      "private": " ist ein priavtes Projekt von ",
+      "supportViaPaypal": "Unterstützen via paypal",
+      "signOff": "Abmelden",
+      "start": "Start"
+   }
+}

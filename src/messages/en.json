@@ -1,0 +1,27 @@
+{
+   "header": {
+      "linkCopied": "Link copied to clipboard!",
+      "immo": "Real estate",
+      "addImmo": "Add property",
+      "shareList": "Share list",
+      "compareImmo": "Compare properties",
+      "startPointForDistance": "Set start point for distance information",
+      "startPoint": "Start point",
+      "errorNoCoordinatesFound": "Error: No coordinates found",
+      "enterLocation": "Enter location or address"
+   },
+   "footer": {
+      "removeAccount": "Remove account",
+      "areYouSure": "Are you sure?",
+      "thisActionCannotBeUndone": "This action cannot be undone. This will permanently delete your account and remove the data from our servers.",
+      "cancel": "No, do not delete",
+      "deleteAccount": "Delete account",
+      "privacyPolicy": "Privacy policy",
+      "imprint": "Imprint",
+      "contact": "Contact",
+      "private": " is a private project by ",
+      "supportViaPaypal": "Support via PayPal",
+      "signOff": "Sign off",
+      "start": "Start"
+   }
+}
