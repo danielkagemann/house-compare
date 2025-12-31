@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-
 import { ListingList } from "@/components/ListingList";
 import { Loading } from "@/components/Loading";
 
