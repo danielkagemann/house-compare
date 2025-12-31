@@ -12,6 +12,7 @@ import { Loading } from "./Loading";
 import { useState } from "react";
 import { FloatingAction, FloatingActionType } from "./layout/FloatingAction";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 
 const PropertiesMap = dynamic(() => import("./PropertiesMap"), {
    ssr: false,
@@ -21,6 +22,7 @@ const PropertiesMap = dynamic(() => import("./PropertiesMap"), {
 export const ListingList = () => {
    // hook
    const $storage = useStorage();
+   const t = useTranslations("house");
 
    // state
    const [display, setDisplay] = useState<FloatingActionType>('list');
@@ -45,7 +47,7 @@ export const ListingList = () => {
          {
             listings.length === 0 && (
                <div className="col-span-full">
-                  <p className="text-gray-500">Keine Immobilien für diese Filterkriterien gefunden.</p>
+                  <p className="text-gray-500">{t('noListingsFound')}</p>
                </div>
             )
          }

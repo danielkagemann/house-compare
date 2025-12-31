@@ -4,6 +4,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { InputNext } from "./InputNext";
 import { Trash } from "../animate-ui/icons/trash";
+import { useTranslations } from "next-intl";
 
 interface Props {
    value: string[],
@@ -15,6 +16,9 @@ export const InputFeatures = ({ value, onChange, onNext }: Props) => {
    // states
    const [feature, setFeature] = useState<string>('');
    const [flatList, setFlatList] = useState<string>('');
+
+   // hooks
+   const t = useTranslations("input");
 
    function renderFeature(item: string, index: number) {
       return (
@@ -34,18 +38,18 @@ export const InputFeatures = ({ value, onChange, onNext }: Props) => {
 
    return (
       <>
-         <p>Bitte gib die Ausstattungsmerkmale der Immobilie an. Nutzer hierzu das Eingabefeld (komma getrennt) oder die Liste darunter.</p>
-         <Textarea autoFocus rows={3} placeholder="z.B. Balkon, Garten, Garage" value={flatList} onChange={(e) => setFlatList(e.target.value)} />
+         <p>{t("pleaseEnterFeatures")}</p>
+         <Textarea autoFocus rows={3} placeholder={t("examplePlaceholder")} value={flatList} onChange={(e) => setFlatList(e.target.value)} />
          <div className="flex justify-end">
             <Button variant="outline" disabled={flatList.trim().length === 0} onClick={() => {
                const featuresFromList = flatList.split(/[\n,]/).map(f => f.trim()).filter(f => f.length > 0);
                const newValues = [...value, ...featuresFromList];
                onChange(newValues);
                setFlatList('');
-            }}>...in Liste</Button>
+            }}>{t("addFromList")}</Button>
          </div>
 
-         <strong>Alle Merkmale der Immobilie</strong>
+         <strong>{t("allFeatures")}</strong>
 
          <div className="flex flex-col gap-1">
             {
@@ -59,7 +63,7 @@ export const InputFeatures = ({ value, onChange, onNext }: Props) => {
                const newValues = [...value, feature];
                onChange(newValues);
                setFeature('');
-            }}>Hinzufügen</Button>
+            }}>{t("addProperty")}</Button>
          </div>
          <InputNext onClick={onNext} />
       </>

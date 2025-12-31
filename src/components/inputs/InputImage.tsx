@@ -4,6 +4,7 @@ import { InputNext } from "./InputNext";
 import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
 import { Endpoints } from "@/lib/fetch";
+import { useTranslations } from "next-intl";
 
 interface Props {
    value: string;
@@ -14,6 +15,8 @@ interface Props {
 export const InputImage = ({ value, onChange, onNext }: Props) => {
    const imageSrc = value || '/assets/images/main-bg.webp';
    const [link, setLink] = useState<string>(value);
+
+   const t = useTranslations("input");
 
    async function onPaste(event: React.ClipboardEvent<HTMLInputElement>) {
       const items = event.clipboardData.items;
@@ -78,7 +81,7 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
             <img src={imageSrc}
                alt="Vorschaubild"
                className="w-24 h-24 rounded-xl object-cover" />
-            <div>Du kannst hier das Bild über eine URL oder aus der Zwischenablage hinzufügen. Es wird intern eine Kopie gespeichert.<br />
+            <div>{t("youCanAddImage")}<br />
                <Button variant="outline" onClick={() => onChange('')}><Trash size={18} /></Button></div>
          </div>
          <div className="flex flex-col gap-1 mt-4">
@@ -86,12 +89,12 @@ export const InputImage = ({ value, onChange, onNext }: Props) => {
                <Input type="text"
                   value={link}
                   onChange={(e) => setLink(e.target.value)}
-                  placeholder="Link einfügen..."
+                  placeholder={t("enterImageUrl")}
                   className="w-full" />
-               <Button variant="outline" onClick={onCheckLink}>Prüfen</Button>
+               <Button variant="outline" onClick={onCheckLink}>{t("check")}</Button>
             </div>
-            <p>Alternativ kannst Du auch ein Bild aus der Zwischenablage einfügen. </p>
-            <Input placeholder="Hier Bild aus Zwischenablage einfügen..." onPaste={onPaste} />
+            <p>{t("alternativeImage")}</p>
+            <Input placeholder={t("pasteImageHere")} onPaste={onPaste} />
 
          </div>
          <InputNext onClick={onNext} />

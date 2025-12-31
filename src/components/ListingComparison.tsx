@@ -12,12 +12,15 @@ import { Loading } from "./Loading";
 import { useMemo } from "react";
 import { RenderIf } from "./renderif";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
 });
 type BestOption = Record<string, { value: number, index: number }>;
 
 export const ListingComparison = () => {
+   // hooks
+   const t = useTranslations("house");
 
    // query selected items
    const { data, isLoading } = useGetPropertyList(true);
@@ -138,7 +141,7 @@ export const ListingComparison = () => {
             </RenderIf>
             <RenderIf condition={attr === 'sqmPrice'}>
                <div className={`text-gray-700 ${bestOption['sqmPrice']?.index === index ? 'text-green-700' : 'text-red-700'}`}>
-                  pro qm: {getSquareMeterPrice(item.price, item.sqm)}
+                  {t("persqm")}: {getSquareMeterPrice(item.price, item.sqm)}
                </div>
             </RenderIf>
             <RenderIf condition={attr === 'description'}>
@@ -169,9 +172,9 @@ export const ListingComparison = () => {
    return (
       <PageLayout>
          <Header />
-         <h2 className="font-bold text-lg">Immobilienvergleich</h2>
+         <h2 className="font-bold text-lg">{t("compare")}</h2>
          <div className="text-gray-600 text-sm mb-4">
-            Vergleiche die ausgewählten Immobilien anhand der wichtigsten Attribute wie Preis, Größe, Baujahr und mehr. Die beste Option in jeder Kategorie wird hervorgehoben, um bei der Entscheidungsfindung zu helfen.
+            {t("compareDescription")}
          </div>
          <div className="overflow-x-auto block">
             <table className="border-collapse min-w-full text-xs md:text-base">

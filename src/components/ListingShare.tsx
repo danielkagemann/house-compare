@@ -8,10 +8,11 @@ import { Hero } from "./Hero";
 import Image from "next/image";
 import { HouseListItem } from "./HouseListItem";
 import { Loading } from "./Loading";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, use, useEffect, useMemo, useState } from "react";
 import { RenderIf } from "./renderif";
 import { FloatingAction, FloatingActionType } from "./layout/FloatingAction";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 
 const PropertiesMap = dynamic(() => import("./PropertiesMap"), {
    ssr: false,
@@ -25,6 +26,7 @@ export const ListingShare = () => {
 
    // hooks
    const $url = useSearchParams();
+   const t = useTranslations("house");
 
    // queries
    const { data: listing, isLoading } = useGetSharedPropertyList(from);
@@ -45,7 +47,7 @@ export const ListingShare = () => {
       return (<PageLayout className="pt-12">
          <Hero>
             <div className="text-red-700 font-bold">
-               Es sind keine Immobilien vorhanden.
+               {t('noListingsFound')}
             </div>
          </Hero>
       </PageLayout>);

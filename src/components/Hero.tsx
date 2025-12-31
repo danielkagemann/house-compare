@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface HeroProps {
    children: React.ReactNode;
@@ -14,7 +15,9 @@ const blobPathKeyframes = [
 ];
 
 export const Hero = ({ children }: HeroProps) => {
+   // hooks
    const clipId = useId();
+   const t = useTranslations("hero");
 
    return (
       <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -27,8 +30,7 @@ export const Hero = ({ children }: HeroProps) => {
             </div>
 
             <p className="text-gray-600 max-w-md mx-0">
-               Finde den Ort, an dem du wirklich ankommst.
-               Villaya hilft dir, deine Lieblingshäuser zu sammeln, zu vergleichen und das Zuhause zu entdecken, das sich richtig anfühlt.
+               {t("tagline")}
             </p>
 
             {children}

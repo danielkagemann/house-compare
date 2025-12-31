@@ -14,6 +14,7 @@ import { Endpoints, useConfirmCode } from "@/lib/fetch";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
+import { useTranslations } from "next-intl";
 
 type UserAction = {
    type: "email" | "code";
@@ -27,6 +28,7 @@ export const LandingPage = () => {
    const [working, setWorking] = useState<boolean>(false);
 
    // hooks
+   const t = useTranslations("main");
    const $router = useRouter();
    const $save = useStorage();
    const $params = useSearchParams();
@@ -63,9 +65,8 @@ export const LandingPage = () => {
 
       if (!response.ok) {
          const err = await response.json();
-         setError(err.message ?? "Fehler beim Anmelden");
+         setError(err.message ?? t("signinError"));
          setWorking(false);
-         return;
       } else {
          // depending on status we do something else
          if (response.status === 204) {
@@ -91,7 +92,7 @@ export const LandingPage = () => {
    if ($confirmMutation.isError) {
       flushSync(() => setWorking(false));
       const err = $confirmMutation.error as any;
-      setError(err.message ?? "Fehler beim Bestätigen des Codes");
+      setError(err.message ?? t("confirmError"));
    }
 
    /**
@@ -113,10 +114,10 @@ export const LandingPage = () => {
          return (
             <Hero>
                <form className="flex flex-col gap-2" onSubmit={onSignIn}>
-                  <div className="font-bold text-sm">Direkt loslegen...</div>
-                  <Input type="email" placeholder="Deine E-Mail Adresse" value={action.value} onChange={(e) => setAction({ type: "email", value: e.target.value })} />
+                  <div className="font-bold text-sm">{t("startnow")}</div>
+                  <Input type="email" placeholder={t("email")} value={action.value} onChange={(e) => setAction({ type: "email", value: e.target.value })} />
                   {error && <div className="text-red-600 text-sm">{error}</div>}
-                  <Button type="submit">Anmelden</Button>
+                  <Button type="submit">{t("register")}</Button>
                </form>
             </Hero>
          );
@@ -125,7 +126,7 @@ export const LandingPage = () => {
       return (
          <Hero>
             <form className="flex flex-col gap-2" onSubmit={onConfirmCode}>
-               <div className="font-bold text-sm">Bestätigungscode aus der EMail</div>
+               <div className="font-bold text-sm">{t("confirmCodeFromEmail")}</div>
                <InputOTP
                   maxLength={6}
                   value={action.value}
@@ -141,7 +142,7 @@ export const LandingPage = () => {
                   </InputOTPGroup>
                </InputOTP>
                {error && <div className="text-red-600 text-sm">{error}</div>}
-               <Button type="submit">Bestätigen</Button>
+               <Button type="submit">{t("confirm")}</Button>
             </form>
          </Hero>
       );
@@ -178,9 +179,9 @@ export const LandingPage = () => {
             {renderAction()}
          </PageLayout>
          <PageLayout className="flex lg:flex-row flex-col items-start gap-4 lg:px-0 px-4">
-            {renderFeature("Sammle Deine Favoriten", <Heart animateOnView loop loopDelay={1000} size={16} />, "Suche atemberaubende Villen aus aller Welt und speichere diejenigen, die deine Fantasie beflügeln. Erstelle eine persönliche Sammlung, die deinen einzigartigen Geschmack widerspiegelt.")}
-            {renderFeature("Speichere mit Deiner Email", <Layers animateOnView loop loopDelay={1000} size={16} />, "Melde dich einfach mit deiner E-Mail-Adresse an, um eine Sammlung zu erstellen und von überall darauf zuzugreifen.")}
-            {renderFeature("Teile Deine Sammlung", <Send animateOnView loop loopDelay={1000} size={16} />, "Erstelle einen teilbaren Link, um deine Sammlung mit Familie und Freunden zu teilen.")}
+            {renderFeature(t("collect"), <Heart animateOnView loop loopDelay={1000} size={16} />, t("collectDescription"))}
+            {renderFeature(t("saveWithEmail"), <Layers animateOnView loop loopDelay={1000} size={16} />, t("saveWithEmailDescription"))}
+            {renderFeature(t("shareCollection"), <Send animateOnView loop loopDelay={1000} size={16} />, t("shareCollectionDescription"))}
          </PageLayout>
       </>
    );

@@ -8,9 +8,10 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { ListOfAmenities } from "./list-of-amenities";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { use, useState } from "react";
 import Markdown from 'react-markdown'
 import remarkGfm from "remark-gfm";
+import { useTranslations } from "next-intl";
 
 const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
@@ -25,6 +26,9 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
    // state
    const [expand, setExpand] = useState<boolean>(false);
 
+   // hooks
+   const t =useTranslations("house");
+   
    const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/main-bg.webp`;
 
    function calculateAllFilled() {
@@ -54,12 +58,12 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
             {hasEdit &&
                (
                   <Button variant="secondary" size="sm">
-                     <Link href={`/properties/details/?id=${data.uuid}`}>Bearbeiten</Link>
+                     <Link href={`/properties/details/?id=${data.uuid}`}>{t('editImmo')}</Link>
                   </Button>
                )}
             {data.url &&
                <Button variant="secondary" size="sm">
-                  <Link href={data.url} target="_blank" rel="noopener noreferrer">Original</Link>
+                  <Link href={data.url} target="_blank" rel="noopener noreferrer">{t('linkToWebsite')}</Link>
                </Button>
             }
          </div>
@@ -104,7 +108,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
                <SmallMap location={{ lat: data.location.lat!, lon: data.location.lon! }} className="h-40" />
             </details>
          }
-         {data.price.length > 0 && <p className="text-primary font-bold text-xl">{`EUR ${parseFloat(data.price).toLocaleString()}` || '--'}</p>}
+         {data.price.length > 0 && <p className="text-primary font-bold text-xl">{`EUR ${Number.parseFloat(data.price).toLocaleString()}` || '--'}</p>}
 
          <div className="flex gap-1 justify-between text-sm px-2">
             {data.sqm.length > 0 && (
@@ -135,7 +139,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
          {
             data.notes.length > 0 && (
                <div className="mt-2 p-2 bg-yellow-400 border-l-4 border-yellow-500">
-                  <strong className="font-bold">Notizen (du kannst hier Markdown verwenden)</strong>
+                  <strong className="font-bold">{t('notes')} {t('markdown')})</strong>
                   <span className="text-sm text-gray-700">
                      <Markdown remarkPlugins={[remarkGfm]}>{data.notes}</Markdown>
                   </span>

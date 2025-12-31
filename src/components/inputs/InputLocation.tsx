@@ -12,6 +12,7 @@ import { Endpoints } from "@/lib/fetch";
 import dynamic from "next/dynamic";
 import { ListOfAmenities } from "../list-of-amenities";
 import { Skeleton } from "../ui/skeleton";
+import { useTranslations } from "next-intl";
 
 const SmallMap = dynamic(() => import("../SmallMap"), {
    ssr: false,
@@ -26,6 +27,9 @@ interface Props {
 export const InputLocation = ({ value, onChange, onNext }: Props) => {
    // state
    const [working, setWorking] = useState(false);
+
+   // hooks
+   const t = useTranslations("input");
 
    const onFindAddr = async () => {
       flushSync(() => {
@@ -50,7 +54,7 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
    function showMap() {
       if (working) {
          return <>
-            <span>Suche nach Adresse...</span>
+            <span>{t("address")}</span>
             <Skeleton className="h-3 bg-white w-full rounded mb-1" />
             <Skeleton className="h-3 bg-white w-4/5 rounded" />
          </>;
@@ -67,7 +71,7 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
    function showAmenities() {
       if (working) {
          return <>
-            <span>Suche nach Sehenswürdigkeiten...</span>
+            <span>{t("amenities")}</span>
             <Skeleton className="h-3 bg-white w-full rounded mb-1" />
             <Skeleton className="h-3 bg-white w-4/5 rounded" />
          </>;
@@ -80,13 +84,13 @@ export const InputLocation = ({ value, onChange, onNext }: Props) => {
 
    return (
       <>
-         <p>Bitte gib den Standort der Immobilie an. Gib die ungefähre Adresse ein oder Koordinaten in der Form Latitude,Longitude. Es wird ebenfalls versucht, Sehenswürdigkeiten in der Nähe zu finden.</p>
+         <p>{t("pleaseEnterLocation")}</p>
          <div className="flex gap-1 items-center">
             <Input type="text" autoFocus value={value.display} onChange={(e) => onChange({ ...value, display: e.target.value })} />
             {working ? <Spinner /> : <Button variant="outline" onClick={onFindAddr}><MapPin size={16} /></Button>}
          </div>
 
-         <p className="text-sm">{hasCoords() ? `${value.lat}, ${value.lon} in ${value.country}` : "Keine gültige Adresse."}</p>
+         <p className="text-sm">{hasCoords() ? `${value.lat}, ${value.lon} in ${value.country}` : t("invalidAddress")}</p>
 
          {showMap()}
          {showAmenities()}

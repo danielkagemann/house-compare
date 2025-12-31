@@ -97,20 +97,3 @@ export function amenityTitle(type: string) {
          return type;
    }
 }
-
-export function getRankTitle(val: RankingType) {
-   switch (val) {
-      case Ranking.none:
-         return 'Keine Bewertung';
-      case Ranking.interested:
-         return 'Interessiert';
-      case Ranking.favorite:
-         return 'Favorit';
-      case Ranking.visited:
-         return 'Besucht';
-      case Ranking.pricewatch:
-         return 'Preisbeobachtung';
-      default:
-         return '';
-   }
-}

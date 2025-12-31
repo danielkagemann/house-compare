@@ -26,7 +26,7 @@ export const HouseAmenities = ({ item }: HouseAmenitiesProps) => {
       <div className="text-sm mt-2">
          {nearestAmenities.map((poi, idx) => (
             <div key={idx}>
-               <strong>{amenityTitle(poi.type)}</strong> - {poi.name || 'unbekannt'} {distanceBetweenCoordinates(item, poi.coordinates).toFixed(2)}km
+               <strong>{amenityTitle(poi.type)}</strong> - {poi.name || '?'} {distanceBetweenCoordinates(item, poi.coordinates).toFixed(2)}km
             </div>
          ))}
       </div>

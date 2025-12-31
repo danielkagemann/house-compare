@@ -1,6 +1,8 @@
 import { getSquareMeterPrice } from "@/model/Listing";
 import { Input } from "../ui/input";
 import { InputNext } from "./InputNext";
+import { use } from "react";
+import { useTranslations } from "next-intl";
 
 interface Props {
    price: string;
@@ -12,12 +14,13 @@ interface Props {
 export const InputSize = ({ price, value, onChange, onNext }: Props) => {
 
    const quote = getSquareMeterPrice(price, value);
+   const t = useTranslations("input");
 
    return (
       <>
-         <p>Gib hier die Wohnfläche oder Nutzfläche in m² an. Der Quadratmeterpreis wird automatisch berechnet.</p>
+         <p>{t("sizeDescription")}</p>
          <Input type="text" autoFocus value={value} onChange={(e) => onChange(e.target.value)} />
-         {quote !== '---' && <p>Der Preis pro Quadratmeter beträgt {quote} EUR.</p>}
+         {quote !== '---' && <p>{t("priceSqm", { price: quote })}</p>}
          <InputNext onClick={onNext} />
       </>
    );
