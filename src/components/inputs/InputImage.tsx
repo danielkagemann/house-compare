@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const InputImage = ({ value, onChange, onNext }: Props) => {
-   const imageSrc = value || '/assets/images/main-bg.jpg';
+   const imageSrc = value || '/assets/images/main-bg.webp';
    const [link, setLink] = useState<string>(value);
 
    async function onPaste(event: React.ClipboardEvent<HTMLInputElement>) {

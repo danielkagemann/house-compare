@@ -25,10 +25,10 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
    // state
    const [expand, setExpand] = useState<boolean>(false);
 
-   const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/main-bg.jpg`;
+   const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/main-bg.webp`;
 
    function calculateAllFilled() {
-      const keys = Object.keys(data).filter(key => key !== 'userId' && key !== 'notes');
+      const keys = Object.keys(data).filter(key => !['userId', 'notes', 'rank'].includes(key));
       const filled = keys.filter(key => {
          const value = data[key as keyof Listing];
          if (Array.isArray(value)) {

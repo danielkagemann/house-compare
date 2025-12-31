@@ -30,7 +30,7 @@ export const Header = () => {
    return (
       <header className="w-full bg-white p-4 flex flex-col md:flex-row md:items-center justify-between ">
          <Link href="/?init" className="flex gap-2 items-center">
-            <Image src="/assets/images/main-logo.png" width={42} height={42} alt="logo" /> <div className="text-2xl font-bold">Villaya</div>
+            <Image src="/assets/images/main-logo.webp" width={42} height={42} alt="logo" /> <div className="text-2xl font-bold">Villaya</div>
          </Link>
          <div className="flex gap-1 md:gap-2 items-center">
             <Tooltip text="Immobilien">

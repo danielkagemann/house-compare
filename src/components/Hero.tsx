@@ -22,7 +22,7 @@ export const Hero = ({ children }: HeroProps) => {
          {/* Left side */}
          <div className="space-y-6 lg:min-w-sm">
             <div className="flex flex-col gap-2">
-               <Image src="/assets/images/main-logo.png" alt="Villaya Logo" width={72} height={72} />
+               <Image src="/assets/images/main-logo.webp" alt="Villaya Logo" width={72} height={72} />
                <h1 className="text-3xl font-bold text-gray-900">Villaya</h1>
             </div>
 
@@ -56,7 +56,7 @@ export const Hero = ({ children }: HeroProps) => {
                   style={{ clipPath: `url(#${clipId})` }}
                >
                   <img
-                     src="/assets/images/main-bg.jpg"
+                     src="/assets/images/main-bg.webp"
                      alt="Beach villas"
                      className="lg:w-full object-cover"
                   />

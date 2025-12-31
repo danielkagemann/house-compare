@@ -2,6 +2,7 @@ import { Listing } from "@/model/Listing";
 import { ReadMore } from "./ui/Readmore";
 import { BedDouble, Calendar, MapPin, Ruler } from "lucide-react";
 import Link from "next/link";
+import { Rank } from "./layout/rank";
 
 interface HouseListItemProps {
    item: Listing;
@@ -19,12 +20,16 @@ export const HouseListItem = ({ item }: HouseListItemProps) => {
    }
 
    return (<div className="md:shadow-md md:rounded-md md:p-4">
-      <div className="flex gap-2 flex-col lg:flex-row">
+      <div className="flex gap-2 flex-col lg:flex-row relative">
          <img
             src={item.image}
             alt={item.title}
             className="w-full lg:w-64 h-48 object-cover rounded-md"
          />
+
+         <div className="absolute top-2 right-2">
+            <Rank value={item.rank} />
+         </div>
          <div className="space-y-1">
             {renderTitle()}
 

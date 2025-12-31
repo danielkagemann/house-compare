@@ -14,6 +14,7 @@ import { BedDouble, Heart, Calendar, Car, Ruler } from "lucide-react";
 import { Link2 } from "./animate-ui/icons/link-2";
 import Link from "next/link";
 import { RenderIf } from "./renderif";
+import { Rank } from "./layout/rank";
 
 interface HouseCardProps {
    data: Listing;
@@ -51,6 +52,11 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
                   alt={data.title}
                   className="w-full h-full object-cover rounded-md"
                />
+
+               {/* rank */}
+               <div className="absolute top-2 right-2">
+                  <Rank value={data.rank} />
+               </div>
 
                {/* heart icon */}
                <motion.button

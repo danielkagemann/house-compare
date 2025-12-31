@@ -6,16 +6,14 @@ require_once 'logger.php';
 
 class Database {
     private $pdo;
+    private array $config;
 
     public function __construct() {
-        $host = 'localhost';
-        $dbname = 'd0453ab1';
-        $username = 'd0453ab1';
-        $password = '30092008!Villaya';
-        
+        $this->config = require __DIR__ . '/secrets.php';
+
         try {
-            $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
-            $this->pdo = new PDO($dsn, $username, $password);
+            $dsn = "mysql:host={$this->config['host']};dbname={$this->config['database']};charset=utf8mb4";
+            $this->pdo = new PDO($dsn, $this->config['username'], $this->config['password']);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             
@@ -60,6 +58,11 @@ class Database {
                 INDEX idx_userId (userId),
                 INDEX idx_creationdate (creationdate)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+        );
+
+        // Ensure 'rank' column exists on LISTING table (INT) with default 0
+        $this->pdo->exec(
+            "ALTER TABLE LISTING ADD COLUMN IF NOT EXISTS `rank` INT NOT NULL DEFAULT 0"
         );
     }
 
@@ -111,16 +114,15 @@ class Database {
         $stmt = $this->pdo->prepare("SELECT * FROM USER WHERE id = :id LIMIT 1");
         $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
         $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $user;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function removeUser(int $userId): bool {
         $stmt = $this->pdo->prepare("DELETE FROM USER WHERE id = :id");
         $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+
         return $stmt->execute();
-    }   
+    }
 
     public function getUserByAccessCode(string $accessCode): ?array {
         $stmt = $this->pdo->prepare("SELECT access FROM USER WHERE access = :access LIMIT 1");
@@ -144,10 +146,14 @@ class Database {
         $stmt = $this->pdo->prepare("SELECT id FROM USER WHERE share = :share LIMIT 1");
         $stmt->bindParam(':share', $shareLink, PDO::PARAM_STR);
         $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $user ? (int)$user['id'] : null;
-    }   
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row || !isset($row['id'])) {
+            return null;
+        }
+
+        return (int)$row['id'];
+    }
 
     public function getListingsByUserId(int $userId): array {
         $stmt = $this->pdo->prepare("SELECT * FROM LISTING WHERE userId = :userId");
@@ -204,10 +210,10 @@ class Database {
         if ($existing) {
             // Update existing listing
             $stmt = $this->pdo->prepare("
-                UPDATE LISTING SET 
-                title = :title, url = :url, price = :price, sqm = :sqm, rooms = :rooms, 
-                location = :location, image = :image, description = :description, 
-                contact = :contact, year = :year, features = :features, notes = :notes
+                UPDATE LISTING SET
+                title = :title, url = :url, price = :price, sqm = :sqm, rooms = :rooms,
+                location = :location, image = :image, description = :description,
+                contact = :contact, year = :year, features = :features, notes = :notes, rank = :rank
                 WHERE uuid = :uuid
             ");
             $stmt->execute([
@@ -223,14 +229,15 @@ class Database {
                 ':year' => $listing['year'] ?? null,
                 ':features' => $featuresJson,
                 ':notes' => $listing['notes'] ?? null,
+                ':rank' => $listing['rank'] ?? 0,
                 ':uuid' => $listing['uuid']
             ]);
         } else {
             // Insert new listing
             $stmt = $this->pdo->prepare("
-                INSERT INTO LISTING 
-                (uuid, title, url, price, sqm, rooms, location, image, description, contact, year, features, notes, userId) 
-                VALUES (:uuid, :title, :url, :price, :sqm, :rooms, :location, :image, :description, :contact, :year, :features, :notes, :userId)
+                INSERT INTO LISTING
+                (uuid, title, url, price, sqm, rooms, location, image, description, contact, year, features, notes, rank, userId)
+                VALUES (:uuid, :title, :url, :price, :sqm, :rooms, :location, :image, :description, :contact, :year, :features, :notes, :rank, :userId)
             ");
             $stmt->execute([
                 ':uuid' => $listing['uuid'],
@@ -246,6 +253,7 @@ class Database {
                 ':year' => $listing['year'] ?? null,
                 ':features' => $featuresJson,
                 ':notes' => $listing['notes'] ?? null,
+                ':rank' => $listing['rank'] ?? 0,
                 ':userId' => $listing['userId']
             ]);
         }
@@ -285,14 +293,16 @@ class Database {
 // Email sending function
 function sendEMail(string $email, string $title, string $body): bool {
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+
+    $cfg = require __DIR__ . '/secrets.php';
     
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host       = 'w0083a6c.kasserver.com';
+        $mail->Host       = $cfg['email_host'];
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'info@villaya.de';
-        $mail->Password   = '30092008!Villaya';
+        $mail->Username   = $cfg['email_user'];
+        $mail->Password   = $cfg['email_pw'];
         $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
         

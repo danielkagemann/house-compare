@@ -2,7 +2,7 @@
 
 import { ListingPreview } from "@/components/ListingPreview";
 import { Button } from "@/components/ui/button";
-import { Listing } from "@/model/Listing";
+import { Listing, Ranking } from "@/model/Listing";
 import React, { ReactNode, useEffect, useState } from "react";
 import {
    Accordion,
@@ -22,6 +22,7 @@ import { useGetPropertyDetails, useSetProperty } from "@/lib/fetch";
 import { Header } from "./layout/Header";
 import { PageLayout } from "./PageLayout";
 import { Asterisk, Check } from "lucide-react";
+import { InputRank } from "./inputs/InputRank";
 
 type InputOrder = {
    title: string;
@@ -51,7 +52,8 @@ export const ListingDetails = () => {
       description: '',
       contact: '',
       year: '',
-      features: []
+      features: [],
+      rank: Ranking.none,
    });
 
    // queries
@@ -101,7 +103,8 @@ export const ListingDetails = () => {
       { title: 'Baujahr', attr: 'year', children: <InputText description="Baujahr der Immobilie" value={listing.year} onChange={onUpdateListing('year')} onNext={onNext('features')} /> },
       { title: 'Eigenschaften', attr: 'features', children: <InputFeatures value={listing.features} onChange={(value) => { setListing({ ...listing, features: value }); }} onNext={onNext('contact')} /> },
       { title: 'Makler & Agentur', attr: 'contact', children: <InputText description="Von welcher Agentur/Makler wird die Immobilie angeboten?" value={listing.contact} onChange={onUpdateListing('contact')} onNext={onNext('notes')} /> },
-      { title: 'Notizen', attr: 'notes', children: <InputText type="area" description="Notizen zur Immobilie" value={listing.notes} onChange={onUpdateListing('notes')} onNext={onNext('')} /> },
+      { title: 'Notizen', attr: 'notes', children: <InputText type="area" description="Notizen zur Immobilie" value={listing.notes} onChange={onUpdateListing('notes')} onNext={onNext('rank')} /> },
+      { title: 'Bewertung', attr: 'rank', children: <InputRank value={listing.rank} onChange={onUpdateListing('rank')} onNext={onNext('')} /> },
    ];
 
    /**
@@ -117,7 +120,7 @@ export const ListingDetails = () => {
    }
 
    function renderMissingValue(attr: string): ReactNode {
-      if (['sourcecode', 'notes'].includes(attr)) {
+      if (['sourcecode', 'notes', 'rank'].includes(attr)) {
          return null;
       }
 
