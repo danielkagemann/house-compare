@@ -50,6 +50,8 @@
       "4": "Preisbeobachtung"
    },
    "house": {
+      "noAmenities": "Keine Sehenswürdigkeiten in der Nähe gefunden.",
+      "title": "Titel",
       "unknown": "Unbekannt",
       "away": "entfernt",
       "compare": "Immobilienvergleich",
@@ -58,7 +60,7 @@
       "description": "Beschreibung",
       "descriptionDescription": "Gib eine detaillierte Beschreibung der Immobilie ein, einschließlich ihrer Merkmale, Vorteile und Besonderheiten.",
       "year": "Baujahr",
-      "yearDescription": "Gib das Baujahr der Immobilie ein, um potenziellen Käufern oder Mietern Informationen über das Alter des Gebäudes zu geben.",
+      "yearDescription": "Wann wurde die Immobilie gebaut?",
       "features": "Ausstattung",
       "contact": "Makler & Agentur",
       "contactDescription": "Von welcher Agentur/Makler wird die Immobilie angeboten?",
@@ -68,7 +70,6 @@
       "rankDescription": "Bewerte die Immobilie basierend auf deinem Interesse oder deiner Präferenz.",
       "linkToWebsite": "Link zur Webseite",
       "price": "Preis",
-      "size": "Größe",
       "sqmPrice": "Preis pro m²",
       "location": "Standort",
       "featuresList": "Ausstattung",
@@ -79,7 +80,14 @@
       "update": "Aktualisieren",
       "create": "Erstellen",
       "noListingsFound": "Keine Immobilien gefunden.",
-      "markdown": "(unterstützt Markdown)"
+      "markdown": "(unterstützt Markdown)",
+      "priceDescription": "Preis der Immobilie in Euro.",
+      "sizeDescription": "Größe der Immobilie in Quadratmetern.",
+      "image": "Bild der Immobilie",
+      "sourceCode": "Quellcode der Immobilienseite",
+      "sqm": "Wohnfläche (m²)",
+      "rooms": "Anzahl der Schlafzimmer",
+      "roomsDescription": "Gib die Anzahl der Schlafzimmer in der Immobilie an."
    },
    "common": {
       "loading": "Daten werden geladen...",

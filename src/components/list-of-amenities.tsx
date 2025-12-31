@@ -27,7 +27,7 @@ export const ListOfAmenities = ({ item }: ListOfAmenitiesProps) => {
          .sort((a, b) => a.distance - b.distance);
    }, [item, t]);
    if (item.poi === undefined || item.poi.length === 0) {
-      return <p>Keine Sehenswürdigkeiten in der Nähe gefunden.</p>;
+      return <p>{t("noAmenities")}</p>;
    }
 
    return (

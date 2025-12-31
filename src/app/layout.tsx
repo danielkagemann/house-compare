@@ -1,8 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/layout/Footer";
-import 'leaflet/dist/leaflet.css';
+import "leaflet/dist/leaflet.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NextIntlClientProvider } from "next-intl";
 import { useSearchParams } from "next/navigation";
@@ -30,14 +31,33 @@ const queryClient = new QueryClient({
   },
 })
 
+interface ProviderProps {
+  readonly children: React.ReactNode;
+}
+
+function Providers({ children }: ProviderProps) {
+  const locale = useSearchParams().get('locale') || 'de';
+
+  const messages = locale === 'de' ? de : en;
+
+  return (
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <QueryClientProvider client={queryClient}>
+        <main className="min-h-screen">
+          {children}
+        </main>
+        <Footer />
+        <Toaster position="top-center" expand={true} richColors />
+      </QueryClientProvider>
+    </NextIntlClientProvider>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const locale = useSearchParams().get('locale') || 'de';
-  const messages = locale === 'de' ? de : en;
 
   return (
     <html lang="de">
@@ -63,17 +83,12 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <QueryClientProvider client={queryClient}>
-            <main className="min-h-screen">
-              {children}
-            </main>
-            <Footer />
-            <Toaster position="top-center" expand={true} richColors />
-          </QueryClientProvider>
-        </NextIntlClientProvider>
+        <Suspense fallback={null}>
+          <Providers>
+            {children}
+          </Providers>
+        </Suspense>
       </body>
     </html>
   );
 }
-

@@ -1,7 +1,6 @@
 import { getSquareMeterPrice } from "@/model/Listing";
 import { Input } from "../ui/input";
 import { InputNext } from "./InputNext";
-import { use } from "react";
 import { useTranslations } from "next-intl";
 
 interface Props {
