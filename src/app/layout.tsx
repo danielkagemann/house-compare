@@ -36,7 +36,17 @@ interface ProviderProps {
 }
 
 function Providers({ children }: ProviderProps) {
-  const locale = useSearchParams().get('locale') || 'de';
+
+  let locale = 'en';
+  if (navigator?.language?.startsWith('de')) {
+    locale = 'de';
+  }
+
+  const overwrite = useSearchParams().get('locale');
+  if (overwrite) {
+    locale = overwrite;
+  }
+
   const messages = locale === 'de' ? de : en;
 
   return (
