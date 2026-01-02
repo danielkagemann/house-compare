@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { ListOfAmenities } from "./list-of-amenities";
 import { motion } from "motion/react";
-import { use, useState } from "react";
+import { useState } from "react";
 import Markdown from 'react-markdown'
 import remarkGfm from "remark-gfm";
 import { useTranslations } from "next-intl";
@@ -27,8 +27,8 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
    const [expand, setExpand] = useState<boolean>(false);
 
    // hooks
-   const t =useTranslations("house");
-   
+   const t = useTranslations("house");
+
    const imageSrc = data.image || `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/images/main-bg.webp`;
 
    function calculateAllFilled() {
@@ -105,7 +105,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
                   <div className="flex items-center gap-1"><MapPin size={14} /> {data.location.display}</div>
                   <div className="transition-transform duration-200 [details:not([open])_&]:rotate-180"><ChevronDown size={14} /></div>
                </summary>
-               <SmallMap location={{ lat: data.location.lat!, lon: data.location.lon! }} className="h-40" />
+               <SmallMap location={{ lat: data.location.lat, lon: data.location.lon }} className="h-50" />
             </details>
          }
          {data.price.length > 0 && <p className="text-primary font-bold text-xl">{`EUR ${Number.parseFloat(data.price).toLocaleString()}` || '--'}</p>}

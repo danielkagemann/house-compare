@@ -208,4 +208,10 @@ body {
       background: transparent !important;
       border: 0 !important;
    }
+  .maplibregl-popup-content {
+    @apply bg-transparent! shadow-none! p-0! rounded-none!;
+   }
+  .maplibregl-popup-tip {
+    @apply hidden!;
+   }
 }
