@@ -1,46 +1,46 @@
-import { useStorage } from "@/store/storage";
-import { Listing, Location, POI } from "@/model/Listing";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useStorage } from '@/store/storage';
+import { Listing, Location, POI } from '@/model/Listing';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-const BASE = "https://villaya.de";
+const BASE = 'https://villaya.de';
 
 /**
  * fetch all properties from the api
  * @returns
  */
 export const useGetPropertyList = (onlySelected: boolean = false) => {
-  const $storage = useStorage();
+   const $storage = useStorage();
 
-  return useQuery({
-    queryKey: ["properties", $storage.token, onlySelected, $storage.selected],
-    queryFn: async () => {
-      if (!$storage.token) {
-        return [];
-      }
-      const res = await fetch(`${BASE}/api/properties/`, {
-        headers: {
-          Authorization: `Bearer ${$storage.token}`,
-        },
-      });
-      if (!res.ok) {
-        return [];
-      }
-      const data = await res.json();
+   return useQuery({
+      queryKey: ['properties', $storage.token, onlySelected, $storage.selected],
+      queryFn: async () => {
+         if (!$storage.token) {
+            return [];
+         }
+         const res = await fetch(`${BASE}/api/properties/`, {
+            headers: {
+               Authorization: `Bearer ${$storage.token}`,
+            },
+         });
+         if (!res.ok) {
+            return [];
+         }
+         const data = await res.json();
 
-      if (onlySelected) {
-        const ls: Listing[] = [];
-        for (const uuid of $storage.selected) {
-          const item = data.find((l: Listing) => l.uuid.trim() === uuid.trim());
-          if (item) {
-            ls.push(item);
-          }
-        }
-        return ls;
-      }
-      return data;
-    },
-  });
+         if (onlySelected) {
+            const ls: Listing[] = [];
+            for (const uuid of $storage.selected) {
+               const item = data.find((l: Listing) => l.uuid.trim() === uuid.trim());
+               if (item) {
+                  ls.push(item);
+               }
+            }
+            return ls;
+         }
+         return data;
+      },
+   });
 };
 
 /**
@@ -49,15 +49,15 @@ export const useGetPropertyList = (onlySelected: boolean = false) => {
  * @returns
  */
 export const useGetSharedPropertyList = (share: string | null) => {
-  return useQuery({
-    queryKey: ["shared-properties", share],
-    queryFn: async () => {
-      const res = await fetch(`${BASE}/api/properties/shared/?from=${share}`);
-      const data = await res.json();
-      return data;
-    },
-    enabled: !!share,
-  });
+   return useQuery({
+      queryKey: ['shared-properties', share],
+      queryFn: async () => {
+         const res = await fetch(`${BASE}/api/properties/shared/?from=${share}`);
+         const data = await res.json();
+         return data;
+      },
+      enabled: !!share,
+   });
 };
 
 /**
@@ -67,21 +67,21 @@ export const useGetSharedPropertyList = (share: string | null) => {
  * @returns
  */
 export const useGetPropertyDetails = (uuid: string | null) => {
-  const $storage = useStorage();
+   const $storage = useStorage();
 
-  return useQuery({
-    queryKey: ["property", uuid, $storage.token],
-    queryFn: async () => {
-      const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
-        headers: {
-          Authorization: `Bearer ${$storage.token}`,
-        },
-      });
-      const data = await res.json();
-      return data;
-    },
-    enabled: !!uuid && !!$storage.token,
-  });
+   return useQuery({
+      queryKey: ['property', uuid, $storage.token],
+      queryFn: async () => {
+         const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
+            headers: {
+               Authorization: `Bearer ${$storage.token}`,
+            },
+         });
+         const data = await res.json();
+         return data;
+      },
+      enabled: !!uuid && !!$storage.token,
+   });
 };
 
 /**
@@ -90,32 +90,29 @@ export const useGetPropertyDetails = (uuid: string | null) => {
  * @param token
  */
 export const useSetProperty = () => {
-  const $storage = useStorage();
-  const queryClient = useQueryClient();
+   const $storage = useStorage();
+   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (listing: Listing) => {
-      const res = await fetch(
-        `${BASE}/api/properties/details/?uuid=${listing.uuid}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${$storage.token}`,
-          },
-          body: JSON.stringify(listing),
-        }
-      );
-      return res.ok;
-    },
-    onSuccess: () => {
-      toast.success("Immobilie gespeichert");
-      queryClient.invalidateQueries({ queryKey: ["properties"], exact: false });
-    },
-    onError: () => {
-      toast.error("Fehler beim Speichern der Immobilie");
-    },
-  });
+   return useMutation({
+      mutationFn: async (listing: Listing) => {
+         const res = await fetch(`${BASE}/api/properties/details/?uuid=${listing.uuid}`, {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${$storage.token}`,
+            },
+            body: JSON.stringify(listing),
+         });
+         return res.ok;
+      },
+      onSuccess: () => {
+         toast.success('Immobilie gespeichert');
+         queryClient.invalidateQueries({ queryKey: ['properties'], exact: false });
+      },
+      onError: () => {
+         toast.error('Fehler beim Speichern der Immobilie');
+      },
+   });
 };
 
 /**
@@ -124,27 +121,25 @@ export const useSetProperty = () => {
  * @returns
  */
 async function imageProxy(url: string): Promise<string> {
-  try {
-    const res = await fetch(
-      `${BASE}/api/properties/image/?url=${encodeURIComponent(url)}`
-    );
-    if (!res.ok) throw new Error("Image not found");
-    const blob = await res.blob();
-    const reader = new FileReader();
-    return new Promise((resolve, reject) => {
-      reader.onload = function (e) {
-        const base64Image = e.target?.result as string;
-        resolve(base64Image);
-      };
-      reader.onerror = function () {
-        reject(new Error("Failed to read image"));
-      };
-      reader.readAsDataURL(blob);
-    });
-  } catch (error) {
-    console.error("Error in imageProxy:", error);
-    return "";
-  }
+   try {
+      const res = await fetch(`${BASE}/api/properties/image/?url=${encodeURIComponent(url)}`);
+      if (!res.ok) throw new Error('Image not found');
+      const blob = await res.blob();
+      const reader = new FileReader();
+      return new Promise((resolve, reject) => {
+         reader.onload = function (e) {
+            const base64Image = e.target?.result as string;
+            resolve(base64Image);
+         };
+         reader.onerror = function () {
+            reject(new Error('Failed to read image'));
+         };
+         reader.readAsDataURL(blob);
+      });
+   } catch (error) {
+      console.error('Error in imageProxy:', error);
+      return '';
+   }
 }
 
 /**
@@ -153,17 +148,15 @@ async function imageProxy(url: string): Promise<string> {
  * @returns
  */
 async function locationLookup(query: string): Promise<Location | null> {
-  try {
-    const result = await fetch(
-      `${BASE}/api/properties/location/?q=${encodeURIComponent(query)}`
-    );
-    if (!result.ok) {
+   try {
+      const result = await fetch(`${BASE}/api/properties/location/?q=${encodeURIComponent(query)}`);
+      if (!result.ok) {
+         return null;
+      }
+      return result.json();
+   } catch {
       return null;
-    }
-    return result.json();
-  } catch {
-    return null;
-  }
+   }
 }
 
 /**
@@ -172,17 +165,37 @@ async function locationLookup(query: string): Promise<Location | null> {
  * @returns
  */
 async function locationPOI(lat: number, lon: number): Promise<POI[] | null> {
-  try {
-    const result = await fetch(
-      `${BASE}/api/properties/poi/?lat=${lat}&lon=${lon}`
-    );
-    if (!result.ok) {
+   try {
+      const result = await fetch(`${BASE}/api/properties/poi/?lat=${lat}&lon=${lon}`);
+      if (!result.ok) {
+         return null;
+      }
+      return result.json();
+   } catch {
       return null;
-    }
-    return result.json();
-  } catch {
-    return null;
-  }
+   }
+}
+
+/**
+ * get route points
+ * @param startlat
+ * @param startlon
+ * @param endlat
+ * @param endlon
+ * @returns
+ */
+async function routeLookup(startlat: number, startlon: number, endlat: number, endlon: number): Promise<any> {
+   try {
+      const result = await fetch(
+         `${BASE}/api/properties/route/?startlat=${startlat}&startlon=${startlon}&endlat=${endlat}&endlon=${endlon}`
+      );
+      if (!result.ok) {
+         return null;
+      }
+      return result.json();
+   } catch {
+      return null;
+   }
 }
 
 /**
@@ -192,31 +205,31 @@ async function locationPOI(lat: number, lon: number): Promise<POI[] | null> {
  * @returns
  */
 export const useDeleteProperty = () => {
-  const $storage = useStorage();
-  const queryClient = useQueryClient();
+   const $storage = useStorage();
+   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (uuid: string) => {
-      const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${$storage.token}`,
-        },
-      });
-      return res.ok;
-    },
-    onSuccess: () => {
-      toast.success("Immobilie gelöscht");
-      // Invalidate all property list queries (both with onlySelected true and false)
-      queryClient.invalidateQueries({
-        queryKey: ["properties"],
-        exact: false,
-      });
-    },
-    onError: () => {
-      toast.error("Fehler beim Löschen der Immobilie");
-    },
-  });
+   return useMutation({
+      mutationFn: async (uuid: string) => {
+         const res = await fetch(`${BASE}/api/properties/details/?uuid=${uuid}`, {
+            method: 'DELETE',
+            headers: {
+               Authorization: `Bearer ${$storage.token}`,
+            },
+         });
+         return res.ok;
+      },
+      onSuccess: () => {
+         toast.success('Immobilie gelöscht');
+         // Invalidate all property list queries (both with onlySelected true and false)
+         queryClient.invalidateQueries({
+            queryKey: ['properties'],
+            exact: false,
+         });
+      },
+      onError: () => {
+         toast.error('Fehler beim Löschen der Immobilie');
+      },
+   });
 };
 
 /**
@@ -225,34 +238,34 @@ export const useDeleteProperty = () => {
  * @returns
  */
 export const useValidateToken = () => {
-  const $storage = useStorage();
-  return useQuery({
-    queryKey: ["is-authenticated", $storage.token],
-    queryFn: async () => {
-      if ($storage.token === null) {
-        return false;
-      }
-      const res = await fetch(`${BASE}/api/auth/validate-token/`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${$storage.token}`,
-        },
-      });
-      return res.status === 204;
-    },
-  });
+   const $storage = useStorage();
+   return useQuery({
+      queryKey: ['is-authenticated', $storage.token],
+      queryFn: async () => {
+         if ($storage.token === null) {
+            return false;
+         }
+         const res = await fetch(`${BASE}/api/auth/validate-token/`, {
+            method: 'GET',
+            headers: {
+               Authorization: `Bearer ${$storage.token}`,
+            },
+         });
+         return res.status === 204;
+      },
+   });
 };
 
 // TODO convert
 async function authSignIn(email: string): Promise<Response> {
-  const response = await fetch(`${BASE}/api/auth/signin/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email }),
-  });
-  return response;
+   const response = await fetch(`${BASE}/api/auth/signin/`, {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+   });
+   return response;
 }
 
 /**
@@ -260,19 +273,19 @@ async function authSignIn(email: string): Promise<Response> {
  * @returns
  */
 export const useConfirmCode = () => {
-  return useMutation({
-    mutationFn: async (code: string) => {
-      const res = await fetch(`${BASE}/api/auth/verify-code/`, {
-        method: "POST",
-        body: JSON.stringify({ code }),
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json.message ?? "Fehler beim Bestätigen des Codes");
-      }
-      return json;
-    },
-  });
+   return useMutation({
+      mutationFn: async (code: string) => {
+         const res = await fetch(`${BASE}/api/auth/verify-code/`, {
+            method: 'POST',
+            body: JSON.stringify({ code }),
+         });
+         const json = await res.json();
+         if (!res.ok) {
+            throw new Error(json.message ?? 'Fehler beim Bestätigen des Codes');
+         }
+         return json;
+      },
+   });
 };
 
 /**
@@ -280,28 +293,28 @@ export const useConfirmCode = () => {
  * @returns
  */
 export const useDeleteAccount = () => {
-  const $storage = useStorage();
-  const queryClient = useQueryClient();
+   const $storage = useStorage();
+   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async () => {
-      const res = await fetch(`${BASE}/api/auth/remove/`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${$storage.token}`,
-        },
-      });
-      return res.ok;
-    },
-    onSuccess: () => {
-      toast.success("Account gelöscht");
-      $storage.tokenSet(null);
-      queryClient.clear();
-    },
-    onError: () => {
-      toast.error("Fehler beim Löschen des Accounts");
-    },
-  });
+   return useMutation({
+      mutationFn: async () => {
+         const res = await fetch(`${BASE}/api/auth/remove/`, {
+            method: 'DELETE',
+            headers: {
+               Authorization: `Bearer ${$storage.token}`,
+            },
+         });
+         return res.ok;
+      },
+      onSuccess: () => {
+         toast.success('Account gelöscht');
+         $storage.tokenSet(null);
+         queryClient.clear();
+      },
+      onError: () => {
+         toast.error('Fehler beim Löschen des Accounts');
+      },
+   });
 };
 
 /**
@@ -309,33 +322,34 @@ export const useDeleteAccount = () => {
  * @returns
  */
 export const useGetShareLink = () => {
-  const $storage = useStorage();
-  return useQuery({
-    queryKey: ["share-link", $storage.token],
-    queryFn: async () => {
-      if (!$storage.token) {
-        return null;
-      }
-      const response = await fetch(`${BASE}/api/auth/share/`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${$storage.token}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        return data.share;
-      }
+   const $storage = useStorage();
+   return useQuery({
+      queryKey: ['share-link', $storage.token],
+      queryFn: async () => {
+         if (!$storage.token) {
+            return null;
+         }
+         const response = await fetch(`${BASE}/api/auth/share/`, {
+            method: 'GET',
+            headers: {
+               Authorization: `Bearer ${$storage.token}`,
+            },
+         });
+         if (response.ok) {
+            const data = await response.json();
+            return data.share;
+         }
 
-      return null;
-    },
-    enabled: !!$storage.token,
-  });
+         return null;
+      },
+      enabled: !!$storage.token,
+   });
 };
 
 export const Endpoints = {
-  imageProxy,
-  locationLookup,
-  locationPOI,
-  authSignIn,
+   imageProxy,
+   locationLookup,
+   locationPOI,
+   routeLookup,
+   authSignIn,
 };

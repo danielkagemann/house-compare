@@ -105,7 +105,7 @@ export const ListingPreview = ({ data, hasEdit = false }: Props) => {
                   <div className="flex items-center gap-1"><MapPin size={14} /> {data.location.display}</div>
                   <div className="transition-transform duration-200 [details:not([open])_&]:rotate-180"><ChevronDown size={14} /></div>
                </summary>
-               <SmallMap location={{ lat: data.location.lat, lon: data.location.lon }} className="h-50" />
+               <SmallMap location={{ lat: data.location.lat, lon: data.location.lon }} amenities={data.location.poi} className="h-60" />
             </details>
          }
          {data.price.length > 0 && <p className="text-primary font-bold text-xl">{`EUR ${Number.parseFloat(data.price).toLocaleString()}` || '--'}</p>}
