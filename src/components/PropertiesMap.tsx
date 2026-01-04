@@ -1,14 +1,13 @@
 'use client';
 
 import { Coordinates, distanceBetweenCoordinates, Listing, POI } from '@/model/Listing';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link2 } from './animate-ui/icons/link-2';
 import Link from 'next/link';
-import { Map, MapMarker, MapRoute, MarkerContent, MarkerLabel, MarkerPopup, MarkerTooltip, useMap } from './ui/map';
+import { Map, MapMarker, MapRoute, MarkerContent, MarkerLabel, MarkerPopup, MarkerTooltip } from './ui/map';
 import { useTranslations } from 'next-intl';
 import { Button } from './ui/button';
 import { PartyPopper } from 'lucide-react';
-import SmallMap from './SmallMap';
 import { RenderIf } from './renderif';
 import { Endpoints } from '@/lib/fetch';
 
@@ -16,7 +15,6 @@ interface Props {
    readonly listings: Listing[];
 }
 
-// ----- main component
 export default function PropertiesMap({ listings }: Props) {
    // hooks
    const t = useTranslations("house");
@@ -156,12 +154,10 @@ export default function PropertiesMap({ listings }: Props) {
    }
 
    return (
-      <div className="w-full h-[calc(100vh-8rem)] z-1 relative">
-         <Map center={[markerList.length > 0 ? markerList[0].location.lon : 0, markerList.length > 0 ? markerList[0].location.lat : 0]}
-            zoom={11}
-         >
-            {renderMap()}
-         </Map>);
-      </div>
+      <Map center={[markerList.length > 0 ? markerList[0].location.lon : 0, markerList.length > 0 ? markerList[0].location.lat : 0]}
+         zoom={11}
+      >
+         {renderMap()}
+      </Map>
    )
 }

@@ -25,9 +25,11 @@
       "start": "Start"
    },
    "main": {
+      "headline": "Dein Zuhause.",
+      "tagline": "Finde den Ort, an dem du wirklich ankommst. Villaya hilft dir, deine Lieblingshäuser zu sammeln, zu vergleichen und das Zuhause zu entdecken, das sich richtig anfühlt.",
       "signInError": "Fehler beim Anmelden",
       "confirmError": "Fehler beim Bestätigen des Codes",
-      "startnow": "Direkt loslegen...",
+      "startnow": "Jetzt starten",
       "email": "Deine E-Mail Adresse",
       "register": "Anmelden",
       "confirmCodeFromEmail": "Bestätigungscode aus der EMail",
@@ -38,9 +40,6 @@
       "collectDescription": "Suche atemberaubende Villen aus aller Welt und speichere diejenigen, die deine Fantasie beflügeln. Erstelle eine persönliche Sammlung, die deinen einzigartigen Geschmack widerspiegelt.",
       "saveWithEmailDescription": "Melde dich einfach mit deiner E-Mail-Adresse an, um eine Sammlung zu erstellen und von überall darauf zuzugreifen.",
       "shareCollectionDescription": "Erstelle einen teilbaren Link, um deine Sammlung mit Familie und Freunden zu teilen."
-   },
-   "hero": {
-      "tagline": "Finde den Ort, an dem du wirklich ankommst. Villaya hilft dir, deine Lieblingshäuser zu sammeln, zu vergleichen und das Zuhause zu entdecken, das sich richtig anfühlt."
    },
    "rank": {
       "0": "Keine Bewertung",

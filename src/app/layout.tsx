@@ -54,7 +54,6 @@ function Providers({ children }: ProviderProps) {
         <main className="min-h-screen">
           {children}
         </main>
-        <Footer />
         <Toaster position="top-center" expand={true} richColors />
       </QueryClientProvider>
     </NextIntlClientProvider>

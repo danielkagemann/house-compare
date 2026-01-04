@@ -4,9 +4,10 @@ type Props = {
    children: ReactNode;
    text: string;
    delay?: number;
+   position?: "bottom" | "right" | "left"
 };
 
-export const Tooltip = ({ children, text, delay = 300 }: Props) => {
+export const Tooltip = ({ children, text, delay = 300, position = "bottom" }: Props) => {
    const [visible, setVisible] = useState(false);
    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -23,6 +24,20 @@ export const Tooltip = ({ children, text, delay = 300 }: Props) => {
       setVisible(false);
    };
 
+
+   function getClassName() {
+      if (position === "bottom") {
+         return "top-full left-1/2 -translate-x-1/2 mb-2";
+      }
+      if (position === "right") {
+         return "top-full left-0 mb-2";
+      }
+      if (position === "left") {
+         return "top-full right-0 mb-2";
+      }
+      return ""
+   }
+
    return (
       <div
          className="relative"
@@ -31,12 +46,11 @@ export const Tooltip = ({ children, text, delay = 300 }: Props) => {
       >
          {children}
          {visible && (
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mb-2 
-                        px-2 py-1 text-white bg-gray-800 rounded-md shadow-lg 
-                        whitespace-nowrap text-xs z-50">
+            <div className={`absolute ${getClassName()} px-2 py-1 text-white bg-gray-800 rounded-md shadow-lg whitespace-nowrap text-xs z-50`}>
                {text}
             </div>
-         )}
-      </div>
+         )
+         }
+      </div >
    );
 };

@@ -72,11 +72,6 @@ export const Footer = () => {
                   <button className="text-primary text-left text-xs hover:underline" onClick={onSignOff}>{t("footer.signOff")}</button>}
             </div>
             <div className="flex gap-1 text-xs items-end justify-end flex-col lg:flex-row lg:gap-3">
-               <Link href="/?init" className="text-primary hover:underline">{t("footer.start")}</Link>
-               {$auth && !isShareMode() &&
-                  <Link href="/properties" className="text-primary hover:underline">{t("header.immo")}</Link>}
-               {$auth && !isShareMode() &&
-                  <Link href="/properties/details" className="text-primary hover:underline">{t("header.addImmo")}</Link>}
                <Link href="/impressum" className="text-primary hover:underline">{t("footer.imprint")}</Link>
                <Link href="/datenschutz" className="text-primary hover:underline">{t("footer.privacyPolicy")}</Link>
             </div>

@@ -8,6 +8,8 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 ## ideas for future implementations
 
+-  redesign
+-  starting point on map visible
 -  ~~map via toggle on main listing page instead of separate page~~
 -  ~~more colorful tilelayer~~
 -  ~~comparison does not look good on mobile~~ better but not perfect

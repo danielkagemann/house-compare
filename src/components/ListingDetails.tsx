@@ -3,7 +3,7 @@
 import { ListingPreview } from "@/components/ListingPreview";
 import { Button } from "@/components/ui/button";
 import { Listing, Ranking } from "@/model/Listing";
-import React, { ReactNode, use, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
    Accordion,
    AccordionContent,
@@ -20,7 +20,7 @@ import { InputFeatures } from "@/components/inputs/InputFeatures";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useGetPropertyDetails, useSetProperty } from "@/lib/fetch";
 import { Header } from "./layout/Header";
-import { PageLayout } from "./PageLayout";
+import { PageLayout } from "./layout/PageLayout";
 import { Asterisk, Check } from "lucide-react";
 import { InputRank } from "./inputs/InputRank";
 import { useTranslations } from "next-intl";

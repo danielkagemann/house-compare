@@ -13,8 +13,8 @@ export const CompareButton = () => {
    const $router = useRouter();
 
    return (
-      <Tooltip text={t("compareImmo")}>
-         <Button variant="secondary"
+      <Tooltip text={t("compareImmo")} position="right">
+         <Button variant="ghost"
             disabled={$save.selected.length < 2}
             className="relative"
             onClick={() => $router.push('/properties/compare')}

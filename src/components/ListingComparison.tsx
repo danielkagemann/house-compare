@@ -6,8 +6,6 @@ import { ReadMore } from "./ui/Readmore";
 import { FeatureList, Features } from "./Features";
 import Flag from 'react-world-flags'
 import { useGetPropertyList } from "@/lib/fetch";
-import { PageLayout } from "./PageLayout";
-import { Header } from "./layout/Header";
 import { Loading } from "./Loading";
 import { useMemo } from "react";
 import { RenderIf } from "./renderif";
@@ -170,8 +168,7 @@ export const ListingComparison = () => {
    }
 
    return (
-      <PageLayout>
-         <Header />
+      <>
          <h2 className="font-bold text-lg">{t("compare")}</h2>
          <div className="text-gray-600 text-sm mb-4">
             {t("compareDescription")}
@@ -194,6 +191,6 @@ export const ListingComparison = () => {
                </tbody>
             </table>
          </div>
-      </PageLayout>
+      </>
    );
 }

@@ -2,17 +2,17 @@
 
 import { motion } from "motion/react";
 import { HouseCard } from "./HouseCard";
-import { PageLayout } from "./PageLayout";
-import { Header } from "./layout/Header";
 import { NoListings } from "./NoListings";
 import { useStorage } from "@/store/storage";
 import { useGetPropertyList } from "@/lib/fetch";
 import { Listing } from "@/model/Listing";
 import { Loading } from "./Loading";
-import { useState } from "react";
-import { FloatingAction, FloatingActionType } from "./layout/FloatingAction";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
+import { Header } from "./layout/Header";
+import { Footer } from "./layout/Footer";
+import { NavigationBar } from "./layout/NavigationBar";
+import { LocationInput } from "./LocationInput";
 
 const PropertiesMap = dynamic(() => import("./PropertiesMap"), {
    ssr: false,
@@ -23,9 +23,6 @@ export const ListingList = () => {
    // hook
    const $storage = useStorage();
    const t = useTranslations("house");
-
-   // state
-   const [display, setDisplay] = useState<FloatingActionType>('list');
 
    // queries
    const { data: listings, isLoading } = useGetPropertyList();
@@ -40,9 +37,6 @@ export const ListingList = () => {
    }
 
    function renderListings() {
-      if (display === 'map') {
-         return null;
-      }
       return (<div className="p-4 grid grid-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
          {
             listings.length === 0 && (
@@ -74,21 +68,24 @@ export const ListingList = () => {
       );
    }
 
-   function renderMap() {
-      if (display === 'list') {
-         return null;
-      }
-      return (
-         <PropertiesMap listings={listings} />
-      );
-   }
-
    return (
-      <PageLayout>
-         <Header />
-         {renderListings()}
-         {renderMap()}
-         <FloatingAction selected={display} onChange={setDisplay} />
-      </PageLayout>
+      <div className="h-screen grid grid-cols-[80px_1fr_1fr] overflow-hidden">
+         {/* navigation */}
+         <NavigationBar />
+
+         {/* content */}
+         <section className="overflow-y-auto">
+            <div className="flex justify-end p-4">
+               <LocationInput />
+            </div>
+            {renderListings()}
+            <Footer />
+         </section>
+
+         {/* map */}
+         <aside className="bg-gray-100 overflow-hidden">
+            <PropertiesMap listings={listings} />
+         </aside>
+      </div>
    );
 };

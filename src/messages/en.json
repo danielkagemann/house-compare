@@ -25,9 +25,11 @@
       "start": "Home"
    },
    "main": {
+      "headline": "Your home.",
+      "tagline": "Find the place where you truly arrive. Villaya helps you collect, compare and discover the home that feels right.",
       "signInError": "Error during sign in",
       "confirmError": "Error confirming the code",
-      "startnow": "Get started right away...",
+      "startnow": "Start now",
       "email": "Your email address",
       "register": "Sign in",
       "confirmCodeFromEmail": "Confirmation code from email",
@@ -38,9 +40,6 @@
       "collectDescription": "Search for stunning villas around the world and save the ones that spark your imagination. Create a personal collection that reflects your unique taste.",
       "saveWithEmailDescription": "Simply sign up with your email address to create a collection and access it from anywhere.",
       "shareCollectionDescription": "Create a shareable link to share your collection with family and friends."
-   },
-   "hero": {
-      "tagline": "Find the place where you truly arrive. Villaya helps you collect, compare and discover the home that feels right."
    },
    "rank": {
       "0": "No rating",

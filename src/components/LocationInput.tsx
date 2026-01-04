@@ -34,7 +34,7 @@ export const LocationInput = () => {
    if (!enterLocation) {
       const hasLocation = fromLocation.length > 0;
       return (
-         <Tooltip text={hasLocation ? fromLocation : t("startPointForDistance")}>
+         <Tooltip text={hasLocation ? fromLocation : t("startPointForDistance")} position="left">
             <Button variant="secondary"
                onClick={() => setEnterLocation(true)}><MapPinHouse size={14} />
                {hasLocation ? fromLocation.substring(0, 15) : t("startPoint")}
