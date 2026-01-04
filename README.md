@@ -10,12 +10,12 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 -  comparison with big map?
 -  add amenities to comparison
--  redesign desktop
--  redesign mobile
 -  show starting point on map
 -  topscore with more checks (year should be removed)
 -  add translation of description possibility
--  404 page
+-  ~~404 page~~
+-  ~~redesign desktop~~
+-  ~~redesign mobile~~
 -  ~~map via toggle on main listing page instead of separate page~~
 -  ~~more colorful tilelayer~~
 -  ~~comparison does not look good on mobile~~ better but not perfect
