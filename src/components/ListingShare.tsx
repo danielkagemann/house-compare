@@ -55,8 +55,6 @@ export const ListingShare = () => {
 
    return (<PageLayout>
       <div className="flex flex-col gap-2">
-         <Image src="/assets/images/main-logo.webp" width={42} height={42} alt="logo" /> <div className="text-2xl font-bold">Villaya</div>
-
          <RenderIf condition={display === 'list'}>
             {
                visibleItems.map((item: Listing) => (

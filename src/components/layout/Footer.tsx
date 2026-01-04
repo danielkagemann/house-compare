@@ -62,7 +62,7 @@ export const Footer = () => {
    }
 
    return (
-      <footer className="w-full p-4 lg:p-12 mt-12 flex flex-col gap-1 text-sm text-gray-600 bg-gray-50">
+      <footer className="w-full p-4 lg:p-12 mt-4 flex flex-col gap-1 text-sm text-gray-600 bg-gray-50">
          <div className="grid grid-cols-2 gap-1">
             <div className="flex flex-col gap-1 items-start">
                <div><strong>Villaya</strong>{t("footer.private")}<a href="https://danielkagemann.name">Daniel Kagemann</a></div>

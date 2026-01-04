@@ -16,6 +16,7 @@ import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { RenderIf } from "./renderif";
 import { Main } from "./layout/Main";
+import { Footer } from "./layout/Footer";
 
 type UserAction = {
    type: "start" | "email" | "code";
@@ -214,23 +215,27 @@ export const LandingPage = () => {
    }
 
    return (
-      <Main>
-         <>
-            {/* tagline */}
-            <div className="space-y-4">
-               <div className="font-bold text-5xl">{t("headline")}</div>
-               <div className="text-base/loose text-gray-700">
-                  {t("tagline")}
+      <>
+         <Main>
+            <>
+               {/* tagline */}
+               <div className="space-y-4">
+                  <div className="font-bold text-5xl">{t("headline")}</div>
+                  <div className="text-base/loose text-gray-700">
+                     {t("tagline")}
+                  </div>
+
+                  {renderCallToAction()}
+
                </div>
 
-               {renderCallToAction()}
-
-            </div>
-
-            {/* action (dynamic) */}
-            <div>
-               {renderBottom()}
-            </div></>
-      </Main>
+               {/* action (dynamic) */}
+               <div>
+                  {renderBottom()}
+               </div>
+            </>
+         </Main>
+         <Footer />
+      </>
    );
 }

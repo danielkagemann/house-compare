@@ -11,6 +11,11 @@ import { useMemo } from "react";
 import { RenderIf } from "./renderif";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
+import { Footer } from "./layout/Footer";
+import { NavigationBar } from "./layout/NavigationBar";
+import { Button } from "./ui/button";
+import { useStorage } from "@/store/storage";
+import { useRouter } from "next/navigation";
 const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
 });
@@ -19,6 +24,8 @@ type BestOption = Record<string, { value: number, index: number }>;
 export const ListingComparison = () => {
    // hooks
    const t = useTranslations("house");
+   const { clearSelection } = useStorage();
+   const $router = useRouter();
 
    // query selected items
    const { data, isLoading } = useGetPropertyList(true);
@@ -168,29 +175,44 @@ export const ListingComparison = () => {
    }
 
    return (
-      <>
-         <h2 className="font-bold text-lg">{t("compare")}</h2>
-         <div className="text-gray-600 text-sm mb-4">
-            {t("compareDescription")}
-         </div>
-         <div className="overflow-x-auto block">
-            <table className="border-collapse min-w-full text-xs md:text-base">
-               <tbody>
-                  {renderRow('image')}
-                  {renderRow('price')}
-                  {renderRow('title')}
-                  {renderRow('location')}
-                  {renderRow('country')}
-                  {renderRow('sqm')}
-                  {renderRow('sqmPrice')}
-                  {renderRow('year')}
-                  {renderRow('rooms')}
-                  {renderRow('description')}
-                  {renderRow('features')}
-                  {renderRow('contact')}
-               </tbody>
-            </table>
-         </div>
-      </>
+      <div className="h-screen grid grid-cols-[80px_1fr] overflow-hidden">
+         {/* navigation */}
+         <NavigationBar />
+
+         {/* content */}
+         <section className="overflow-y-auto ">
+            <div className="p-4">
+               <div className="flex justify-between">
+                  <h1 className="font-bold text-lg">{t("compare")}</h1>
+                  <Button variant="secondary" size="sm" onClick={() => {
+                     clearSelection();
+                     $router.push('/properties');
+                  }}>{t("clearCompare")}</Button>
+               </div>
+               <div className="text-gray-600 text-sm mb-4">
+                  {t("compareDescription")}
+               </div>
+               <div className="overflow-x-auto block">
+                  <table className="border-collapse min-w-full text-xs md:text-base">
+                     <tbody>
+                        {renderRow('image')}
+                        {renderRow('price')}
+                        {renderRow('title')}
+                        {renderRow('location')}
+                        {renderRow('country')}
+                        {renderRow('sqm')}
+                        {renderRow('sqmPrice')}
+                        {renderRow('year')}
+                        {renderRow('rooms')}
+                        {renderRow('description')}
+                        {renderRow('features')}
+                        {renderRow('contact')}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <Footer />
+         </section>
+      </div>
    );
 }

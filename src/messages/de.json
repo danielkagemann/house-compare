@@ -49,6 +49,7 @@
       "4": "Preisbeobachtung"
    },
    "house": {
+      "clearCompare": "Vergleich zurücksetzen",
       "noAmenities": "Keine Sehenswürdigkeiten in der Nähe gefunden.",
       "title": "Titel",
       "unknown": "Unbekannt",
@@ -86,13 +87,16 @@
       "sourceCode": "Quellcode der Immobilienseite",
       "sqm": "Wohnfläche (m²)",
       "rooms": "Anzahl der Schlafzimmer",
-      "roomsDescription": "Gib die Anzahl der Schlafzimmer in der Immobilie an."
+      "roomsDescription": "Gib die Anzahl der Schlafzimmer in der Immobilie an.",
+      "availableListings": "Gespeicherte Immobilien"
    },
    "common": {
       "loading": "Daten werden geladen...",
       "noListingsFound": "Du hast bisher noch keine Traumhäuser gespeichert. Suche nach Deinem persönlichen Traumhaus und speichere die Informationen hier.",
       "foundAPropertyPrompt": "Du hast eine Immobilie gefunden? Dann schnell eintragen",
-      "addProperty": "Immobilie hinzufügen"
+      "addProperty": "Immobilie hinzufügen",
+      "less": "weniger",
+      "more": "mehr"
    },
    "input": {
       "pleaseEnterFeatures": "Bitte gib die Ausstattungsmerkmale der Immobilie an. Nutzer hierzu das Eingabefeld (komma getrennt) oder die Liste darunter.",

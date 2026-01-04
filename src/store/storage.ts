@@ -11,6 +11,7 @@ type StorageState = {
 
    selectionToggle: (id: string) => void;
    selectionContains: (id: string) => boolean;
+   clearSelection: () => void;
    locationSet: (loc: Location | null) => void;
    tokenSet: (value: string | null) => void;
 };
@@ -22,6 +23,7 @@ export const useStorage = create<StorageState>()(
          selected: [],
          token: null,
 
+         clearSelection: () => set({ selected: [] }),
          selectionToggle: (id: string) => {
             const normalized = id.trim();
             if (!normalized) return;

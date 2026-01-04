@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { useState } from "react"
 
 type Props = {
@@ -7,6 +8,9 @@ type Props = {
 const MAX_LENGTH = 300
 
 export const ReadMore = ({ text }: Props) => {
+   // hooks
+   const t = useTranslations("common");
+
    // state
    const [expanded, setExpanded] = useState<boolean>(false);
 
@@ -18,7 +22,7 @@ export const ReadMore = ({ text }: Props) => {
    return (
       <>
          <p>{show}</p>
-         <button type="button" onClick={() => setExpanded(p => !p)} className="cursor-pointer text-primary font-bold">{expanded ? 'weniger' : 'mehr'}</button>
+         <button type="button" onClick={() => setExpanded(p => !p)} className="cursor-pointer text-primary font-bold">{expanded ? t("less") : t("more")}</button>
       </>
    )
 }

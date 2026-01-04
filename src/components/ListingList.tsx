@@ -68,14 +68,14 @@ export const ListingList = () => {
    }
 
    return (
-      <div className="h-screen grid grid-cols-[80px_1fr_1fr] overflow-hidden">
+      <div className="h-screen grid grid-cols-[80px_6fr_4fr] overflow-hidden">
          {/* navigation */}
          <NavigationBar />
 
          {/* content */}
          <section className="overflow-y-auto">
             <div className="flex justify-between p-4">
-               <h1 className="text-lg font-semibold">{t('availableListings')}</h1>
+               <h1 className="text-xl font-semibold">{t('availableListings')}</h1>
                <LocationInput />
             </div>
             {renderListings()}

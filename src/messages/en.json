@@ -49,6 +49,7 @@
       "4": "Price watch"
    },
    "house": {
+      "clearCompare": "Reset comparison",
       "noAmenities": "No points of interest found nearby.",
       "title": "Title",
       "unknown": "Unknown",
@@ -86,13 +87,16 @@
       "sourceCode": "Source code of the property page",
       "sqm": "Living area (m²)",
       "rooms": "Number of bedrooms",
-      "roomsDescription": "Enter the number of bedrooms in the property."
+      "roomsDescription": "Enter the number of bedrooms in the property.",
+      "availableListings": "Stored properties"
    },
    "common": {
       "loading": "Loading data...",
       "noListingsFound": "You haven't saved any dream homes yet. Search for your personal dream home and store the information here.",
       "foundAPropertyPrompt": "Found a property? Add it right away",
-      "addProperty": "Add property"
+      "addProperty": "Add property",
+      "less": "less",
+      "more": "more"
    },
    "input": {
       "pleaseEnterFeatures": "Please enter the property's features. Use the input field (comma-separated) or the list below.",

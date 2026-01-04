@@ -24,6 +24,8 @@ import { PageLayout } from "./layout/PageLayout";
 import { Asterisk, Check } from "lucide-react";
 import { InputRank } from "./inputs/InputRank";
 import { useTranslations } from "next-intl";
+import { NavigationBar } from "./layout/NavigationBar";
+import { Footer } from "./layout/Footer";
 
 type InputOrder = {
    title: string;
@@ -141,12 +143,14 @@ export const ListingDetails = () => {
    }
 
    return (
-      <PageLayout>
-         <Header />
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/*user input*/}
-            <div className="px-4 md:px-0">
-               <h2 className="font-bold text-lg">{isEditing ? t('editImmo') : t('addImmo')}</h2>
+      <div className="h-screen grid grid-cols-[80px_1fr_1fr] overflow-hidden">
+         {/* navigation */}
+         <NavigationBar />
+
+         {/*user input*/}
+         <div className="overflow-y-auto">
+            <div className="p-4">
+               <h1 className="font-semibold text-lg">{isEditing ? t('editImmo') : t('addImmo')}</h1>
                <Accordion
                   type="single"
                   collapsible
@@ -177,12 +181,11 @@ export const ListingDetails = () => {
                   </div>
                </div>
             </div>
-
-            {/*preview*/}
-            <div className="hidden md:block">
-               <ListingPreview data={listing as Listing} />
-            </div>
+            <Footer />
          </div>
-      </PageLayout>
+
+         {/*preview*/}
+         <ListingPreview data={listing as Listing} />
+      </div>
    );
 }
