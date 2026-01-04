@@ -68,7 +68,7 @@ export const ListingList = () => {
    }
 
    return (
-      <div className="h-screen grid grid-cols-[80px_6fr_4fr] overflow-hidden">
+      <div className="h-screen grid md:grid-cols-[80px_6fr_4fr] overflow-hidden">
          {/* navigation */}
          <NavigationBar />
 
@@ -83,7 +83,7 @@ export const ListingList = () => {
          </section>
 
          {/* map */}
-         <aside className="bg-gray-100 overflow-hidden">
+         <aside className="bg-gray-100 hidden md:block overflow-hidden">
             <PropertiesMap listings={listings} />
          </aside>
       </div>

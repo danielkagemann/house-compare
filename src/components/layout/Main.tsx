@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
    return (
-      <div className="grid grid-cols-2 gap-2 w-screen h-screen">
-         <div className="p-16 flex flex-col justify-between h-full">
+      <div className="grid md:grid-cols-2 gap-2 w-screen h-screen">
+         <div className="md:p-16 p-4 flex flex-col justify-between md:h-full">
             {/* logo */}
             <div>
                <div className="flex gap-1 justify-start items-center">

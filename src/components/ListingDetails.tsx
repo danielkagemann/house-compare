@@ -141,7 +141,7 @@ export const ListingDetails = () => {
    }
 
    return (
-      <div className="h-screen grid grid-cols-[80px_1fr_1fr] overflow-hidden">
+      <div className="h-screen grid md:grid-cols-[80px_1fr_1fr] overflow-hidden">
          {/* navigation */}
          <NavigationBar />
 
@@ -183,7 +183,9 @@ export const ListingDetails = () => {
          </div>
 
          {/*preview*/}
-         <ListingPreview data={listing as Listing} />
+         <div className="hidden md:block">
+            <ListingPreview data={listing as Listing} />
+         </div>
       </div>
    );
 }

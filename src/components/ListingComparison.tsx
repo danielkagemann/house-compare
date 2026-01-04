@@ -175,7 +175,7 @@ export const ListingComparison = () => {
    }
 
    return (
-      <div className="h-screen grid grid-cols-[80px_1fr] overflow-hidden">
+      <div className="h-screen grid md:grid-cols-[80px_1fr] overflow-hidden">
          {/* navigation */}
          <NavigationBar />
 
