@@ -98,6 +98,11 @@
       "less": "weniger",
       "more": "mehr"
    },
+   "notfound": {
+      "title": "vier null vier",
+      "subtitle": "Das ist sehr technisch, bedeutet aber leider, das die Seite, die Du suchst, nicht gefunden wurde.",
+      "goHome": "Zur Startseite"
+   },
    "input": {
       "pleaseEnterFeatures": "Bitte gib die Ausstattungsmerkmale der Immobilie an. Nutzer hierzu das Eingabefeld (komma getrennt) oder die Liste darunter.",
       "examplePlaceholder": "z.B. Balkon, Garten, Garage",
