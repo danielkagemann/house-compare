@@ -3,16 +3,16 @@
 import { useGetSharedPropertyList } from "@/lib/fetch";
 import { Listing } from "@/model/Listing";
 import { useSearchParams } from "next/navigation";
-import { Hero } from "./Hero";
-import Image from "next/image";
 import { HouseListItem } from "./HouseListItem";
 import { Loading } from "./Loading";
-import { Fragment, use, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { RenderIf } from "./renderif";
 import { FloatingAction, FloatingActionType } from "./layout/FloatingAction";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { PageLayout } from "./layout/PageLayout";
+import { Main } from "./layout/Main";
+import { Footer } from "./layout/Footer";
 
 const PropertiesMap = dynamic(() => import("./PropertiesMap"), {
    ssr: false,
@@ -44,13 +44,16 @@ export const ListingShare = () => {
    }
 
    if (listing?.length === 0) {
-      return (<PageLayout>
-         <Hero>
-            <div className="text-red-700 font-bold">
-               {t('noListingsFound')}
-            </div>
-         </Hero>
-      </PageLayout>);
+      return (
+         <>
+            <Main>
+               <div className="text-red-700 font-bold">
+                  {t('noListingsFound')}
+               </div>
+
+            </Main>
+            <Footer />
+         </>);
    }
 
    return (<PageLayout>
