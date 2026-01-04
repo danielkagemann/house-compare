@@ -8,15 +8,16 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 ## ideas for future implementations
 
--  redesign
--  starting point on map visible
+-  redesign desktop
+-  redesign mobile
+-  show starting point on map
+-  topscore with more checks (year should be removed)
+-  add translation of description possibility
 -  ~~map via toggle on main listing page instead of separate page~~
 -  ~~more colorful tilelayer~~
 -  ~~comparison does not look good on mobile~~ better but not perfect
 -  ~~details with indicator which field has empty data~~
--  topscore with more checks (year should be removed)
 -  ~~personal ranking as new field (db + details)~~
--  add translation of description possibility
 -  ~~show map on compare~~
 
 ## finding a domain name
@@ -41,34 +42,16 @@ Here are the top 3 results.
 
 ## features
 
--  add whats new screen/info screen
 -  set real estate data manually or from idealista and thinkspain html
 -  possibility to add coordinates instead of location
--  storage in browser
--  store your favorite collection
+-  collect amenities nearby
+-  show map
+-  show routes
+-  stored in database per user
+-  shareable listings
 -  comparison of real estates by user selection (up to 3)
 -  add starting point to calculate distance (air)
--  works on mobile and desktop
 -  detect countries
-
-## Some insights
-
-### Overview
-
-All you need is your email address so the data can be stored in the database.
-
-![](./sc1.jpg)
-
-In case the email address is recognized by the system you will be redirected to your list of favorites. Otherwise
-an email is send with a confirmation code before you can start.
-
-![](./sc2.jpg)
-
-### Location
-
-You can define a starting point and the (air) distance is calculated to give you a better understanding of the place.
-
-![](./sc3.jpg)
 
 ## dependencies used
 
@@ -78,3 +61,6 @@ You can define a starting point and the (air) distance is calculated to give you
 -  lucide icons for nice symbols
 -  animated-ui for microanimations
 -  motion for microanimations
+-  maplibre gl for map
+-  zustand for global state
+-  tanstack query for rest calls

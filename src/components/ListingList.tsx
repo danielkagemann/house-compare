@@ -9,7 +9,6 @@ import { Listing } from "@/model/Listing";
 import { Loading } from "./Loading";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { Header } from "./layout/Header";
 import { Footer } from "./layout/Footer";
 import { NavigationBar } from "./layout/NavigationBar";
 import { LocationInput } from "./LocationInput";
@@ -75,7 +74,8 @@ export const ListingList = () => {
 
          {/* content */}
          <section className="overflow-y-auto">
-            <div className="flex justify-end p-4">
+            <div className="flex justify-between p-4">
+               <h1 className="text-lg font-semibold">{t('availableListings')}</h1>
                <LocationInput />
             </div>
             {renderListings()}
