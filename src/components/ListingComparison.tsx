@@ -16,6 +16,7 @@ import { NavigationBar } from "./layout/NavigationBar";
 import { Button } from "./ui/button";
 import { useStorage } from "@/store/storage";
 import { useRouter } from "next/navigation";
+import { ListOfAmenities } from "./list-of-amenities";
 const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
 });
@@ -48,6 +49,7 @@ export const ListingComparison = () => {
       }))
    }
 
+   // TODO this fails if we have two listings with same best values
    const bestOption = useMemo((): BestOption => {
       // iterate over all data elements and summarize the best options
       const summary: BestOption = {};
@@ -120,6 +122,10 @@ export const ListingComparison = () => {
 
             <RenderIf condition={attr === 'price'}>
                <div className={`text-sm md:text-lg font-bold ${bestOption['price']?.index === index ? 'text-green-700' : 'text-red-700'}`}>EUR {item.price}</div>
+            </RenderIf>
+
+            <RenderIf condition={attr === 'amenities'}>
+               <ListOfAmenities item={item.location} />
             </RenderIf>
 
             <RenderIf condition={attr === 'location'}>
@@ -200,6 +206,7 @@ export const ListingComparison = () => {
                         {renderRow('title')}
                         {renderRow('location')}
                         {renderRow('country')}
+                        {renderRow('amenities')}
                         {renderRow('sqm')}
                         {renderRow('sqmPrice')}
                         {renderRow('year')}

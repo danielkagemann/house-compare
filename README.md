@@ -10,9 +10,9 @@ captcha hits hard and could not get it done in less effort (tried puppeteer, pla
 
 -  comparison with big map?
 -  add amenities to comparison
--  show starting point on map
 -  topscore with more checks (year should be removed)
 -  add translation of description possibility
+-  ~~show starting point on map~~
 -  ~~404 page~~
 -  ~~redesign desktop~~
 -  ~~redesign mobile~~

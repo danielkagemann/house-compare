@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { toast } from 'sonner';
-
 import { Location } from '@/model/Listing';
 
 type StorageState = {
@@ -58,6 +57,7 @@ export const useStorage = create<StorageState>()(
          partialize: (s) => ({
             selected: s.selected,
             token: s.token,
+            location: s.location,
          }),
          version: 1,
       }

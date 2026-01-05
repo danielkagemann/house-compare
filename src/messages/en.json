@@ -49,6 +49,7 @@
       "4": "Price watch"
    },
    "house": {
+      "start": "Starting point",
       "clearCompare": "Reset comparison",
       "noAmenities": "No points of interest found nearby.",
       "title": "Title",

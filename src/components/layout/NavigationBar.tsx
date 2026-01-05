@@ -29,7 +29,7 @@ export const NavigationBar = () => {
 
    // w-20 is 80px
    return (
-      <nav className="bg-gray-600 text-white w-full md:w-20 h-full flex md:flex-col md:items-center space-x-4 justify-center md:space-y-8 py-4 md:py-16">
+      <nav className="bg-gray-600 text-white w-full md:w-20 h-full flex md:flex-col md:items-center space-x-4 md:space-x-0 md:justify-start justify-center md:space-y-8 py-4 md:py-16">
          <Link href="/?init">
             <Image src="/assets/images/main-logo.webp" width={32} height={32} alt="logo" className="invert-100" />
          </Link>
@@ -51,7 +51,6 @@ export const NavigationBar = () => {
             </Tooltip>
          }
          <CompareButton />
-
       </nav >
    );
 }

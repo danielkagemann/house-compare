@@ -49,6 +49,7 @@
       "4": "Preisbeobachtung"
    },
    "house": {
+      "start": "Startpunkt",
       "clearCompare": "Vergleich zurücksetzen",
       "noAmenities": "Keine Sehenswürdigkeiten in der Nähe gefunden.",
       "title": "Titel",

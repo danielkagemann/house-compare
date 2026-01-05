@@ -10,6 +10,7 @@ import { Button } from './ui/button';
 import { PartyPopper } from 'lucide-react';
 import { RenderIf } from './renderif';
 import { Endpoints } from '@/lib/fetch';
+import { useStorage } from '@/store/storage';
 
 interface Props {
    readonly listings: Listing[];
@@ -18,6 +19,7 @@ interface Props {
 export default function PropertiesMap({ listings }: Props) {
    // hooks
    const t = useTranslations("house");
+   const { location } = useStorage();
 
    // state
    const [selected, setSelected] = useState<Listing | null>(null);
@@ -90,6 +92,27 @@ export default function PropertiesMap({ listings }: Props) {
    }
 
    /**
+    * add starting point as marker
+    * @returns 
+    */
+   function renderStartingPoint() {
+      if (!location) {
+         return null;
+      }
+
+      return (
+         <MapMarker latitude={location.lat} longitude={location.lon}>
+            <MarkerContent>
+               <MarkerLabel position="bottom">
+                  <div className="bg-primary text-white py-1 px-2 border border-white/80 rounded-md">{location.display}</div>
+               </MarkerLabel>
+               <MarkerTooltip>{t('start')}</MarkerTooltip>
+            </MarkerContent>
+         </MapMarker>
+      );
+   }
+
+   /**
     * create custom html marker
     * @param item 
     * @returns 
@@ -149,7 +172,6 @@ export default function PropertiesMap({ listings }: Props) {
             </>
          );
       }
-
       return listings.map(renderCustomMarker);
    }
 
@@ -157,6 +179,7 @@ export default function PropertiesMap({ listings }: Props) {
       <Map center={[markerList.length > 0 ? markerList[0].location.lon : 0, markerList.length > 0 ? markerList[0].location.lat : 0]}
          zoom={11}
       >
+         {renderStartingPoint()}
          {renderMap()}
       </Map>
    )
