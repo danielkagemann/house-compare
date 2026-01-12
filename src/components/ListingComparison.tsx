@@ -17,6 +17,8 @@ import { Button } from "./ui/button";
 import { useStorage } from "@/store/storage";
 import { useRouter } from "next/navigation";
 import { ListOfAmenities } from "./list-of-amenities";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
 });
@@ -164,6 +166,11 @@ export const ListingComparison = () => {
             <RenderIf condition={attr === 'contact'}>
                <div className="flex gap-1 text-gray-700"><User size={14} /> {item.contact}</div>
             </RenderIf>
+            <RenderIf condition={attr === 'notes'}>
+               <span className="text-sm text-gray-700">
+                  <Markdown remarkPlugins={[remarkGfm]}>{item.notes}</Markdown>
+               </span>
+            </RenderIf>
          </td >
       );
    }
@@ -214,6 +221,7 @@ export const ListingComparison = () => {
                         {renderRow('description')}
                         {renderRow('features')}
                         {renderRow('contact')}
+                        {renderRow('notes')}
                      </tbody>
                   </table>
                </div>

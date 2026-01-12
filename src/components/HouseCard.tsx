@@ -78,7 +78,7 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
                {/* delete */}
                <motion.button
                   type="button"
-                  className="absolute bottom-2 left-2 bg-black/10 transition-all duration-200 rounded-lg p-2 group-hover:bg-black"
+                  className="absolute bottom-2 left-2 bg-black/30 transition-all duration-200 rounded-lg p-2 group-hover:bg-black"
                   onClick={onDelete}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ rotate: 360 }}
@@ -89,7 +89,7 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
 
                {/* original website */}
                <motion.div
-                  className={`absolute bottom-2 right-10 bg-black/10 transition-all duration-200 rounded-lg p-2 group-hover:bg-black`}
+                  className={`absolute bottom-2 right-10 bg-black/30 transition-all duration-200 rounded-lg p-2 group-hover:bg-black`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ y: -5 }}
                   transition={{ duration: 0.2 }}>
@@ -101,7 +101,7 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
                {/* edit */}
                <motion.button
                   type="button"
-                  className={`absolute bottom-2 right-2 bg-black/10 transition-all duration-200 rounded-lg p-2 group-hover:bg-black`}
+                  className={`absolute bottom-2 right-2 bg-black/30 transition-all duration-200 rounded-lg p-2 group-hover:bg-black`}
                   onClick={() => setShow(true)}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ y: -5 }}
@@ -151,7 +151,7 @@ export const HouseCard = ({ data, isSelected, onSelect }: HouseCardProps) => {
                </SheetContent>
             </Sheet>
          </div>
-         <div className="md:hidden pt-2 mb-4 border-b-8 border-gray-200 w-[calc(100%+4rem)] -mx-8" />
+         <div className="md:hidden pt-2 mb-4 border-b-8 border-gray-200 w-[calc(100%+2rem)] -mx-4" />
       </>
    );
 };
