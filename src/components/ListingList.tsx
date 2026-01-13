@@ -74,11 +74,13 @@ export const ListingList = () => {
 
          {/* content */}
          <section className="overflow-y-auto">
-            <div className="flex justify-between p-4">
-               <h1 className="text-xl font-semibold">{t('availableListings')}</h1>
-               <LocationInput />
+            <div className="h-screen">
+               <div className="flex justify-between p-4">
+                  <h1 className="text-xl font-semibold">{t('availableListings')}</h1>
+                  <LocationInput />
+               </div>
+               {renderListings()}
             </div>
-            {renderListings()}
             <Footer />
          </section>
 

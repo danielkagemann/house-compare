@@ -42,6 +42,7 @@ export type Listing = {
    year: string;
    features: string[];
    notes: string;
+   score?: number;
    rank: RankingType;
 };
 

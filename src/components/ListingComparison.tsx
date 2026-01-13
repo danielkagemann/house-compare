@@ -7,7 +7,6 @@ import { FeatureList, Features } from "./Features";
 import Flag from 'react-world-flags'
 import { useGetPropertyList } from "@/lib/fetch";
 import { Loading } from "./Loading";
-import { useMemo } from "react";
 import { RenderIf } from "./renderif";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
@@ -19,10 +18,12 @@ import { useRouter } from "next/navigation";
 import { ListOfAmenities } from "./list-of-amenities";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useMemo } from "react";
+import { calculateScores } from "@/model/score";
 const SmallMap = dynamic(() => import("./SmallMap"), {
    ssr: false,
 });
-type BestOption = Record<string, { value: number, index: number }>;
+
 
 export const ListingComparison = () => {
    // hooks
@@ -33,6 +34,16 @@ export const ListingComparison = () => {
    // query selected items
    const { data, isLoading } = useGetPropertyList(true);
 
+   // derived state
+   const scoredListings = useMemo(() => {
+      return calculateScores(data || []);
+   }, [data]);
+
+   /**
+    * feature list
+    * @param index
+    * @returns 
+    */
    function getFeatures(index: number): FeatureList[] {
       // get other features translated to only string array and remove this one
       const tmp = [...data];
@@ -51,59 +62,26 @@ export const ListingComparison = () => {
       }))
    }
 
-   // TODO this fails if we have two listings with same best values
-   const bestOption = useMemo((): BestOption => {
-      // iterate over all data elements and summarize the best options
-      const summary: BestOption = {};
-
-      if (!data) {
-         return summary;
+   /**
+    * get top index
+    * @returns 
+    */
+   function getTopOptionIndex(): number | null {
+      if (!scoredListings || scoredListings.length === 0) {
+         return null;
       }
 
-      // find the index with the best value for each attribute
-      data.forEach((item: Listing, index: number) => {
-         // price
-         const price = Number.parseFloat(item.price);
-         if (!summary['price'] || price < summary['price'].value) {
-            summary['price'] = { value: price, index };
-         }
+      let topIndex = 0;
+      let topScore = -1;
 
-         // sqmPrice
-         const sqmPrice: number = getSquareMeterPrice(item.price, item.sqm, true) as number;
-         if (!summary['sqmPrice'] || sqmPrice < summary['sqmPrice'].value) {
-            summary['sqmPrice'] = { value: sqmPrice, index };
-         }
-
-         // rooms
-         const rooms = Number.parseFloat(item.rooms);
-         if (!summary['rooms'] || rooms > summary['rooms'].value) {
-            summary['rooms'] = { value: rooms, index };
-         }
-
-         // year
-         const year = Number.parseFloat(item.year);
-         if (!summary['year'] || year > summary['year'].value) {
-            summary['year'] = { value: year, index };
-         }
-
-         // sqm
-         const sqm = Number.parseFloat(item.sqm);
-         if (!summary['sqm'] || sqm > summary['sqm'].value) {
-            summary['sqm'] = { value: sqm, index };
+      scoredListings.forEach((item: Listing, index: number) => {
+         if (item.score !== undefined && item.score > topScore) {
+            topScore = item.score;
+            topIndex = index;
          }
       });
 
-      return summary;
-   }, [data]);
-
-   function getTopOptionIndex() {
-      const indices = Object.values(bestOption).map(item => item.index);
-
-      const top: number[] = new Array(data?.length ?? 0).fill(0);
-      indices.forEach((idx) => {
-         top[idx] = top[idx] + 1;
-      });
-      return top.indexOf(Math.max(...top));
+      return topScore >= 0 ? topIndex : null;
    }
 
    function renderCell(item: Listing, attr: string, index: number) {
@@ -123,7 +101,7 @@ export const ListingComparison = () => {
             </RenderIf>
 
             <RenderIf condition={attr === 'price'}>
-               <div className={`text-sm md:text-lg font-bold ${bestOption['price']?.index === index ? 'text-green-700' : 'text-red-700'}`}>EUR {item.price}</div>
+               <div className={`text-sm md:text-lg font-bold`}>EUR {item.price}</div>
             </RenderIf>
 
             <RenderIf condition={attr === 'amenities'}>
@@ -142,19 +120,24 @@ export const ListingComparison = () => {
             </RenderIf>
 
             <RenderIf condition={attr === 'year'}>
-               <div className={`flex gap-1 items-center text-gray-700 ${bestOption['year']?.index === index ? 'text-green-700' : 'text-red-700'}`}><Calendar size={14} /> {item.year}</div>
+               <div className={`flex gap-1 items-center text-gray-700`}><Calendar size={14} /> {item.year}</div>
             </RenderIf>
 
             <RenderIf condition={attr === 'rooms'}>
-               <div className={`flex gap-1 items-center text-gray-700 ${bestOption['rooms']?.index === index ? 'text-green-700' : 'text-red-700'}`}><BedDouble size={14} /> {item.rooms}</div>
+               <div className={`flex gap-1 items-center text-gray-700`}><BedDouble size={14} /> {item.rooms}</div>
             </RenderIf>
 
             <RenderIf condition={attr === 'sqm'}>
-               <div className={`flex gap-1 items-center text-gray-700 ${bestOption['sqm']?.index === index ? 'text-green-700' : 'text-red-700'}`}><Ruler size={14} /> {item.sqm} m²</div>
+               <div className={`flex gap-1 items-center text-gray-700`}><Ruler size={14} /> {item.sqm} m²</div>
             </RenderIf>
             <RenderIf condition={attr === 'sqmPrice'}>
-               <div className={`text-gray-700 ${bestOption['sqmPrice']?.index === index ? 'text-green-700' : 'text-red-700'}`}>
+               <div className={`text-gray-700`}>
                   {t("persqm")}: {getSquareMeterPrice(item.price, item.sqm)}
+               </div>
+            </RenderIf>
+            <RenderIf condition={attr === 'score'}>
+               <div className={`text-gray-700`}>
+                  <strong>Score</strong> {item.score?.toFixed(3)}
                </div>
             </RenderIf>
             <RenderIf condition={attr === 'description'}>
@@ -178,7 +161,7 @@ export const ListingComparison = () => {
    function renderRow(attr: string) {
       return (
          <tr>
-            {data.map((item: Listing, index: number) => renderCell(item, attr, index))}
+            {scoredListings.map((item: Listing, index: number) => renderCell(item, attr, index))}
          </tr>
       );
    }
@@ -213,6 +196,7 @@ export const ListingComparison = () => {
                         {renderRow('title')}
                         {renderRow('location')}
                         {renderRow('country')}
+                        {renderRow('score')}
                         {renderRow('amenities')}
                         {renderRow('sqm')}
                         {renderRow('sqmPrice')}
